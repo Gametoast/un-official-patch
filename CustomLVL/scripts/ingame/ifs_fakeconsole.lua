@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 -- ifs_fakeconsole.lua (zerted  PC v1.3 r129 patch )
 -- verified decompile by cbadal 
 --
