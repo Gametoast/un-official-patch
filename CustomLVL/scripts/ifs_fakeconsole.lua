@@ -55,10 +55,10 @@ fakeconsole_listbox_layout = {
 	-- Height is calculated from yHeight, Spacing, showcount.
 	yHeight = 22,
 	ySpacing  = 0,
-	showcount = 13,
+	showcount = 19,
 	font = gListboxItemFont,
 
- 	width = 208,
+ 	width = 320,
 	x = 0,
 	slider = 1,
 	CreateFn = Fakeconsole_Listbox_CreateItem,
