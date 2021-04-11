@@ -1,8 +1,40 @@
 ucft
 {
     REQN
-	{
-		"script"
+    {
+        "script"
+        "points"
+        "ifs_sideselect"
+        "ifs_charselect"
+        "ifs_mapselect"
+        "ifs_readyselect"
+		"utility_functions2"
+		"fakeconsole_functions"
+        "ifs_fakeconsole"
+        "game_interface"
     }
 
+    REQN
+    {
+        "script"
+        "platform=xbox"
+    }
+
+    REQN
+    {
+        "script"
+        "platform=pc"
+        "ifs_pc_spawnselect"
+        "ifs_pc_spectator"
+    }
+    
+    REQN
+    {
+        "config"
+        "hudtransforms"
+        "1playerhud"
+        "2playerhud"
+        "3playerhud"
+        "4playerhud"
+    }
 }
