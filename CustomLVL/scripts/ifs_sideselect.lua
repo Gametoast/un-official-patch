@@ -220,36 +220,34 @@ ifs_sideselect1 = NewIFShellScreen {
 		--local r2 = ScriptCB_GetSideSelectButtonSetting()
 		local bteam1, bteam2, bauto, bspec = ScriptCB_GetSideSelectButtonSetting()
 		
-		if iKey ~= 97 then
-			if iKey ~= 65 then
-				if iKey == 51 then
-					--18
-				else
-					if bauto ~= 0 then
-						-- 50
-					else
-						if bauto ~= 1 then
-							-- 50
-						else
-							ShowMessageText("mods.shortcuts.auto")
-							this.CurButton = "auto"
-							-- 50
-						end
-					end
-				end
-			else
-			--9
+		if iKey == 97 or iKey == 65 or iKey == 51 then
+			
+			if bauto ~= 0 and bauto ~= 1 then
+				ShowMessageText("mods.shortcuts.auto")
+				this.CurButton = "auto"
 			end
-		else
+
+		elseif iKey == 49 then
+			
+			if bteam1 ~= 0 and bteam1 ~= 1 then
+				ShowMessageText("mods.shortcuts.team1")
+				this.CurButton = "team1"
+			end
+			
+		elseif iKey == 50 then
 		
-			--9
+			if bteam2 ~= 0 and bteam2 ~= 1 then
+				ShowMessageText("mods.shortcuts.team2")
+				this.CurButton = "team2"
+			end
+		
+		elseif iKey == 52 then
+			if bspec ~= 0 and bspec ~= 1 then
+				ShowMessageText("mods.shortcuts.spec")
+				this.CurButton = "spec"
+			end
 		end
 
-		
-		if iKey == 1 then
-
-		end
-		
 	end,
 	
 	Update = function(this, fDt)
