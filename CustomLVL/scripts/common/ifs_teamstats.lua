@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -252,26 +257,26 @@ end
 
 teamstats_listbox_layoutL = {
 --	showcount = 20, -- filled in from code later
-	yTop = -63,
-	yHeight = 26,
-	ySpacing = -6,
+	--yTop = -63,
+	yHeight = 27,
+	ySpacing = 0,
 -- 	width = 430, -- filled in from code later
 	x = 0,
 --	slider = 1,
-	font = "gamefont_tiny",
+	--font = "gamefont_tiny",
 	CreateFn = Teamstats_Listbox_CreateItem,
 	PopulateFn = Teamstats_Listbox_PopulateItem,
 }
 
 teamstats_listbox_layoutR = {
 --	showcount = 20, -- filled in from code later
-	yTop = -63,
-	yHeight = 26,
-	ySpacing = -6,
+	--yTop = -63,
+	yHeight = 27,
+	ySpacing = 0,
 -- 	width = 430, -- filled in from code later
 	x = 0,
 --	slider = 1,
-	font = "gamefont_tiny",
+	--font = "gamefont_tiny",
 	CreateFn = Teamstats_Listbox_CreateItem,
 	PopulateFn = Teamstats_Listbox_PopulateItem,
 }
@@ -492,14 +497,19 @@ function ifs_teamstats_fnUpdateTeamSelection(this)
 	end
 end
 
+function ifs_teamstats_fnNav()
+
+end
+
+
 ifs_teamstats = NewIFShellScreen {
 	nologo = 1,
 	fMAX_IDLE_TIME = 30.0,
 	fCurIdleTime = 0,
 	movieIntro      = nil, -- played before the screen is displayed
 	movieBackground = nil, -- played while the screen is displayed
-	bAcceptIsSelect = 1,
-	bNohelptext_back = 1, -- We use PS2-Square/XBox-X to exit this screen.
+	--bAcceptIsSelect = 1,
+	bNohelptext_backPC = 1, -- We use PS2-Square/XBox-X to exit this screen.
 
 --	title = NewIFText {
 --		string = "ifs.stats.teamstatstitle",
@@ -511,11 +521,48 @@ ifs_teamstats = NewIFShellScreen {
 --		ColorR= 255, ColorG = 255, ColorB = 255, -- Something that's readable!
 --	},
 
+	bgTexture = NewIFImage {
+		ZPos = 250,
+		ScreenRelativeX = 0,
+		ScreenRelativeY = 0,
+		UseSafezone = 0,
+		texture = "statsscreens_bg",
+		localpos_l = 0,
+		localpos_t = 0,
+	},
+	
+	quit = NewPCIFButton {
+		ScreenRelativeX = 0,
+		ScreenRelativeY = 1,
+		x = 75,
+		y = -15,
+		btnw = 150,
+		btnh = 25,
+		font = "gamefont_medium",
+		bg_tail = 20,
+		tag = "quit",
+		string = "ifs.stats.done",
+	},
+	
+	buttonNextPage = NewPCIFButton {
+		ScreenRelativeX = 1,
+		ScreenRelativeY = 1,
+		x = -90,
+		y = -15,
+		btnw = 180,
+		btnh = ScriptCB_GetFontHeight("gamefont_small"),
+		font = "gamefont_small",
+		tag = "details",
+		string = "ifs.Stats.personalstatstitle",
+		noTransitionFlash = 1,
+		bg_tail = 20,
+	},
+
 	titleTeamStats = NewIFText {
 		string = "ifs.stats.teamstatstitle",
 		font = "gamefont_medium",
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.017,
+		ScreenRelativeY = 0.01,
 		textw = 150,
 		ColorR= gTitleTextColor[1], ColorG = gTitleTextColor[2], ColorB = gTitleTextColor[3], -- Something that's readable!
 		style = "normal",
