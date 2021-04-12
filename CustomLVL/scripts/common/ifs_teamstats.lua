@@ -13,83 +13,89 @@
 -- fully-built item.
 function Teamstats_Listbox_CreateItem(layout)
 	--print ("Teamstats_Listbox_CreateItem")
-	local insidewidth = layout.width - 10;
+	local insidewidth = layout.width * 0.99
+	local r2 = insidewidth * 0.133
 	-- Make a coordinate system pegged to the top-left of where the cursor would go.
 	local Temp = NewIFContainer {
-		x = layout.x - 0.5 * insidewidth, y=layout.y + 1,
+		x = layout.x - 0.5 * insidewidth + r2 * 0.25,
+		y=layout.y,
 		bInertPos = 1,
 	}
-
-	local Font = teamstats_listbox_layoutL.font
-	local FontHeight = teamstats_listbox_layoutL.fontheight
-	local WidthPer = insidewidth * 0.125
-	teamstats_listbox_layoutL.NameWidth = (insidewidth - WidthPer * 4) + 5 -- pixels we let name use
-
+	
 	Temp.labelstr = NewIFText {
 		HScale = 0.8,
 		VScale = 1,
-		x = 2, y = FontHeight * -0.5 - 5, textw = insidewidth, -- Need full width, will manuall clamp later
-		valign = "vcenter", texth = layout.height,
+		x = 2,
+		y = -10,
+		textw = 0.65 * insidewidth, -- Need full width, will manuall clamp later
+		texth = ScriptCB_GetFontHeight("gamefont_medium"),
 		clip = "character",
-		halign = "left", font = Font,
+		halign = "left",
+		--valign = "vcenter",
+		font = "gamefont_medium",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		bInertPos = 1,
 		nocreatebackground = 1,
-		startdelay = math.random() * 0.25,
+		startdelay = math.random() * 0.15,
 		inert_all = 1,
 	}
+	
+	--local Font = teamstats_listbox_layoutL.font
+	--local FontHeight = teamstats_listbox_layoutL.fontheight
+	local WidthPer = insidewidth * 0.133
+	--teamstats_listbox_layoutL.NameWidth = (insidewidth - WidthPer * 4) + 5 -- pixels we let name use
 
 	Temp.val1str = NewIFText{
 		HScale = 0.8,
 		VScale = 1,
-		x = insidewidth - WidthPer * 4, y = FontHeight * -0.5 - 5,
-		valign = "vcenter", texth = layout.height, -- ScriptCB_GetFontHeight("gamefont_tiny"),
-		textw = WidthPer, halign = "right", font = Font,
+		x = insidewidth - WidthPer * 4, y = -10,
+		--valign = "vcenter", texth = layout.height, -- ScriptCB_GetFontHeight("gamefont_tiny"),
+		textw = WidthPer, halign = "hcenter", font = "gamefont_medium",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		bInertPos = 1,
 		nocreatebackground = 1,
-		startdelay = math.random() * 0.25,
+		startdelay = math.random() * 0.15,
 		inert_all = 1,
 	}
 	Temp.val2str = NewIFText{
 		HScale = 0.8,
 		VScale = 1,
-		x = insidewidth - WidthPer * 3, y = FontHeight * -0.5 - 5, 
-		valign = "vcenter", texth = layout.height, -- ScriptCB_GetFontHeight("gamefont_tiny"),
-		textw = WidthPer, halign = "right", font = Font,
+		x = insidewidth - WidthPer * 3,	y = -10, 
+		--valign = "vcenter", texth = layout.height, -- ScriptCB_GetFontHeight("gamefont_tiny"),
+		textw = WidthPer, halign = "hcenter", font = "gamefont_medium",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		bInertPos = 1,
 		nocreatebackground = 1,
-		startdelay = math.random() * 0.25,
+		startdelay = math.random() * 0.15,
 		inert_all = 1,
 	}
 	Temp.val3str = NewIFText{ 
 		HScale = 0.8,
 		VScale = 1,
-		x = insidewidth - WidthPer * 2, y = FontHeight * -0.5 - 5,
-		valign = "vcenter", texth = layout.height, -- ScriptCB_GetFontHeight("gamefont_tiny"),
-		textw = WidthPer, halign = "right", font = Font,
+		x = insidewidth - WidthPer * 2, y = -10,
+		--valign = "vcenter", texth = layout.height, -- ScriptCB_GetFontHeight("gamefont_tiny"),
+		textw = WidthPer, halign = "hcenter", font = "gamefont_medium",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		bInertPos = 1,
 		nocreatebackground = 1,
-		startdelay = math.random() * 0.25,
+		startdelay = math.random() * 0.15,
 		inert_all = 1,
 	}
 	Temp.val4str = NewIFText{ 
 		HScale = 0.8,
 		VScale = 1,
-		x = insidewidth - WidthPer * 1, y = FontHeight * -0.5 - 5,
-		valign = "vcenter", texth = layout.height, -- ScriptCB_GetFontHeight("gamefont_tiny"),
-		textw = WidthPer, halign = "right", font = Font,
+		x = insidewidth - WidthPer * 1, y = -10,
+		--valign = "vcenter", texth = layout.height, -- ScriptCB_GetFontHeight("gamefont_tiny"),
+		textw = WidthPer, halign = "hcenter", font = "gamefont_medium",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		bInertPos = 1,
 		nocreatebackground = 1,
-		startdelay = math.random() * 0.25,
+		startdelay = math.random() * 0.15,
 		inert_all = 1,
 	}
 	return Temp
@@ -100,9 +106,10 @@ end
 function Teamstats_Listbox_PopulateItem(Dest,Data)
 	if(Data) then
 		-- force the name into word clipping
---		IFText_fnSetTextBreak(Dest.labelstr,"none")
+		IFText_fnSetTextBreak(Dest.labelstr,"none")
+		IFText_fnSetUString(Dest.labelstr, Data.labelustr)
 		-- Contents to show. Do so.
-		local NameUStr = Data.labelustr
+		--local NameUStr = Data.labelustr
 		IFText_fnSetString(Dest.val1str,Data.val1str)
 		IFText_fnSetString(Dest.val2str,Data.val2str)
 		IFText_fnSetString(Dest.val3str,Data.val3str)
@@ -116,22 +123,22 @@ function Teamstats_Listbox_PopulateItem(Dest,Data)
 		-- Shrink font horizontally on name until it fits. This will make super-long
 		-- XLive gamertags work even after they shoved in an extra column since BF1
 
-		local TextHScale = 1.0
-		IFText_fnSetScale(Dest.labelstr, TextHScale, 1.0)
-		IFText_fnSetUString(Dest.labelstr,NameUStr)
-		local fLeft, fTop, fRight, fBot = IFText_fnGetDisplayRect(Dest.labelstr)
-		local TextW = fRight - fLeft
-		-- Initial guess at scale: a very close fit
-		TextHScale = math.min(1.0, teamstats_listbox_layoutL.NameWidth / TextW)
---		print("Initial TextHScale = ", TextHScale)
-		repeat
-			IFText_fnSetScale(Dest.labelstr, TextHScale, 1.0)
-			IFText_fnSetUString(Dest.labelstr,NameUStr)
-			fLeft, fTop, fRight, fBot = IFText_fnGetDisplayRect(Dest.labelstr)
-			TextW = fRight - fLeft
-			TextHScale = TextHScale * 0.95 -- shrink over time
---			print("Shrunk TextHScale to ", TextHScale)
-		until (TextW < teamstats_listbox_layoutL.NameWidth)
+		-- local TextHScale = 1.0
+		-- IFText_fnSetScale(Dest.labelstr, TextHScale, 1.0)
+		-- IFText_fnSetUString(Dest.labelstr,NameUStr)
+		-- local fLeft, fTop, fRight, fBot = IFText_fnGetDisplayRect(Dest.labelstr)
+		-- local TextW = fRight - fLeft
+		-- -- Initial guess at scale: a very close fit
+		-- TextHScale = math.min(1.0, teamstats_listbox_layoutL.NameWidth / TextW)
+-- --		print("Initial TextHScale = ", TextHScale)
+		-- repeat
+			-- IFText_fnSetScale(Dest.labelstr, TextHScale, 1.0)
+			-- IFText_fnSetUString(Dest.labelstr,NameUStr)
+			-- fLeft, fTop, fRight, fBot = IFText_fnGetDisplayRect(Dest.labelstr)
+			-- TextW = fRight - fLeft
+			-- TextHScale = TextHScale * 0.95 -- shrink over time
+-- --			print("Shrunk TextHScale to ", TextHScale)
+		-- until (TextW < teamstats_listbox_layoutL.NameWidth)
 
 		if(Data.ColorR) then
 			IFObj_fnSetColor(Dest.labelstr,Data.ColorR,Data.ColorG,Data.ColorB)
@@ -142,7 +149,7 @@ function Teamstats_Listbox_PopulateItem(Dest,Data)
 		end
 		
 		-- set points to yellow
-		IFObj_fnSetColor(Dest.val1str,255,255,0)
+		--IFObj_fnSetColor(Dest.val1str,255,255,0)
 	end
 
 	IFObj_fnSetVis(Dest,Data) -- Show if there are contents
@@ -158,7 +165,7 @@ end
 -- fully-built item.
 function Teamstats_AwardsListbox_CreateItem(layout)
 	--print ("Teamstats_AwardsListbox_CreateItem")
-	local insidewidth = layout.width - 10;
+	local insidewidth = layout.width - 20;
 	-- Make a coordinate system pegged to the top-left of where the cursor would go.
 	local Temp = NewIFContainer {
 		x = layout.x - 0.5 * insidewidth, y=layout.y + 1,
@@ -299,9 +306,10 @@ teamstats_awardsListbox_layoutR = {
 	PopulateFn = Teamstats_AwardsListbox_PopulateItem,
 }
 
-function ifs_teamstats_fnFillContents(this)
+function ifs_teamstats_fnFillContents(this, parameter_1)
 	-- Reset listbox, show it. [Remember, Lua starts at 1!]
 	local playerIdxL,playerIdxR
+	
 	playerIdxR = ScriptCB_GetTeamstats(1)
 	playerIdxL = ScriptCB_GetTeamstats(0)
 	if(this.SetCursorToPlayer) then
@@ -311,21 +319,90 @@ function ifs_teamstats_fnFillContents(this)
 			teamstats_listbox_layoutL.SelectedIdx = playerIdxL + 1
 			teamstats_listbox_layoutL.FirstShownIdx = math.max(playerIdxL-4,1)
 			teamstats_listbox_layoutR.CursorIdx = nil
-			teamstats_listbox_layoutR.SelectedIdx = playerIdxL + 1
+			teamstats_listbox_layoutR.SelectedIdx = nil --playerIdxL + 1
 			teamstats_listbox_layoutR.FirstShownIdx = math.max(playerIdxL-4,1)
 		end
 		if(playerIdxR >= 0) then
 			this.bCursorOnLeft = nil
 			teamstats_listbox_layoutL.CursorIdx = nil
-			teamstats_listbox_layoutL.SelectedIdx = playerIdxR + 1
+			teamstats_listbox_layoutL.SelectedIdx = nil --playerIdxR + 1
 			teamstats_listbox_layoutL.FirstShownIdx = math.max(playerIdxR-4,1)
 			teamstats_listbox_layoutR.CursorIdx = playerIdxR + 1
 			teamstats_listbox_layoutR.SelectedIdx = playerIdxR + 1
 			teamstats_listbox_layoutR.FirstShownIdx = math.max(playerIdxR-4,1)
 		end
 	end
+	
+	this.playerTeam = 1
+	
+	if(playerIdxR >= 0) then
+		this.playerTeam = 2
+	end
+	
+	ScriptCB_TeamStatsSetTitles(this.playerTeam)
+	
+	if not parameter_1 then
+		
+		local w,h = ScriptCB_GetSafeScreenInfo()	-- r4, r5
+		local r, b = ScriptCB_GetScreenInfo()		-- r6, r7
+		local fLargeSize = r / 800	--r8
+		local fXOffset, r10, lRotateSpeed, rRotateSpeed = nil			-- r9, r10, r11, r12
+		fXOffset = 0	-- r9
+		r10 = 0
+		ys = 0
+		sa = 0
+		lRotateSpeed = 1
+		
+		if this.returnAnim == 1 then
+
+			fXOffset = -w * 0.15
+			ys = -h * 0.3
+			sa = 0.4
+			lRotateSpeed = 20
+		end
+		
+		AnimationMgr_AddAnimation(this.LeftModel, {fTotalTime = 0.4, fStartAlpha = sa, fEndAlpha = 0.2,
+													fStartX = fXOffset, fStartY = ys, fEndX = 0, fEndY=0,
+													fStartW = 0.5 * fLargeSize,	fStartH = 0.5 * fLargeSize,
+													fEndW = fLargeSize,	fEndH = fLargeSize})
+		
+		fXOffset = 0
+		r10 = 0
+		ys = 0
+		sa = 0
+		rRotateSpeed = 1
+
+		if this.returnAnim == 2 then
+			
+			fXOffset = w * 0.15
+			ys = -h * 0.3
+			sa = 0.4
+			rRotateSpeed = 20
+		end 
+		
+		AnimationMgr_AddAnimation(this.RightModel, {fTotalTime = 0.4, fStartAlpha = sa, fEndAlpha = 0.2,
+													fStartX = fXOffset, fStartY = ys, fEndX = 0, fEndY=0,
+													fStartW = 0.5 * fLargeSize,	fStartH = 0.5 * fLargeSize,
+													fEndW = fLargeSize,	fEndH = fLargeSize})
+		
+		this.returnAnim = nil
+		
+		IFModel_fnSetOmegaY(this.LeftModel, lRotateSpeed)
+		IFModel_fnSetOmegaY(this.RightModel, rRotateSpeed)
+		
+		this.IconModelFastMode = 1
+		
+	else
+		AnimationMgr_AddAnimation(this.LeftModel, {fTotalTime = 0.1, fStartAlpha = 0.2, fEndAlpha = 0.2})
+		AnimationMgr_AddAnimation(this.RightModel, {fTotalTime = 0.1, fStartAlpha = 0.2, fEndAlpha = 0.2})
+	end
+	
+	
+	
 	teamstats_awardsListbox_layoutL.CursorIdx = nil
 	teamstats_awardsListbox_layoutR.CursorIdx = nil
+	teamstats_awardsListbox_layoutL.SelectedIdx = nil
+	teamstats_awardsListbox_layoutR.SelectedIdx = nil
 	
 	ListManager_fnFillContents(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
 	ScriptCB_GetTeamstats(1)
@@ -346,6 +423,7 @@ function ifs_teamstats_fnBlankContents(this)
 	Max = table.getn(teamstats_listbox_contentsL)
 	for i=1,Max do
 		teamstats_listbox_contentsL[i].labelustr = BlankUStr
+		teamstats_listbox_contentsL[i].labelstr = BlankUStr
 		teamstats_listbox_contentsL[i].val1str = ""
 		teamstats_listbox_contentsL[i].val2str = ""
 		teamstats_listbox_contentsL[i].val3str = ""
@@ -355,6 +433,7 @@ function ifs_teamstats_fnBlankContents(this)
 	Max = table.getn(teamstats_listbox_contentsR)
 	for i=1,Max do
 		teamstats_listbox_contentsR[i].labelustr = BlankUStr
+		teamstats_listbox_contentsR[i].labelstr = BlankUStr
 		teamstats_listbox_contentsR[i].val1str = ""
 		teamstats_listbox_contentsR[i].val2str = ""
 		teamstats_listbox_contentsR[i].val3str = ""
@@ -366,8 +445,8 @@ function ifs_teamstats_fnBlankContents(this)
 			teamstats_awardsListbox_contentsL[i].labelustr = BlankUStr
 			teamstats_awardsListbox_contentsL[i].contentsustr = ""
 		end
-	else
-		print ("ifs_teamstats_fnBlankContents: teamstats_awardsListbox_contentsL == nil")
+	--else
+	--	print ("ifs_teamstats_fnBlankContents: teamstats_awardsListbox_contentsL == nil")
 	end
 
 	if ( teamstats_awardsListbox_contentsR ) then
@@ -376,8 +455,8 @@ function ifs_teamstats_fnBlankContents(this)
 			teamstats_awardsListbox_contentsR[i].labelustr = BlankUStr
 			teamstats_awardsListbox_contentsR[i].contentsustr = ""
 		end
-	else
-		print ("ifs_teamstats_fnBlankContents: teamstats_awardsListbox_contentsR == nil")
+	--else
+	--	print ("ifs_teamstats_fnBlankContents: teamstats_awardsListbox_contentsR == nil")
 	end
 
 	-- Repaint
@@ -409,64 +488,100 @@ teamstats_awardsListbox_contentsL = {}
 teamstats_awardsListbox_contentsR = {}
 
 function ifs_teamstats_fnFlipLeftRight(this)
-	this.bCursorOnLeft = not this.bCursorOnLeft
+	if teamstats_listbox_layoutL.SelectedIdx then
+		this.bCursorOnLeft = nil
+		teamstats_listbox_layoutR.SelectedIdx = teamstats_listbox_layoutL.SelectedIdx
+		teamstats_listbox_layoutL.SelectedIdx = nil
+	
+	else
+		this.bCursorOnLeft = 1
+		teamstats_listbox_layoutL.SelectedIdx = teamstats_listbox_layoutR.SelectedIdx
+		teamstats_listbox_layoutR.SelectedIdx = nil
+	end
+	
+	ifs_teamstats_fnValidateCursor(this)
+	
 
 	-- Flip the selections/cursor positions
-	if(this.bCursorOnLeft) then
-		-- Was just on the right, now on left
-		local Pos = teamstats_listbox_layoutR.SelectedIdx
+	-- if(this.bCursorOnLeft) then
+		-- -- Was just on the right, now on left
+		-- local Pos = teamstats_listbox_layoutR.SelectedIdx
 
-		-- make sure the position isn't off the bottom of the listbox
-		Pos = ScriptCB_TeamStatsValidatePos( 0, Pos );
+		-- -- make sure the position isn't off the bottom of the listbox
+		-- Pos = ScriptCB_TeamStatsValidatePos( 0, Pos );
 		
-		teamstats_listbox_layoutL.CursorIdx = Pos
-		teamstats_listbox_layoutR.CursorIdx = nil
-		teamstats_listbox_layoutL.SelectedIdx = Pos
-		teamstats_listbox_layoutR.SelectedIdx = Pos
+		-- teamstats_listbox_layoutL.CursorIdx = Pos
+		-- teamstats_listbox_layoutR.CursorIdx = nil
+		-- teamstats_listbox_layoutL.SelectedIdx = Pos
+		-- teamstats_listbox_layoutR.SelectedIdx = Pos
 
-		ListManager_fnFillContents(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
-		ListManager_fnFillContents(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
-		-- Just move cursor on side that's now dim
-		ListManager_fnMoveCursor(this.RightList,teamstats_listbox_layoutR)
-	else
-		-- Was just on the left, now on right
-		local Pos = teamstats_listbox_layoutL.SelectedIdx
+		-- ListManager_fnFillContents(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
+		-- ListManager_fnFillContents(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
+		-- -- Just move cursor on side that's now dim
+		-- ListManager_fnMoveCursor(this.RightList,teamstats_listbox_layoutR)
+	-- else
+		-- -- Was just on the left, now on right
+		-- local Pos = teamstats_listbox_layoutL.SelectedIdx
 
-		-- make sure the position isn't off the bottom of the listbox
-		Pos = ScriptCB_TeamStatsValidatePos( 1, Pos );
+		-- -- make sure the position isn't off the bottom of the listbox
+		-- Pos = ScriptCB_TeamStatsValidatePos( 1, Pos );
 		
-		teamstats_listbox_layoutR.CursorIdx = Pos
-		teamstats_listbox_layoutL.CursorIdx = nil
-		teamstats_listbox_layoutR.SelectedIdx = Pos
-		teamstats_listbox_layoutL.SelectedIdx = Pos
+		-- teamstats_listbox_layoutR.CursorIdx = Pos
+		-- teamstats_listbox_layoutL.CursorIdx = nil
+		-- teamstats_listbox_layoutR.SelectedIdx = Pos
+		-- teamstats_listbox_layoutL.SelectedIdx = Pos
 
-		ListManager_fnFillContents(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
-		ListManager_fnFillContents(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
-		-- Just move cursor on side that's now dim
-		ListManager_fnMoveCursor(this.LeftList,teamstats_listbox_layoutL)
-	end
+		-- ListManager_fnFillContents(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
+		-- ListManager_fnFillContents(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
+		-- -- Just move cursor on side that's now dim
+		-- ListManager_fnMoveCursor(this.LeftList,teamstats_listbox_layoutL)
+	-- end
 end
 
 --validate the cursor position (make sure we're not on a null entry)
 function ifs_teamstats_fnValidateCursor(this)
-	local Pos = teamstats_listbox_layoutL.SelectedIdx
-	if(this.bCursorOnLeft) then
-		Pos = ScriptCB_TeamStatsValidatePos( 0, Pos );
-	else
-		Pos = ScriptCB_TeamStatsValidatePos( 1, teamstats_listbox_layoutR.SelectedIdx );
+	local Pos = nil
+	
+	
+	if teamstats_listbox_layoutL.SelectedIdx then
+		Pos = 1
 	end
 	
-	--set the cursor to the validated position
-	teamstats_listbox_layoutL.SelectedIdx = Pos
-	teamstats_listbox_layoutR.SelectedIdx = Pos
-
-	if(this.bCursorOnLeft) then		
-		teamstats_listbox_layoutL.CursorIdx = Pos
+	this.bCursorOnLeft = Pos
+	
+	local r2 = teamstats_listbox_layoutL.SelectedIdx or teamstats_listbox_layoutR.SelectedIdx
+	
+	if Pos then
+		r2 = ScriptCB_TeamStatsValidatePos(0, r2)
+	else
+		r2 = ScriptCB_TeamStatsValidatePos(1, r2)
+	end
+	
+	
+	if Pos then
+		teamstats_listbox_layoutL.CursorIdx = r2
 		teamstats_listbox_layoutR.CursorIdx = nil
+		teamstats_listbox_layoutL.SelectedIdx = r2
+		teamstats_listbox_layoutR.SelectedIdx = nil
 	else
 		teamstats_listbox_layoutL.CursorIdx = nil
-		teamstats_listbox_layoutR.CursorIdx = Pos
+		teamstats_listbox_layoutR.CursorIdx = r2
+		teamstats_listbox_layoutL.SelectedIdx = nil
+		teamstats_listbox_layoutR.SelectedIdx = r2
 	end
+	
+	-- --set the cursor to the validated position
+	-- teamstats_listbox_layoutL.SelectedIdx = Pos
+	-- teamstats_listbox_layoutR.SelectedIdx = Pos
+
+	-- if(this.bCursorOnLeft) then		
+		-- teamstats_listbox_layoutL.CursorIdx = Pos
+		-- teamstats_listbox_layoutR.CursorIdx = nil
+	-- else
+		-- teamstats_listbox_layoutL.CursorIdx = nil
+		-- teamstats_listbox_layoutR.CursorIdx = Pos
+	-- end
+	
 	ListManager_fnMoveCursor(this.LeftList,teamstats_listbox_layoutL)
 	ListManager_fnMoveCursor(this.RightList,teamstats_listbox_layoutR)
 end
@@ -475,7 +590,7 @@ end
 function ifs_teamstats_fnUpdateTeamSelection(this)
 	--print ("ifs_teamstats_fnUpdateTeamSelection")
 	if (this.bCursorOnLeft) then
-		local cursorIdx = teamstats_listbox_layoutL.CursorIdx
+		local cursorIdx = teamstats_listbox_layoutL.SelectedIdx
 		local firstShownIdx = teamstats_listbox_layoutL.FirstShownIdx
 		if ( cursorIdx and gSelectedTextColor ) then
 			--if ( not this.LeftList[cursorIdx] ) then
@@ -486,7 +601,7 @@ function ifs_teamstats_fnUpdateTeamSelection(this)
 			IFObj_fnSetColor(this.LeftList[cursorIdx-firstShownIdx+1].labelstr, gSelectedTextColor[1], gSelectedTextColor[2], gSelectedTextColor[3])
 		end
 	else
-		local cursorIdx = teamstats_listbox_layoutR.CursorIdx
+		local cursorIdx = teamstats_listbox_layoutR.SelectedIdx
 		local firstShownIdx = teamstats_listbox_layoutR.FirstShownIdx
 		if ( cursorIdx and gSelectedTextColor ) then
 			--if ( not this.RightList[cursorIdx] ) then
@@ -497,8 +612,15 @@ function ifs_teamstats_fnUpdateTeamSelection(this)
 	end
 end
 
-function ifs_teamstats_fnNav()
-
+function ifs_teamstats_fnNav(parameter_1)
+	local this = ifs_teamstats
+	
+	if teamstats_listbox_layoutL.SelectedIdx then
+	
+	else
+	
+	end
+	
 end
 
 
@@ -521,14 +643,15 @@ ifs_teamstats = NewIFShellScreen {
 --		ColorR= 255, ColorG = 255, ColorB = 255, -- Something that's readable!
 --	},
 
-	bgTexture = NewIFImage {
+	bgTexture = NewIFImage { 
 		ZPos = 250,
 		ScreenRelativeX = 0,
 		ScreenRelativeY = 0,
 		UseSafezone = 0,
-		texture = "statsscreens_bg",
+		texture = "statsscreens_bg", 
 		localpos_l = 0,
 		localpos_t = 0,
+		-- Size, UVs aren't fully specified here, but in NewIFShellScreen()
 	},
 	
 	quit = NewPCIFButton {
@@ -578,7 +701,7 @@ ifs_teamstats = NewIFShellScreen {
 		string = "ifs.stats.awards",
 		font = "gamefont_medium",
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.637,
+		ScreenRelativeY = 0.705,
 		textw = 350,
 		ColorR= gTitleTextColor[1], ColorG = gTitleTextColor[2], ColorB = gTitleTextColor[3], -- Something that's readable!
 		style = "normal",
@@ -588,17 +711,6 @@ ifs_teamstats = NewIFShellScreen {
 		bgmid = "bf2_buttons_title_center",
 		bgright = "bf2_buttons_topright",
 		bg_width = 460, 
-	},
-	
-	bgTexture = NewIFImage { 
-		ZPos = 250,
-		ScreenRelativeX = 0,
-		ScreenRelativeY = 0,
-		UseSafezone = 0,
-		texture = "statsscreens_bg", 
-		localpos_l = 0,
-		localpos_t = 0,
-		-- Size, UVs aren't fully specified here, but in NewIFShellScreen()
 	},
 
 
@@ -697,15 +809,15 @@ ifs_teamstats = NewIFShellScreen {
 	end,
 
 	-- Misc ( == PS2-Square/XBox-X) button quits stats
-	Input_Misc = function(this)
-		if(ScriptCB_CanClientLeaveStats()) then
-			this.fCurIdleTime = this.fMAX_IDLE_TIME 
-			if(not gE3StatsTimeout or gE3StatsTimeout < 0) then
-				ScriptCB_QuitFromStats()
-				ScriptCB_SndPlaySound("shell_menu_exit");
-			end
-		end
-	end,
+	-- Input_Misc = function(this)
+		-- if(ScriptCB_CanClientLeaveStats()) then
+			-- this.fCurIdleTime = this.fMAX_IDLE_TIME 
+			-- if(not gE3StatsTimeout or gE3StatsTimeout < 0) then
+				-- ScriptCB_QuitFromStats()
+				-- ScriptCB_SndPlaySound("shell_menu_exit");
+			-- end
+		-- end
+	-- end,
 
 	--Back button quits stats
 	Input_Back = function(this)
@@ -716,6 +828,10 @@ ifs_teamstats = NewIFShellScreen {
 
 	-- No U/D/L/R functionality possible on this screen (gotta have stubs
 	-- here, or the base class will override)
+
+	Input_KeyDown = function(this, iKey)
+	
+	end,
 
 	Input_GeneralUp = function(this)
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
