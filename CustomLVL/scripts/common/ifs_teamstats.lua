@@ -816,17 +816,134 @@ ifs_teamstats = NewIFShellScreen {
 
 	-- Accept button bumps the page
 	Input_Accept = function(this)
+		
+		local selected, cursor		-- r1, r2
+		
+		if gMouseListBox then
+			selected = gMouseListBox.Layout.SelectedIdx
+			cursor = gMouseListBox.Layout.CursorIdx
+		end
+		
+		if gShellScreen_fnDefaultInputAccept(this) then
+			ScriptCB_ResetMouseMark()
+			
+			if gMouseListBox then
+			
+				if gMouseListBox.Layout.SelectedIdx == selected and
+					cursor == gMouseListBox.Layout.CursorIdx and
+					this.lastDoubleClickTime and
+					ScriptCB_GetMissionTime() < this.lastDoubleClickTime + 0.4 then
+				
+					this.lastDoubleClickTime = nil
+					this.CurButton = "details"
 
-		if(this.bCursorOnLeft) then
+				else
+					this.lastDoubleClickTime = ScriptCB_GetMissionTime()
+					return
+				end
+			else
+				return
+			end
+		end
+		
+		this.fCurIdleTime = this.fMAX_IDLE_TIME
+		local r3 = nil
+		
+		if(teamstats_listbox_layoutL.SelectedIdx) then
 			ifs_personalstats.fTeam = 1
 			ifs_personalstats.fIdx = teamstats_listbox_layoutL.SelectedIdx
+			r3 = teamstats_listbox_contentsL[teamstats_listbox_layoutL.SelectedIdx]
 		else
 			ifs_personalstats.fTeam = 2
 			ifs_personalstats.fIdx = teamstats_listbox_layoutR.SelectedIdx
+			r3 = teamstats_listbox_contentsR[teamstats_listbox_layoutR.SelectedIdx]
 		end
-        ifs_movietrans_PushScreen(ifs_personalstats)
-		ScriptCB_SndPlaySound("shell_menu_enter");
-		this.fCurIdleTime = this.fMAX_IDLE_TIME 
+		
+		if r3 then		-- else 138
+			if this.CurButton == "details" then
+				
+				IFText_fnSetUString(ifs_personalstats.title2, r3.labelustr)
+				ScriptCB_PersonalStatsSetTitles(this.playerTeam, ifs_personalstats.fTeam)
+				
+				local w,h = ScriptCB_GetSafeScreenInfo()
+				local r, b = ScriptCB_GetScreenInfo()
+				local fLargeSize = r / 800	--r8
+				local fXOffset, fXEnd, r11 = nil
+				
+				if ifs_personalstats.fTeam == 1 then	-- else 108
+					fXOffset = -w * 0.25
+					fXEnd = -w * 0.4
+					this.returnAnim = 1
+				else
+					fXOffset = w * 0.25
+					fXEnd = w * 0.4
+					this.returnAnim = 2
+				end	-- to 111
+				
+				--lbl 111
+				AnimationMgr_AddAnimation(ifs_personalstats.IconModel,
+										{
+											fTotalTime = 0.4,
+											fStartAlpha = 0.2,
+											fEndAlpha = 0.4,
+											fStartX = fXOffset,
+											fStartY = 0,
+											fEndX = fXEnd,
+											fEndY = -h * 0.3,
+											fStartW = 1 * fLargeSize,
+											fStartH = 1 * fLargeSize,
+											fEndW = 0.5 * fLargeSize,
+											fEndH = 0.5 * fLargeSize,
+										})
+				
+				IFModel_fnSetOmegaY(ifs_personalstats.IconModel, 0.3)
+			end		
+		end
+		
+		--lbl 138
+		if this.CurButton == "quit" then	--else 148
+			ScriptCB_QuitFromStats()
+			ScriptCB_SndPlaySound("shell_menu_exit")
+			return
+		
+		--lbl 148
+		elseif this.CurButton == "details" then 	--else 159
+			ifs_movietrans_PushScreen(ifs_personalstats)
+			ScriptCB_SndPlaySound("shell_menu_enter");
+			return
+			
+		--lbl 159
+		elseif this.CurButton == "_upL" or this.CurButton == "_upR" then
+			ifs_teamstats_fnNav(ListManager_fnScrollUp)
+			ListManager_fnFillContents(this.LeftList, teamstats_listbox_contentsL, teamstats_listbox_layoutL)
+			ListManager_fnFillContents(this.RightList, teamstats_listbox_contentsR, teamstats_listbox_layoutR)
+			
+		elseif this.CurButton == "_downL" or this.CurButton == "_downR" then
+			ifs_teamstats_fnNav(ListManager_fnScrollDown)
+			ListManager_fnFillContents(this.LeftList, teamstats_listbox_contentsL, teamstats_listbox_layoutL)
+			ListManager_fnFillContents(this.RightList, teamstats_listbox_contentsR, teamstats_listbox_layoutR)
+			
+		elseif this.CurButton == "_sortKillsL" or this.CurButton == "_sortKillsR" then
+			ScriptCB_SndPlaySound("shell_select_change")
+			ScriptCB_SetTeamStatsSortMode(0)
+			ifs_teamstats_fnFillContents(this, 1)
+
+		elseif this.CurButton == "_sortDeathsL" or this.CurButton == "_sortDeathsR" then
+			ScriptCB_SndPlaySound("shell_select_change")
+			ScriptCB_SetTeamStatsSortMode(1)
+			ifs_teamstats_fnFillContents(this, 1)
+			
+		elseif this.CurButton == "_sortCppL" or this.CurButton == "_sortCppR" then
+			ScriptCB_SndPlaySound("shell_select_change")
+			ScriptCB_SetTeamStatsSortMode(2)
+			ifs_teamstats_fnFillContents(this, 1)
+			
+		elseif this.CurButton == "_sortNameL" or this.CurButton == "_sortNameR" then
+			ScriptCB_SndPlaySound("shell_select_change")
+			ScriptCB_SetTeamStatsSortMode(3)
+			ifs_teamstats_fnFillContents(this, 1)
+		end
+
 	end,
 
 	-- Misc ( == PS2-Square/XBox-X) button quits stats
