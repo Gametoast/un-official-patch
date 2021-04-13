@@ -612,15 +612,25 @@ function ifs_teamstats_fnUpdateTeamSelection(this)
 	end
 end
 
-function ifs_teamstats_fnNav(parameter_1)
+function ifs_teamstats_fnNav(fnListManagerNav)
 	local this = ifs_teamstats
 	
 	if teamstats_listbox_layoutL.SelectedIdx then
-	
+		teamstats_listbox_layoutR.SelectedIdx = teamstats_listbox_layoutL.SelectedIdx
+		fnListManagerNav(this.LeftList, teamstats_listbox_contentsL, teamstats_listbox_layoutL)
+		fnListManagerNav(this.RightList, teamstats_listbox_contentsR, teamstats_listbox_layoutR)
+		teamstats_listbox_layoutR.SelectedIdx = nil
 	else
-	
+		teamstats_listbox_layoutL.SelectedIdx = teamstats_listbox_layoutR.SelectedIdx
+		fnListManagerNav(this.RightList, teamstats_listbox_contentsR, teamstats_listbox_layoutR)
+		fnListManagerNav(this.LeftList, teamstats_listbox_contentsL, teamstats_listbox_layoutL)
+		teamstats_listbox_layoutL.SelectedIdx = nil
 	end
 	
+	ifs_teamstats_fnUpdateTeamSelection(this)
+	ifs_teamstats_fnValidateCursor(this)
+	
+	this.fCurIdleTime = this.fMAX_IDLE_TIME
 end
 
 
@@ -719,6 +729,10 @@ ifs_teamstats = NewIFShellScreen {
 	Enter = function(this, bFwd)
 		gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function
 
+
+		IFModel_fnSetMsh(this.LeftModel, "")
+		IFModel_fnSetMsh(this.RightModel, "")
+		
 		-- if we're in MP and the client never received stats, just skip the stats and go
 		-- back to the shell now
 		if(not ScriptCB_ClientGotStats()) then
@@ -727,38 +741,41 @@ ifs_teamstats = NewIFShellScreen {
 			return
 		end
 
-		if(this.Helptext_Back) then
-			IFText_fnSetString(this.Helptext_Accept.helpstr,"ifs.stats.personalstatstitle")
-			gHelptext_fnMoveIcon(this.Helptext_Accept)
-		end
+		-- if(this.Helptext_Back) then
+			-- IFText_fnSetString(this.Helptext_Accept.helpstr,"ifs.stats.personalstatstitle")
+			-- gHelptext_fnMoveIcon(this.Helptext_Accept)
+		-- end
 
 		if(bFwd) then
 			-- Horrible hack -- We need the memory on the PS2 for the stats,
 			-- and the only way to get that now is to kick some screens out of
 			-- memory.
 			if(gPlatformStr == "PS2") then
---				ifs_pausemenu = nil -- die if we ever exit out of here.
+				ifs_pausemenu = nil -- die if we ever exit out of here.
 				ifs_opt_controller = nil -- we need memory, NOW
 				ifs_mp_lobby = nil -- we need memory, NOW			
-				ifs_sideselect = nil
-				ifs_charselect = nil
-				ifs_mapselect = nil
-				ifs_readyselect = nil
-				ifs_fakeconsole = nil
+--				ifs_sideselect = nil
+--				ifs_charselect = nil
+--				ifs_mapselect = nil
+--				ifs_readyselect = nil
+--				ifs_fakeconsole = nil
 			end
 			this.bCursorOnLeft = 1
 			teamstats_listbox_layoutL.FirstShownIdx = 1
 			teamstats_listbox_layoutR.FirstShownIdx = 1
 			teamstats_listbox_layoutL.SelectedIdx = 1
-			teamstats_listbox_layoutR.SelectedIdx = 1
+			teamstats_listbox_layoutR.SelectedIdx = nil
 			teamstats_listbox_layoutL.CursorIdx = 1
 			teamstats_listbox_layoutR.CursorIdx = nil
 			
 			this.SetCursorToPlayer = 1
 		end
-		ifs_teamstats_fnFillContents(this)
+		ifs_teamstats_fnFillContents(this, nil)
 		this.SetCursorToPlayer = nil
 		ifs_teamstats_fnUpdateTeamSelection(this)
+		
+		teamstats_awardsListbox_layoutL.CursorIdx = nil
+		teamstats_awardsListbox_layoutR.CursorIdx = nil
 		
 		this.fCurIdleTime = this.fMAX_IDLE_TIME
 
@@ -791,6 +808,10 @@ ifs_teamstats = NewIFShellScreen {
 		teamstats_awardsListbox_contents = nil
 		teamstats_awardsListbox_contentsL = nil
 		teamstats_awardsListbox_contentsR = nil
+		
+		if gCurHiliteButton then
+			IFButton_fnSelect(gCurHiliteButton, nil)
+		end
 	end,
 
 	-- Accept button bumps the page
@@ -822,6 +843,11 @@ ifs_teamstats = NewIFShellScreen {
 	--Back button quits stats
 	Input_Back = function(this)
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
+		
+		if not gE3StatsTimeout or gE3StatsTimeout < 0 then
+			ScriptCB_QuitFromStats()
+			ScriptCB_SndPlaySound("shell_menu_exit")
+		end
 		--ScriptCB_PopScreen()
 		--ScriptCB_SndPlaySound("shell_menu_exit");
 	end,
@@ -830,39 +856,53 @@ ifs_teamstats = NewIFShellScreen {
 	-- here, or the base class will override)
 
 	Input_KeyDown = function(this, iKey)
-	
+		
+		if iKey == 108 then
+			if ScriptCB_CanClientLeaveStats() then
+				ScriptCB_QuitFromStats()
+				ScriptCB_SndPlaySound("shell_menu_exit")
+			end
+		end
 	end,
 
 	Input_GeneralUp = function(this)
-		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		ListManager_fnNavUp(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
-		ListManager_fnNavUp(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
-		ifs_teamstats_fnUpdateTeamSelection(this)
-		ifs_teamstats_fnValidateCursor(this)
+		ifs_teamstats_fnNav(ListManager_fnNavUp)
+	
+		-- this.fCurIdleTime = this.fMAX_IDLE_TIME 
+		-- ListManager_fnNavUp(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
+		-- ListManager_fnNavUp(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
+		-- ifs_teamstats_fnUpdateTeamSelection(this)
+		-- ifs_teamstats_fnValidateCursor(this)
 	end,
 	Input_GeneralDown = function(this)
-		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		ListManager_fnNavDown(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
-		ListManager_fnNavDown(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
-		--validate the cursor position (make sure we're not on a null entry)
-		ifs_teamstats_fnValidateCursor(this)
-		ifs_teamstats_fnUpdateTeamSelection(this)
+		ifs_teamstats_fnNav(ListManager_fnNavDown)
+		
+		-- this.fCurIdleTime = this.fMAX_IDLE_TIME 
+		-- ListManager_fnNavDown(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
+		-- ListManager_fnNavDown(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
+		-- --validate the cursor position (make sure we're not on a null entry)
+		-- ifs_teamstats_fnValidateCursor(this)
+		-- ifs_teamstats_fnUpdateTeamSelection(this)
 	end,
 
 	Input_LTrigger = function(this)
-		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		ListManager_fnPageUp(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
-		ListManager_fnPageUp(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
-		ifs_teamstats_fnUpdateTeamSelection(this)
-		ifs_teamstats_fnValidateCursor(this)
+		ifs_teamstats_fnNav(ListManager_fnPageUp)
+		
+		-- this.fCurIdleTime = this.fMAX_IDLE_TIME 
+		-- ListManager_fnPageUp(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
+		-- ListManager_fnPageUp(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
+		-- ifs_teamstats_fnUpdateTeamSelection(this)
+		-- ifs_teamstats_fnValidateCursor(this)
 	end,
 	Input_RTrigger = function(this)
-		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		ListManager_fnPageDown(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
-		ListManager_fnPageDown(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
-		--validate the cursor position (make sure we're not on a null entry)
-		ifs_teamstats_fnValidateCursor(this)
-		ifs_teamstats_fnUpdateTeamSelection(this)
+		ifs_teamstats_fnNav(ListManager_fnPageDown)
+		
+		-- this.fCurIdleTime = this.fMAX_IDLE_TIME 
+		-- ListManager_fnPageDown(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
+		-- ListManager_fnPageDown(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
+		-- --validate the cursor position (make sure we're not on a null entry)
+		-- ifs_teamstats_fnValidateCursor(this)
+		-- ifs_teamstats_fnUpdateTeamSelection(this)
 	end,
 
 	Input_GeneralLeft = function(this)
@@ -924,6 +964,10 @@ ifs_teamstats = NewIFShellScreen {
 		else
 			teamstats_listbox_layoutL.CursorIdx = nil
 		end
+		
+		teamstats_awardsListbox_layoutL.CursorIdx = nil
+		teamstats_awardsListbox_layoutR.CursorIdx = nil
+		
 		ListManager_fnFillContents(this.LeftList,teamstats_listbox_contentsL,teamstats_listbox_layoutL)
 		ListManager_fnFillContents(this.RightList,teamstats_listbox_contentsR,teamstats_listbox_layoutR)
 		ListManager_fnFillContents(this.awardsLeftList,teamstats_awardsListbox_contentsL,teamstats_awardsListbox_layoutL)
