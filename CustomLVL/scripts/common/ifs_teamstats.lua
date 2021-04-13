@@ -1041,22 +1041,82 @@ ifs_teamstats = NewIFShellScreen {
 		-- Call default base class's update function (make button bounce)
 		gIFShellScreenTemplate_fnUpdate(this,fDt)
 
-		-- If the host is busy, then wait on this screen
-		if(fDt > 0.5) then
-			fDt = 0.5 -- clamp this to sane values
+		if gE3StatsTimeout then --else 11
+			gE3StatsTimeout = gE3StatsTimeout - fDt
 		end
+	
+		if this.IconModelFastMode then --else 30
+			if not this.LeftModel.bAnimActive then
+				print("icon fast mode")
+				this.IconModelFastMode = nil
+				IFModel_fnSetOmegaY(this.LeftModel, 0.3)
+				IFModel_fnSetOmegaY(this.RightModel, 0.25)
+			end
+		end
+		--lbl 30
+		
+		if gPlatformStr == "PC" then --else 76
+			if gMouseListBox then --else 76
+				if ScriptCB_CheckMouseMark() then
+					
+					if gMouseListBox == this.LeftList then --else 54
+						this.bCursorOnLeft = 1
+						
+						if teamstats_listbox_layoutL.CursorIdx == teamstats_listbox_layoutL.SelectedIdx then --else 67
+							teamstats_listbox_layoutR.SelectedIdx = nil
+							--to 67
+						end
+					else --label 54
+						
+						if gMouseListBox == this.RightList then --else 67
+							this.bCursorOnLeft = nil
+							
+							if teamstats_listbox_layoutR.CursorIdx == teamstats_listbox_layoutR.SelectedIdx then --else 67
+								teamstats_listbox_layoutL.SelectedIdx = nil
+							--to 67
+							end
+						end
+						
+					end
+					ifs_teamstats_fnUpdateTeamSelection(this)
+					this.RepaintListbox(this, this.bCursorOnLeft) 
+				end
+				--lbl 74
+				ScriptCB_SetMouseMark()
+			end
+		end
+		--lbl 76
+		
+		this.fCurIdleTime = this.fCurIdleTime - fDt
+		
+		if this.fCurIdleTime < 0 then --else 94
+			if not gE3StatsTimeout or gE3StatsTimeout < 0 then
+				this.fCurIdleTime = 100
+				ScriptCB_QuitFromStats()
+				ScriptCB_SndPlaySound("shell_menu_exit")
+			end
+		end
+		
+		--lbl 94
+		
+		
+		-- If the host is busy, then wait on this screen
+		-- if(fDt > 0.5) then
+			-- fDt = 0.5 -- clamp this to sane values
+		-- end
 
 		if(ScriptCB_CanClientLeaveStats()) then
-			gE3StatsTimeout = 0 -- allow quit now
-			if(this.Helptext_Done) then
-				IFObj_fnSetVis(this.Helptext_Done, 1) -- show helptext
-			end
+			IFObj_fnSetVis(this.quit, 1)
 		else
-			gE3StatsTimeout = 1 -- keep clients from leaving
-			if(this.Helptext_Done) then
-				IFObj_fnSetVis(this.Helptext_Done, nil) -- hide helptext
-			end
+			IFObj_fnSetVis(this.quit, nil)
 		end
+		
+		--lbl 107
+		IFObj_fnSetVis(this.buttons.LeftUpArrow, 1 < teamstats_listbox_layoutL.FirstShownIdx)
+		IFObj_fnSetVis(this.buttons.RightUpArrow, 1 < teamstats_listbox_layoutL.FirstShownIdx)
+		
+		--lbl 127
+
 
 		if(gE3StatsTimeout) then
 			gE3StatsTimeout = gE3StatsTimeout - fDt
