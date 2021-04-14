@@ -1041,7 +1041,7 @@ ifs_teamstats = NewIFShellScreen {
 		-- Call default base class's update function (make button bounce)
 		gIFShellScreenTemplate_fnUpdate(this,fDt)
 
-		if gE3StatsTimeout then --else 11
+		if(gE3StatsTimeout) then
 			gE3StatsTimeout = gE3StatsTimeout - fDt
 		end
 	
@@ -1087,14 +1087,12 @@ ifs_teamstats = NewIFShellScreen {
 		end
 		--lbl 76
 		
+		-- if we've been sitting here for a while, bail to the teaser screen
 		this.fCurIdleTime = this.fCurIdleTime - fDt
-		
-		if this.fCurIdleTime < 0 then --else 94
-			if not gE3StatsTimeout or gE3StatsTimeout < 0 then
-				this.fCurIdleTime = 100
-				ScriptCB_QuitFromStats()
-				ScriptCB_SndPlaySound("shell_menu_exit")
-			end
+		if((this.fCurIdleTime < 0) and (not gE3StatsTimeout or gE3StatsTimeout < 0)) then
+			this.fCurIdleTime = 100
+			ScriptCB_QuitFromStats()
+			ScriptCB_SndPlaySound("shell_menu_exit");
 		end
 		
 		--lbl 94
@@ -1116,19 +1114,23 @@ ifs_teamstats = NewIFShellScreen {
 		IFObj_fnSetVis(this.buttons.RightUpArrow, 1 < teamstats_listbox_layoutL.FirstShownIdx)
 		
 		--lbl 127
-
-
-		if(gE3StatsTimeout) then
-			gE3StatsTimeout = gE3StatsTimeout - fDt
-		end
-
-		-- if we've been sitting here for a while, bail to the teaser screen
-		this.fCurIdleTime = this.fCurIdleTime - fDt
-		if((this.fCurIdleTime < 0) and (not gE3StatsTimeout or gE3StatsTimeout < 0)) then
-			this.fCurIdleTime = 100
-			ScriptCB_QuitFromStats()
-			ScriptCB_SndPlaySound("shell_menu_exit");
-		end
+		
+		local r2 = math.max(table.getn(teamstats_listbox_contentsL), table.getn(teamstats_listbox_contentsR))		
+		IFObj_fnSetVis(this.buttons.LeftDownArrow, teamstats_listbox_layoutL.FirstShownIdx + teamstats_listbox_layoutL.showcount <= r2)
+		IFObj_fnSetVis(this.buttons.RightDownArrow, teamstats_listbox_layoutL.FirstShownIdx + teamstats_listbox_layoutL.showcount <= r2)
+		
+		IFObj_UpdateBlinkyAnim(this.buttons.LeftUpArrow, IFObj_fnTestHotSpot(this.buttons.LeftUpArrow), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.RightUpArrow, IFObj_fnTestHotSpot(this.buttons.RightUpArrow), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.LeftDownArrow, IFObj_fnTestHotSpot(this.buttons.LeftDownArrow), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.RightDownArrow, IFObj_fnTestHotSpot(this.buttons.RightDownArrow), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.LeftColumnHeader1, IFObj_fnTestHotSpot(this.buttons.LeftColumnHeader1), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.LeftColumnHeader2, IFObj_fnTestHotSpot(this.buttons.LeftColumnHeader2), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.LeftColumnHeader3, IFObj_fnTestHotSpot(this.buttons.LeftColumnHeader3), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.LeftColumnHeader4, IFObj_fnTestHotSpot(this.buttons.LeftColumnHeader4), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.RightColumnHeader1, IFObj_fnTestHotSpot(this.buttons.RightColumnHeader1), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.RightColumnHeader2, IFObj_fnTestHotSpot(this.buttons.RightColumnHeader2), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.RightColumnHeader3, IFObj_fnTestHotSpot(this.buttons.RightColumnHeader3), 0.4, 1, 0.4, 0.2)
+		IFObj_UpdateBlinkyAnim(this.buttons.RightColumnHeader4, IFObj_fnTestHotSpot(this.buttons.RightColumnHeader4), 0.4, 1, 0.4, 0.2)
  	end,
 
 
