@@ -1165,171 +1165,158 @@ function ifs_teamstats_fnBuildScreen(this)
 	this.bgTexture.localpos_r = r*widescreen
 	this.bgTexture.localpos_b = b
 	this.bgTexture.uvs_b = v
+	
+	local w, h = ScriptCB_GetScreenInfo()		-- r5, r6
+	local ws,hs = ScriptCB_GetSafeScreenInfo()	-- r7, r8
+	local r9 = 0.376
+	
+	this.titleTeamStats.bg_width = ws*0.98
+	this.titleAwards.bg_width = ws*0.98
+	
 
 	--if(this.Helptext_Back) then
 	--	IFText_fnSetString(this.Helptext_Back.helpstr,"ifs.stats.back")
 	--end
 
-	if(gPlatformStr ~= "PC") then
-		this.Helptext_Done = NewHelptext {
-			ScreenRelativeX = 0.0, -- left
-			ScreenRelativeY = 1.0, -- bottom
-			y = -15, -- just above bottom
-			x = 0,
-			buttonicon = "btnmisc",
-			string = "ifs.stats.done",
-		}
-	end
+	-- if(gPlatformStr ~= "PC") then
+		-- this.Helptext_Done = NewHelptext {
+			-- ScreenRelativeX = 0.0, -- left
+			-- ScreenRelativeY = 1.0, -- bottom
+			-- y = -15, -- just above bottom
+			-- x = 0,
+			-- buttonicon = "btnmisc",
+			-- string = "ifs.stats.done",
+		-- }
+	-- end
 
-	-- Inset slightly from fulls screen size
-	local w,h = ScriptCB_GetSafeScreenInfo()
+	-- -- Inset slightly from fulls screen size
+	-- local w,h = ScriptCB_GetSafeScreenInfo()
 --	w = w * 0.95
 	--h = h * 0.82
 
 	this.listbox = NewButtonWindow { ZPos = 200, x=0, y = 0,
 		ScreenRelativeX = 0.5, -- center
-		ScreenRelativeY = 0.345, -- top part of screen
-		width = w,
-		height = h * 0.54,
+		ScreenRelativeY = r9, -- top part of screen
+		width = ws,
+		height = hs * 0.63,
+		noEnterAnimation = 1,
 	}
 
 	-- Cut width in half for 2-column layout, make containers to drop them into
-	w = w * 0.5
+	ws = ws * 0.5
 	this.LeftList = NewIFContainer {
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.32,
-		x =-w * 0.5
+		ScreenRelativeY = r9 * 1.07,
+		x =-ws * 0.5
 	}
 	this.RightList = NewIFContainer {
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.32,
-		x = w * 0.5
+		ScreenRelativeY = r9 * 1.07,
+		x = ws * 0.5
 	}
 
 	-- awards
+	local r10 = 0.84
+	
 	this.awardsListbox = NewButtonWindow { ZPos = 200, x=0, y = 0,
 		ScreenRelativeX = 0.5, -- center
-		ScreenRelativeY = 0.805, -- bottom part of screen
-		width = w * 2,
-		height = h * 0.22,
+		ScreenRelativeY = r10, -- bottom part of screen
+		width = ws * 2,
+		height = hs * 0.17,
 	}
 	
 	this.awardsLeftList = NewIFContainer {
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.805,
-		x =-w * 0.5
+		ScreenRelativeY = r10,
+		x =-ws * 0.5
 	}
 
 	this.awardsRightList = NewIFContainer {
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.805,
-		x = w * 0.5
-	}
-
-	local offset_x = 0.062
-	local offset_w = 0.120
-
-	this.LeftList.ColumnHeader1 = NewIFImage {
-		x = w * (offset_x + 0*offset_w), y = h * -0.22,
-		texture = "points", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-	this.LeftList.ColumnHeader2 = NewIFImage {
-		x = w * (offset_x + 1*offset_w), y = h * -0.22,
-		texture = "stats_kills", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-	this.LeftList.ColumnHeader3 = NewIFImage {
-		x = w * (offset_x + 2*offset_w), y = h * -0.22,
-		texture = "stats_deaths", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-	this.LeftList.ColumnHeader4 = NewIFImage {
-		x = w * (offset_x + 3*offset_w), y = h * -0.22,
-		texture = "stats_flags", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-	this.LeftList.TeamIcon = NewIFImage {
-		x = -w * 0.3, y = h * -0.22,
-		texture = "stats_cpp", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-
-	this.RightList.ColumnHeader1 = NewIFImage {
-		x = w * (offset_x + 0*offset_w), y = h * -0.22,
-		texture = "points", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-	this.RightList.ColumnHeader2 = NewIFImage {
-		x = w * (offset_x + 1*offset_w), y = h * -0.22,
-		texture = "stats_kills", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-	this.RightList.ColumnHeader3 = NewIFImage {
-		x = w * (offset_x + 2*offset_w), y = h * -0.22,
-		texture = "stats_deaths", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-	this.RightList.ColumnHeader4 = NewIFImage {
-		x = w * (offset_x + 3*offset_w), y = h * -0.22,
-		texture = "stats_flags", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
-	}
-	this.RightList.TeamIcon = NewIFImage {
-		x = - w * 0.3, y = h * -0.22,
-		texture = "stats_cpp", -- .tga assumed
-		localpos_r = w*0.07, localpos_b = h*0.04,
-		inert = 1,
+		ScreenRelativeY = r10,
+		x = ws * 0.5
 	}
 	
-	-- set the team icon textures
-	local team1 = ScriptCB_TeamStatsGetTeam1();
-	if(team1 == 1) then -- aliance
-		this.LeftList.TeamIcon.texture = "all_icon"
-		this.RightList.TeamIcon.texture = "imp_icon"
-	elseif(team1 == 2) then
-		this.LeftList.TeamIcon.texture = "imp_icon"
-		this.RightList.TeamIcon.texture = "all_icon"
-	elseif(team1 == 3) then
-		this.LeftList.TeamIcon.texture = "rep_icon"
-		this.RightList.TeamIcon.texture = "cis_icon"
-	else
-		this.LeftList.TeamIcon.texture = "cis_icon"
-		this.RightList.TeamIcon.texture = "rep_icon"
-	end
+	local r11 = 30
+	local r12 = 30
+	local offset_x = 0.06
+	local offset_w = 0.124
+
+	local r15 = ws * (offset_x + 0 * offset_w) - (r11 / 2)
+	local r16 = ws * (offset_x + 1 * offset_w) - (r11 / 2)
+	local r17 = ws * (offset_x + 2 * offset_w) - (r11 / 2)
+	local r18 = ws * (offset_x + 3 * offset_w) - (r11 / 2)
+	local r19 = -this.listbox.height / 2
 	
-	this.titleTeamStats.bg_width = w*2 * 0.945
-	this.titleTeamStats.bgoffsetx = w * -0.009
-	this.titleTeamStats.bgexpandy = 6
-	this.titleAwards.bg_width = w*2 * 0.945
-	this.titleAwards.bgoffsetx = w * -0.009
-	this.titleAwards.bgexpandy = 6
+	this.LeftList.Title = NewIFText{
+		string = "TITLE: 30",
+		font = "gamefont_medium",
+		flashy = 0,
+		textw = ws * 0.5,
+		texth = r12,
+		halign = "left",
+		x = -ws / 2 + 15,
+		y = r19,
+	}
+	
+	this.LeftModel = NewIFModel {
+		ScreenRelativeX = 0.25,
+		ScreenRelativeY = 0.5,
+		x = 0,
+		y = 0,
+		scale = 1,
+		OmegaY = 0.3,
+		lighting = 1,
+	}
+	
+	this.RightList.Title = NewIFText{
+		string = "TITLE: 30",
+		font = "gamefont_medium",
+		flashy = 0,
+		textw = ws * 0.5,
+		texth = r12,
+		halign = "left",
+		x = -ws / 2 + 15,
+		y = r19,
+	}
+	
+	this.RightModel = NewIFModel {
+		ScreenRelativeX = 0.75,
+		ScreenRelativeY = 0.5,
+		x = 0,
+		y = 0,
+		scale = 1,
+		OmegaY = 0.25,
+		lighting = 1,
+	}
+	
+	this.titleTeamStats.bg_width = 2*ws * 0.9665
+	this.titleTeamStats.bgoffsetx = 2*ws * -0.0053
+	this.titleTeamStats.bgexpandy = 4
+	this.titleAwards.bg_width = 2*ws * 0.9665
+	this.titleAwards.bgoffsetx = 2*ws * -0.0053
+	this.titleAwards.bgexpandy = 4
 
-	teamstats_listbox_layoutL.fontheight = ScriptCB_GetFontHeight(teamstats_listbox_layoutL.font)
-	teamstats_listbox_layoutL.yHeight = math.max(26,teamstats_listbox_layoutL.fontheight)
-	teamstats_listbox_layoutR.fontheight = ScriptCB_GetFontHeight(teamstats_listbox_layoutR.font)
-	teamstats_listbox_layoutR.yHeight = math.max(26,teamstats_listbox_layoutR.fontheight)
+	-- teamstats_listbox_layoutL.fontheight = ScriptCB_GetFontHeight(teamstats_listbox_layoutL.font)
+	-- teamstats_listbox_layoutL.yHeight = math.max(26,teamstats_listbox_layoutL.fontheight)
+	-- teamstats_listbox_layoutR.fontheight = ScriptCB_GetFontHeight(teamstats_listbox_layoutR.font)
+	-- teamstats_listbox_layoutR.yHeight = math.max(26,teamstats_listbox_layoutR.fontheight)
 
-	teamstats_listbox_layoutL.width = w
-	teamstats_listbox_layoutR.width = teamstats_listbox_layoutL.width
-	teamstats_listbox_layoutL.showcount = math.floor(this.listbox.height / (teamstats_listbox_layoutL.yHeight + teamstats_listbox_layoutL.ySpacing)) - 2
+	teamstats_listbox_layoutL.width = ws - 20
+	teamstats_listbox_layoutR.width = ws - 20
+	--lbl199
+	local r20 = hs * 0.55
+	teamstats_listbox_layoutL.showcount = math.floor(r20 / (teamstats_listbox_layoutL.yHeight + teamstats_listbox_layoutL.ySpacing)) - 1
 	teamstats_listbox_layoutR.showcount = teamstats_listbox_layoutL.showcount
 
 	teamstats_awardsListbox_layoutL.fontheight = ScriptCB_GetFontHeight(teamstats_awardsListbox_layoutL.font)
 	teamstats_awardsListbox_layoutL.yHeight = math.max(18,teamstats_awardsListbox_layoutL.fontheight)
 	teamstats_awardsListbox_layoutR.fontheight = ScriptCB_GetFontHeight(teamstats_awardsListbox_layoutR.font)
 	teamstats_awardsListbox_layoutR.yHeight = math.max(18,teamstats_awardsListbox_layoutR.fontheight)
-
-	teamstats_awardsListbox_layoutL.width = w
+	--lbl 244
+	teamstats_awardsListbox_layoutL.CursorIdx = nil
+	teamstats_awardsListbox_layoutR.CursorIdx = nil
+	teamstats_awardsListbox_layoutL.width = ws
 	teamstats_awardsListbox_layoutR.width = teamstats_awardsListbox_layoutL.width
 	teamstats_awardsListbox_layoutL.showcount = 4 --math.floor(this.awardsListbox.height / (teamstats_awardsListbox_layoutL.yHeight + teamstats_awardsListbox_layoutL.ySpacing)) - 1
 	teamstats_awardsListbox_layoutR.showcount = 4 --teamstats_awardsListbox_layoutL.showcount
@@ -1338,6 +1325,148 @@ function ifs_teamstats_fnBuildScreen(this)
 	ListManager_fnInitList(ifs_teamstats.RightList,teamstats_listbox_layoutR)
 	ListManager_fnInitList(ifs_teamstats.awardsLeftList,teamstats_awardsListbox_layoutL)
 	ListManager_fnInitList(ifs_teamstats.awardsRightList,teamstats_awardsListbox_layoutR)
+	
+	--lbl 278
+	this.buttons = NewIFContainer{
+		ScreenRelativeX = 0.5,
+		ScreenRelativeY = r9 * 0.98,
+	}
+	
+	local r21 = 30
+	
+	this.buttons.LeftUpArrow = NewIFImage {
+		ZPos = 0,
+		x = -ws * 0.5,
+		y = -r20 / 2 + 10,
+		inertUVs = 1,
+		alpha = 180,
+		localpos_l = -r21/2,
+		localpos_t = -r21/2,
+		localpos_r = r21/2,
+		localpos_b = r21/2,
+		texture = "small_arrow",
+		AutoHotspot = "_upL",
+		uvs_diag = 1,
+	}
+	
+	this.buttons.RightUpArrow = NewIFImage {
+		ZPos = 0,
+		x = ws * 0.5,
+		y = -r20 / 2 + 10,
+		inertUVs = 1,
+		alpha = 180,
+		localpos_l = -r21/2,
+		localpos_t = -r21/2,
+		localpos_r = r21/2,
+		localpos_b = r21/2,
+		texture = "small_arrow",
+		AutoHotspot = "_upR",
+		uvs_diag = 1,
+	}
+	--lbl 341
+	this.buttons.LeftDownArrow = NewIFImage {
+		ZPos = 0,
+		x = -ws * 0.5,
+		y = r20 / 2 + 10,
+		inertUVs = 1,
+		alpha = 180,
+		localpos_l = -r21/2,
+		localpos_t = r21/2,
+		localpos_r = r21/2,
+		localpos_b = -r21/2,
+		texture = "small_arrow",
+		AutoHotspot = "_downL",
+		uvs_diag = 1,
+	}
+	
+	this.buttons.RightDownArrow = NewIFImage {
+		ZPos = 0,
+		x = ws * 0.5,
+		y = r20 / 2 + 10,
+		inertUVs = 1,
+		alpha = 180,
+		localpos_l = -r21/2,
+		localpos_t = r21/2,
+		localpos_r = r21/2,
+		localpos_b = -r21/2,
+		texture = "small_arrow",
+		AutoHotspot = "_downR",
+		uvs_diag = 1,
+	}
+	
+	--lbl 394
+	this.buttons.LeftColumnHeader1 = NewIFImage {
+		x = r15 - ws / 2,
+		y = r19 + h * 0.03,
+		texture = "points",
+		localpos_r = r11,
+		localpos_b = r12,
+		AutoHotspot = "_sortKillsL",
+	}
+	
+	this.buttons.LeftColumnHeader2 = NewIFImage {
+		x = r16 - ws / 2,
+		y = r19 + h * 0.03,
+		texture = "stats_kills",
+		localpos_r = r11,
+		localpos_b = r12,
+		AutoHotspot = "_sortDeathsL",
+	}
+	
+	this.buttons.LeftColumnHeader3 = NewIFImage {
+		x = r17 - ws / 2,
+		y = r19 + h * 0.03,
+		texture = "stats_deaths",
+		localpos_r = r11,
+		localpos_b = r12,
+		AutoHotspot = "_sortCppL",
+	}
+	
+	this.buttons.LeftColumnHeader4 = NewIFImage {
+		x = r18 - ws / 2,
+		y = r19 + h * 0.03,
+		texture = "stats_flags",
+		localpos_r = r11,
+		localpos_b = r12,
+		AutoHotspot = "_sortCppL",
+	}
+	
+	this.buttons.RightColumnHeader1 = NewIFImage {
+		x = r15 + ws / 2,
+		y = r19 + h * 0.03,
+		texture = "points",
+		localpos_r = r11,
+		localpos_b = r12,
+		AutoHotspot = "_sortKillsR",
+	}
+	
+	this.buttons.RightColumnHeader2 = NewIFImage {
+		x = r16 + ws / 2,
+		y = r19 + h * 0.03,
+		texture = "stats_kills",
+		localpos_r = r11,
+		localpos_b = r12,
+		AutoHotspot = "_sortDeathsR",
+	}
+	
+	this.buttons.RightColumnHeader3 = NewIFImage {
+		x = r17 + ws / 2,
+		y = r19 + h * 0.03,
+		texture = "stats_deaths",
+		localpos_r = r11,
+		localpos_b = r12,
+		AutoHotspot = "_sortCppR",
+	}
+	
+	this.buttons.RightColumnHeader4 = NewIFImage {
+		x = r18 + ws / 2,
+		y = r19 + h * 0.03,
+		texture = "stats_flags",
+		localpos_r = r11,
+		localpos_b = r12,
+		AutoHotspot = "_sortCppR",
+	}
+
 end
 
 
