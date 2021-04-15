@@ -1,6 +1,23 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
+
+lobby_marked = nil
+local r0 = "teamtracksselected"
+local r1 = "enemiestrackselected"
+local r2 = "untrackselected"
+local r3 = "singletomarked"
+local r4 = "markplayer"
+local r5 = "friendstomarked"
+local r6 = "enemiestomarked"
+local r7 = "friendlyaifollow"
+local r8 = "enemyaifollow"
+local r9 = "selectedboot"
 
 -- Multiplayer lobby
 
@@ -591,6 +608,7 @@ function ifs_mp_lobby_CalcCanForceBoot()
             IFText_fnSetString(this.Helptext_ForceBoot.helpstr, "ifs.onlinelobby.forceboot")
         end
     end
+	ifs_mp_lobby_fnShowExtraButtons(1,1)
 end
 
 -- bringup vote to boot popup
@@ -719,6 +737,16 @@ ifs_mp_lobby = NewIFShellScreen {
 			-- restore it on re-entry)
 			ScriptCB_UpdateLobby(1)
 		end
+		
+		if __TempProcessPlayersFunction__ then
+			local uop_fnProcessPlayer = __TempProcessPlayersFunction__
+			__TempProcessPlayersFunction__ = nil
+			
+			uop_fnProcessPlayer(ifs_mp_lobby_listbox_contents)
+			ScriptCB_PopScreen()
+			return
+		end
+		
 		ListManager_fnFillContents(this.listbox,ifs_mp_lobby_listbox_contents,lobby_listbox_layout)
 
 		ifs_mp_lobby_SetHilight(this,1)
@@ -838,51 +866,267 @@ ifs_mp_lobby = NewIFShellScreen {
 			-- hide the button, since we just voted
 			ifs_mp_lobby_CalcCanForceBoot()
 		else -- SM 7-Feb-05 -- if (gPlatformStr ~= "PC") then
-
-			if(lobby_listbox_layout.SelectedIdx) then
+			
+			--lbl 98
+			if(this.CurButton == r0) then	--else 140
 				local Selection = ifs_mp_lobby_listbox_contents[lobby_listbox_layout.SelectedIdx]
 				if(not Selection) then
 					return
 				end
-				IFText_fnSetString(Popup_LobbyOpts.title,Selection.namestr)
-				Popup_LobbyOpts.bIsMe = Selection.bIsLocal and (Selection.iViewport == ScriptCB_GetPausingViewport())
-				--                              print("bIsMe = ", Popup_LobbyOpts.bIsMe, " from ", Selection.bIsLocal, Selection.iViewport ,ScriptCB_GetPausingViewport())
 				
-				local NumEntries = table.getn(ifs_mp_lobby_listbox_contents)
-				Popup_LobbyOpts.bIsSameTeam = nil
-				for i = 1, NumEntries do
-					--print("+++i=", i, Selection.iTeam, ifs_mp_lobby_listbox_contents[i].bIsLocal, ifs_mp_lobby_listbox_contents[i].namestr, ifs_mp_lobby_listbox_contents[i].iTeam )
-					if( ifs_mp_lobby_listbox_contents[i].bIsLocal ) then
-						if( Selection.iTeam == ifs_mp_lobby_listbox_contents[i].iTeam ) then
-							--print("+++x=", i, Selection.iTeam, ifs_mp_lobby_listbox_contents[i].bIsLocal, ifs_mp_lobby_listbox_contents[i].namestr, ifs_mp_lobby_listbox_contents[i].iTeam )
-							Popup_LobbyOpts.bIsSameTeam = 1
-						end
-					end
-				end            
+				local team = 0	--r2
+				if Selection.iTeam < 0.5 then
+					team = 1
+				else
+					team = 2
+				end
+				
+				local characterIndex = Selection.indexstr
+				unit = GetCharacterUnit(characterIndex)
+				
+				if unit == nil then
+					return
+				end
+				--lbl 125
+				
+				MapAddEntityMarker(unit, "hud_objective_icon", 4, team, "YELLOW", true, true, true, true)
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+				
+			elseif(this.CurButton == r1) then
+				
+				local data = ifs_mp_lobby_listbox_contents[lobby_listbox_layout.SelectedIdx]
+				if not data then
+					return
+				end
+				
+				local team = 0
+				if data.iTeam < 0.5 then
+					team = 2
+				else
+					team = 1
+				end
+				
+				local characterIndex = data.indexstr
+				unit = GetCharacterUnit(characterIndex)
+				
+				if unit == nil then
+					return
+				end
+				
+				MapAddEntityMarker(unit, "hud_objective_icon", 4, team, "YELLOW", true, true, true, true)
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+			
+			elseif(this.CurButton == r2) then
+				
+				local data = ifs_mp_lobby_listbox_contents[lobby_listbox_layout.SelectedIdx]
+				if not data then
+					return
+				end
+				
+				local characterIndex = data.indexstr
+				unit = GetCharacterUnit(characterIndex)
+				
+				if unit == nil then
+					return
+				end
+				
+				MapRemoveEntityMarker(unit)
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+				
+			elseif(this.CurButton == r3) then
+				
+				local data = ifs_mp_lobby_listbox_contents[lobby_listbox_layout.SelectedIdx]
+				if not data then
+					return
+				end
+				
+				local characterIndex = data.indexstr
+				local unit = GetCharacterUnit(characterIndex)
+				
+				if unit == nil then
+					return
+				end
+				
+				if lobby_marked == nil then
+					return
+				end
+				
+				local markedUnit = GetCharacterUnit(lobby_marked)
+				if markedUnit == nil then
+					return
+				end
+				
+				local mat = GetEntityMatrix(markedUnit)
+				SetEntityMatrix(unit, mat)
 				
 				ifelm_shellscreen_fnPlaySound(this.acceptSound)
-
-
-				-- Get their muted, friend flags.
-				-- also get the boot flag. says if we could boot this player if we wanted to.
-				-- this is not absolute, there are other conditions that could hide the "boot"
-				-- option. all this tells us is that someone else isn't currently nominated
-				-- for a boot
-				Popup_LobbyOpts.bIsMuted, 
-				Popup_LobbyOpts.bIsFriend, 
-				Popup_LobbyOpts.bCanBoot,
-				Popup_LobbyOpts.bIsGuest,
-				Popup_LobbyOpts.bCanAddFriend = 
-					ScriptCB_GetLobbyPlayerFlags(Selection.namestr, Selection.indexstr)
+			
+			elseif(this.CurButton == r4) then
 				
-				Popup_LobbyOpts.bOnlyForPlayer = 1
-				Popup_LobbyOpts.fnDone         = ifs_mp_lobby_fnLobbyOptionsPopupDone;
-				Popup_LobbyOpts.playerIndex    = Selection.indexstr
-				Popup_LobbyOpts:fnActivate(1)
-			end -- selectedidx is valid
-		end -- (SM 7-Feb-05 NOT) not PC
-	end,
+				local data = ifs_mp_lobby_listbox_contents[lobby_listbox_layout.SelectedIdx]
+				if not data then
+					return
+				end
+				
+				lobby_marked = data.indexstr
+				
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+			
+			elseif(this.CurButton == r5) then
+				
+				if lobby_marked == nil then
+					return
+				end
+				
+				local markedUnit = GetCharacterUnit(lobby_marked)	--r1
+				local markedTeam = GetCharacterTeam(lobby_marked)	--r2
+				local teamSize = GetTeamSize(markedTeam)			--r3
+				
+				local i = 0		--r4
+				for i = 0, teamSize -1, 1 do
+					local member = GetTeamMember(markedTeam, i)
+					
+					if not (member == nil) then
+						local unit = GetCharacterUnit(member)
+						
+						if not (unit == nil) then
+							local mat = GetEntityMatrix(markedUnit)
+							SetEntityMatrix(unit, mat)
+						end
+					end
+				end
+				
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+			
+			elseif(this.CurButton == r6) then
+				
+				if lobby_marked == nil then
+					return
+				end
+				
+				local markedUnit = GetCharacterUnit(lobby_marked)	--r1
+				local markedTeam = GetCharacterTeam(lobby_marked)	--r2
+				
+				if markedTeam == 1 then
+					markedTeam = 2
+				elseif markedTeam == 2 then
+					markedTeam = 1
+				else
+					ShowMessageText("mods.freecam.unknownenemy")
+					return
+				end
+				
+				local teamSize = GetTeamSize(markedTeam)			--r3
+				
+				local i = 0		--r4
+				for i = 0, teamSize -1, 1 do
+					local member = GetTeamMember(markedTeam, i)
+					
+					if not (member == nil) then
+						local unit = GetCharacterUnit(member)
+						
+						if not (unit == nil) then
+							local mat = GetEntityMatrix(markedUnit)
+							SetEntityMatrix(unit, mat)
+						end
+					end
+				end
+				
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+				
+			elseif(this.CurButton == r7) then
+			
+				local data = ifs_mp_lobby_listbox_contents[lobby_listbox_layout.SelectedIdx]
+				if not data then
+					return
+				end
+				
+				local team = GetCharacterTeam(data.indexstr)
+				
+				AddAIGoal(team, "follow", 100, data.indexstr)
+				
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+				
+			elseif(this.CurButton == r8) then
+				
+				local data = ifs_mp_lobby_listbox_contents[lobby_listbox_layout.SelectedIdx]
+				if not data then
+					return
+				end
+				
+				local team = GetCharacterTeam(data.indexstr)
+				
+				if team == 1 then
+					team = 2
+				elseif team == 2 then
+					team = 1
+				else
+					ShowMessageText("mods.freecam.unknownenemy")
+					return
+				end
+				
+				--lbl 419
+				
+				AddAIGoal(team, "follow", 100, data.indexstr)
+				
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+				
+			elseif(this.CurButton == r9) then
+				
+				ScriptCB_VoteKick("")
+				
+				ifelm_shellscreen_fnPlaySound(this.acceptSound)
+				
+			else
+				if (lobby_listbox_layout.SelectedIdx) then
+					
+					local data = ifs_mp_lobby_listbox_contents[lobby_listbox_layout.SelectedIdx]
+					if not data then
+						return
+					end
+					
+					IFText_fnSetString(Popup_LobbyOpts.title,data.namestr)
+					Popup_LobbyOpts.bIsMe = data.bIsLocal and (data.iViewport == ScriptCB_GetPausingViewport())
+					--                              print("bIsMe = ", Popup_LobbyOpts.bIsMe, " from ", Selection.bIsLocal, Selection.iViewport ,ScriptCB_GetPausingViewport())
+					
+					local NumEntries = table.getn(ifs_mp_lobby_listbox_contents)
+					Popup_LobbyOpts.bIsSameTeam = nil
+					for i = 1, NumEntries do
+						--print("+++i=", i, Selection.iTeam, ifs_mp_lobby_listbox_contents[i].bIsLocal, ifs_mp_lobby_listbox_contents[i].namestr, ifs_mp_lobby_listbox_contents[i].iTeam )
+						if( ifs_mp_lobby_listbox_contents[i].bIsLocal ) then
+							if( data.iTeam == ifs_mp_lobby_listbox_contents[i].iTeam ) then
+								--print("+++x=", i, Selection.iTeam, ifs_mp_lobby_listbox_contents[i].bIsLocal, ifs_mp_lobby_listbox_contents[i].namestr, ifs_mp_lobby_listbox_contents[i].iTeam )
+								Popup_LobbyOpts.bIsSameTeam = 1
+							end
+						end
+					end            
+					
+					ifelm_shellscreen_fnPlaySound(this.acceptSound)
 
+
+					-- Get their muted, friend flags.
+					-- also get the boot flag. says if we could boot this player if we wanted to.
+					-- this is not absolute, there are other conditions that could hide the "boot"
+					-- option. all this tells us is that someone else isn't currently nominated
+					-- for a boot
+					Popup_LobbyOpts.bIsMuted, 
+					Popup_LobbyOpts.bIsFriend, 
+					Popup_LobbyOpts.bCanBoot,
+					Popup_LobbyOpts.bIsGuest,
+					Popup_LobbyOpts.bCanAddFriend = 
+						ScriptCB_GetLobbyPlayerFlags(data.namestr, data.indexstr)
+					
+					Popup_LobbyOpts.bOnlyForPlayer = 1
+					Popup_LobbyOpts.fnDone         = ifs_mp_lobby_fnLobbyOptionsPopupDone;
+					Popup_LobbyOpts.playerIndex    = data.indexstr
+					Popup_LobbyOpts:fnActivate(1)
+				end -- selectedidx is valid
+			end -- (SM 7-Feb-05 NOT) not PC
+		end
+	end,
+	
+	
+	
 	Input_Back = function(this)
 		if(this.bShellActive) then
 			ifelm_shellscreen_fnPlaySound(this.exitSound)
@@ -1167,6 +1411,34 @@ function ifs_mp_lobby_fnBuildScreen(this)
     end
 
 --  ScriptCB_GetLobbyPlayerlist()
+
+	return r9, r1, r0, r2, r3, r4, r5, r6, r7, r8
+end
+
+function ifs_mp_lobby_fnShowExtraButtons(parameter1, parameter2)
+	
+	local this = ifs_mp_lobby
+	parameter2 = 1
+	parameter1 = 1
+	showTracking = 1
+	isSameTeam = 1
+	
+	IFObj_fnSetVis(this.Helptext_teamtracksselected, showTracking)
+	
+	if ScriptCB_GetAmHost() then
+		IFObj_fnSetVis(this.Helptext_enemiestrackselected, isSameTeam)
+	else
+		IFObj_fnSetVis(this.Helptext_enemiestrackselected, nil)
+	end
+	
+	IFObj_fnSetVis(this.Helptext_untrackselected, showTracking)
+	IFObj_fnSetVis(this.Helptext_singletomarked, parameter2)
+	IFObj_fnSetVis(this.Helptext_markplayer, parameter2)
+	IFObj_fnSetVis(this.Helptext_friendstomarked, parameter2)
+	IFObj_fnSetVis(this.Helptext_enemiestomarked, parameter2)
+	IFObj_fnSetVis(this.Helptext_friendlyaifollow, parameter1)
+	IFObj_fnSetVis(this.Helptext_enemyaifollow, parameter1)
+
 end
 
 
