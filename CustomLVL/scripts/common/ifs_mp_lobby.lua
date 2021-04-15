@@ -1387,32 +1387,156 @@ function ifs_mp_lobby_fnBuildScreen(this)
         this.Helptext_Misc = NewPCIFButton {
             ScreenRelativeX = 0.5, -- left
             ScreenRelativeY = 1.0, -- bottom
-            y = -15, -- second row of items
-            btnw = 200, 
+            --y = -15, -- second row of items
+            --btnw = 200, 
             btnh = ScriptCB_GetFontHeight("gamefont_small"),
             font = "gamefont_small",
             tag = "voteboot",
             string = "ifs.onlinelobby.vote",
+			y = -40,
+			x = -200,
+			btnw = 180,
             --nocreatebackground = 1,
         }
 
         this.Helptext_ForceBoot = NewPCIFButton {
-            ScreenRelativeX = 1.0, -- left
             ScreenRelativeY = 1.0, -- bottom
-            y = -15, -- second row of items
-            x = -100,
-            btnw = 200, 
             btnh = ScriptCB_GetFontHeight("gamefont_small"),
             font = "gamefont_small",
             tag = "forceboot",
             string = "ifs.onlinelobby.forceboot",
+            ScreenRelativeX = 0.5,
+            y = -40,
+            x = 200,
+            btnw = 180, 
             --nocreatebackground = 1,
         }
+		
+		local uop_btnw = 180
+		local txt = "mods.freecam."
+		
+		this.Helptext_SelectedBoot = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = -50,
+			x = 250,
+			btnw = 200,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r0,
+			string = txt .. r0,
+		}
+		
+		this.Helptext_enemiestrackselected = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = 20,
+			x = 200,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r1,
+			string = txt .. r1,
+		}
+		
+		this.Helptext_teamtracksselected = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = 0,
+			x = 200,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r2,
+			string = txt .. r2,
+		}
+		
+		this.Helptext_untrackselected = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = -20,
+			x = 200,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r3,
+			string = txt .. r3,
+		}
+		
+		this.Helptext_singletomarked = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = -20,
+			x = 0,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r4,
+			string = txt .. r4,
+		}
+		
+		this.Helptext_markplayer = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = -40,
+			x = 0,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r5,
+			string = txt .. r5,
+		}
+		
+		this.Helptext_friendstomarked = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = 0,
+			x = 0,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r6,
+			string = txt .. r6,
+		}
+		
+		this.Helptext_enemiestomarked = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = 20,
+			x = 0,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r7,
+			string = txt .. r7,
+		}
+		
+		this.Helptext_friendlyaifollow = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = 20,
+			x = -200,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r8,
+			string = txt .. r8,
+		}
+		
+		this.Helptext_enemyaifollow = NewPCIFButton {
+			ScreenRelativeX = 0.5,
+			ScreenRelativeY = 1,
+			y = 0,
+			x = -200,
+			btnw = uop_btnw,
+			btnh = ScriptCB_GetFontHeight("gamefont_small"),
+			font = "gamefont_small",
+			tag = r9,
+			string = txt .. r9,
+		}
     end
 
 --  ScriptCB_GetLobbyPlayerlist()
-
-	return r9, r1, r0, r2, r3, r4, r5, r6, r7, r8
 end
 
 function ifs_mp_lobby_fnShowExtraButtons(parameter1, parameter2)
