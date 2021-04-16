@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 -- ifs_instant_options_tags.lua (zerted patch 1.3)
 -- default options
 -- WARNING : this file can (and is) overridden in the platform directories
@@ -8,7 +13,7 @@ ifs_io_listtags_global = {
 }
 ifs_io_listtags_host = {
   title = "ifs.instantoptions.titles.host",
-  tags = {"players", "warmup", "vote", "teamdmg", "shownames", "autoassign", "startcnt", "playerawards"}
+  tags = {"dedicated", "players", "warmup", "vote", "teamdmg", "shownames", "autoassign", "startcnt", "playerawards"}
 }
 ifs_io_listtags_hero = {
   title = "ifs.instantoptions.titles.hero",

@@ -31,20 +31,20 @@ common.lvl:
 	
 shell.lvl
   scripts:
-    shell_interface
-	ifs_login
-	ifs_missionselect
-	missionlist
-	ifs_sp
-	ifs_sp_campaign
-	ifs_instant_options_tags
-	ifs_freeform_init_common
-	ifs_freeform_main
-	ifs_freeform_battle_mode
-	ifs_freeform_battle_card
-	ifs_mp_sessionlist
-	ifs_mp_leaderboard
-	ifs_era_handler
-	ifs_missionselect_pcmulti
+    shell_interface - restored
+    ifs_login - tbd
+    ifs_missionselect - tbd
+    missionlist - tbd
+    ifs_sp - restored
+    ifs_sp_campaign - tbd
+    ifs_instant_options_tags - restored
+    ifs_freeform_init_common - restored
+    ifs_freeform_main - restored
+    ifs_freeform_battle_mode - tbd
+    ifs_freeform_battle_card - tbd
+    ifs_mp_sessionlist - tbd
+    ifs_mp_leaderboard - tbd
+    ifs_era_handler - tbd
+    ifs_missionselect_pcmulti - tbd
 	
 	
