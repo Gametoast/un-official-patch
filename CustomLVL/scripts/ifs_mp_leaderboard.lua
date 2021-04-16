@@ -1,5 +1,5 @@
 -- ifs_mp_leaderboard.lua (Zerted1.3 patch ) 
--- verified WRONG
+-- verified (BAD_AL)
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
