@@ -2,14 +2,11 @@
 -- r129
 
 common.lvl:
-  missing textures:
-    btn_directional_pad_LR
-    btn_directional_pad_L
-    btn_directional_pad_R
-    btn_directional_pad_U
-    btn_directional_pad_D
-    hotspot
-    noise
+  texture differences:
+    front_icon.tga
+    newrep_icon.tga
+    toys_icon.tga
+
 
   scripts:
     ifs_mp_lobby - closure definition upvalues wrong order, but function is correct
@@ -18,3 +15,15 @@ common.lvl:
     error_popup - restored
     popup_prompt - restored
     startup - not part of the final build??
+
+  scripts binary differences:
+    error_popup.script
+    ifs_awardstats.script
+    ifs_careerstats.script
+    ifs_mp_lobby.script
+    ifs_opt_general.script
+    ifs_opt_mp.script
+    ifs_pausemenu.script
+    ifs_personalstats.script
+    ifs_teamstats.script
+    popup_prompt.script
