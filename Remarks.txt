@@ -34,17 +34,24 @@ shell.lvl
     shell_interface - restored
     ifs_login - tbd
     ifs_missionselect - tbd
-    missionlist - tbd
+    missionlist - WIP
     ifs_sp - restored
     ifs_sp_campaign - tbd
+    ifs_missionselect_pcmulti - WIP 
     ifs_instant_options_tags - restored
     ifs_freeform_init_common - restored
     ifs_freeform_main - restored
-    ifs_freeform_battle_mode - tbd
+    ifs_freeform_battle_mode - restored
     ifs_freeform_battle_card - tbd
     ifs_mp_sessionlist - tbd
     ifs_mp_leaderboard - tbd
     ifs_era_handler - restored
     ifs_missionselect_pcmulti - tbd
+
+addme.script
+   scripts:
+     addme.lua - restored
+
+
 	
 	
