@@ -12,18 +12,6 @@ ucft
 		"fakeconsole_functions"
         "ifs_fakeconsole"
         "game_interface"
-    }
-
-    REQN
-    {
-        "script"
-        "platform=xbox"
-    }
-
-    REQN
-    {
-        "script"
-        "platform=pc"
         "ifs_pc_spawnselect"
         "ifs_pc_spectator"
     }
