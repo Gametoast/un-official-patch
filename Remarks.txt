@@ -37,7 +37,7 @@ shell.lvl
     missionlist               - WIP
     ifs_sp                    - restored
     ifs_sp_campaign           - tbd
-    ifs_missionselect_pcmulti - WIP 
+    ifs_missionselect_pcmulti - tbd 
     ifs_instant_options_tags  - restored
     ifs_freeform_init_common  - restored
     ifs_freeform_main         - restored
