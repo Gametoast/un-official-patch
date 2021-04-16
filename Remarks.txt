@@ -1,0 +1,20 @@
+--------------------------------------------
+-- r129
+
+common.lvl:
+  missing textures:
+    btn_directional_pad_LR
+    btn_directional_pad_L
+    btn_directional_pad_R
+    btn_directional_pad_U
+    btn_directional_pad_D
+    hotspot
+    noise
+
+  scripts:
+    ifs_mp_lobby - closure definition upvalues wrong order, but function is correct
+    ifs_pausemenu - restored
+    ifs_teamstats - restored
+    error_popup - restored
+    popup_prompt - restored
+    startup - not part of the final build??
