@@ -44,7 +44,7 @@ shell.lvl
     ifs_freeform_battle_card - tbd
     ifs_mp_sessionlist - tbd
     ifs_mp_leaderboard - tbd
-    ifs_era_handler - tbd
+    ifs_era_handler - restored
     ifs_missionselect_pcmulti - tbd
 	
 	
