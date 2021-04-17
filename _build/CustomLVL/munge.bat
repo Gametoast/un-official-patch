@@ -29,6 +29,12 @@
 @if not exist %MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM%\CustomLVL mkdir %MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM%\CustomLVL
 @if not exist %OUTPUT_DIR% mkdir %OUTPUT_DIR%
 
+@REM ===== copy premunged files
+@set SOURCE_SUBDIR=CustomLVL
+if exist %MUNGE_ROOT_DIR%\%SOURCE_SUBDIR%\MUNGED xcopy %MUNGE_ROOT_DIR%\%SOURCE_SUBDIR%\MUNGED\*.* %MUNGE_DIR% /D /Q /Y
+if exist %MUNGE_ROOT_DIR%\%SOURCE_SUBDIR%\%MUNGE_DIR% xcopy %MUNGE_ROOT_DIR%\%SOURCE_SUBDIR%\%MUNGE_DIR%\*.* %MUNGE_DIR% /D /Q /Y
+
+
 @REM ===== Handle files in CustomLVL\Movies\
 @set SOURCE_SUBDIR=CustomLVL\movies
 @set SOURCE_DIR=
@@ -59,6 +65,9 @@ configmunge -inputfile effects\*.fx %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -output
 @move /y configmunge.log configmunge_fx.log
 scriptmunge -inputfile scripts\*.lua %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 @for /f %%A in ('dir %SOURCE_DIR%\scripts /s /b /Ad') do scriptmunge -inputfile *.lua %MUNGE_ARGS% -sourcedir %%A -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
+
+configmunge -inputfile $*.hud %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
+@move /y configmunge.log configmunge_hud.log
 
 %MUNGE_PLATFORM%_texturemunge -inputfile $*.tga %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 fontmunge -inputfile fonts\*.fff %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
