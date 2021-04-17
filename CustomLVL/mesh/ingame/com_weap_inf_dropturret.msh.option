@@ -1,0 +1,3 @@
+-keep aimer_y aimer_x 
+-keepmaterial override_texture override_texture 
+-nocollision

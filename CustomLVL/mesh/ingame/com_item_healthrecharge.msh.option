@@ -1,0 +1,2 @@
+-keep com_item_health_recharge pH_tester_arm10 Equipment_Operator_Arm_Socket pH_tester_arm6 
+-nocollision

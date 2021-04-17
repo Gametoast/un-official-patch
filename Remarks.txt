@@ -65,6 +65,6 @@ ingame.lvl
     walker_icon
 
   hud differences:
-    1playerhud.hud - tbd
+    1playerhud.hud - restored
     hudtransforms - tbd
 	
