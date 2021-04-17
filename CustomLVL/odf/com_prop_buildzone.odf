@@ -1,0 +1,10 @@
+[GameObjectClass]
+ClassLabel = "prop"
+GeometryName = "com_prop_buildzone.msh"
+
+
+[Properties]
+Label = "BuildTrap Zone"
+MapTexture = ""
+GeometryName	= "com_prop_buildzone"
+

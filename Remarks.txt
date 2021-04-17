@@ -46,5 +46,15 @@ shell.lvl
     ifs_mp_leaderboard - tbd
     ifs_era_handler - restored
     ifs_missionselect_pcmulti - tbd
-	
+
+ingame.lvl
+  missing odfs:
+    com_prop_barrier_01
+    com_bldg_ctfbase_greenteam
+    com_bldg_ctfbase_redteam
+    com_weap_inf_landmine_placed
+    com_prop_barrier_02
+    com_prop_cratemd_01
+    com_prop_barrel
+    com_prop_cratelg_01
 	

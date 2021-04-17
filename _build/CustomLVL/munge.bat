@@ -61,11 +61,14 @@ localizemunge -inputfile *.cfg %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %
 @set SOURCE_DIR=
 @set SOURCE_DIR=%SOURCE_DIR% %MUNGE_ROOT_DIR%\%SOURCE_SUBDIR%
 
+odfmunge -inputfile $*.odf %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 configmunge -inputfile effects\*.fx %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 @move /y configmunge.log configmunge_fx.log
 scriptmunge -inputfile scripts\*.lua %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 @for /f %%A in ('dir %SOURCE_DIR%\scripts /s /b /Ad') do scriptmunge -inputfile *.lua %MUNGE_ARGS% -sourcedir %%A -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 
+configmunge -inputfile $*.sanm %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
+@move /y configmunge.log configmunge_sanm.log
 configmunge -inputfile $*.hud %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 @move /y configmunge.log configmunge_hud.log
 
