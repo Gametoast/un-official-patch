@@ -79,5 +79,52 @@ ingame.lvl
     lua - verified
     animation - binary equal
     odf - binary equal
+    texture - recovered has too many textures (rep_icon, all_icon, cis_icon, imp_icon)
+              they come from common and are added automatically because they are used
+              with the flag items in the odf folder. IDK why they are not added in the
+              uop ingame. Anyway it wouldn't hurt if they are missing in ingame, since
+              they are already in common. MAYBE be a problem of the custom munge tool
+              Anyway it does not hurt if they are there twice.
+    lvl - for some reason the new file is smaller although there are more files.
+          unmunged all files have the same size, so maybe a packing order reason??
+
+  binary unqual textures (but they look the same)
+    binoculars.tga
+    common_bldg_commandpost.tga
+    common_bldg_commandpost_bump.tga
+    com_1st_weap_inf_grenadethermal.tga
+    com_1st_weap_inf_torpedo.tga
+    com_1st_weap_inf_torpedo_bump.tga
+    com_icon_ctfflag_neutral.tga
+    com_item_healthrecharge.tga
+    com_item_healthrecharge_bump.tga
+    com_sfx_explosion2.tga
+    com_sfx_explosion4.tga
+    com_sfx_flames1.tga
+    com_sfx_flames2.tga
+    com_sfx_flames3.tga
+    com_sfx_laser_orange.tga
+    com_sfx_lightning.tga
+    com_sfx_scorchmark.tga
+    com_sfx_smoke2.tga
+    com_sfx_smoke4.tga
+    com_sfx_waterspray1.tga
+    com_weap_inf_grenadethermal.tga
+    com_weap_inf_landmine.tga
+    com_weap_inf_seismic_mine.tga
+    com_weap_probedroid.tga
+    construction create.tga
+    cor1_prop_holocron.tga
+    gonk.tga
+    hud_poison.tga
+    hud_thermaldetonator.tga
+    item_powerup_ammo.tga
+    item_powerup_health.tga
+    item_powerup_health_green.tga
+    item_powerup_health_red.tga
+    item_powerup_health_yellow.tga
+    missile.tga
+    shell_cube.tga
+
 
 	
