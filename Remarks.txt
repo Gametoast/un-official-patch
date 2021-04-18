@@ -71,4 +71,11 @@ ingame.lvl
   hud differences:
     1playerhud.hud - restored
     hudtransforms - restored
+
+  checked:
+    effects - binary equal
+    config - binary equal
+    hud - binary equal
+    msh - complete, binary unequal
+
 	

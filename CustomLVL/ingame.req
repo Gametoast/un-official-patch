@@ -112,6 +112,7 @@ ucft
 		"config"
 		"SoldierAnimation"
 		
+		"sfo_kmsx"
 		"com_sfx_weap_sc_exp_sm"
 		"com_sfx_weap_sc_exp_md"
 		"com_sfx_weap_sc_exp_lg"
