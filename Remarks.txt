@@ -7,7 +7,6 @@ common.lvl:
     newrep_icon.tga
     toys_icon.tga
 
-
   scripts:
     ifs_mp_lobby - closure definition upvalues wrong order, but function is correct
     ifs_pausemenu - restored
@@ -52,7 +51,7 @@ addme.script
      addme.lua - restored
 
 ingame.lvl
-  missing odfs:
+  missing odfs (from stock req, not needed):
     com_prop_barrier_01
     com_bldg_ctfbase_greenteam
     com_bldg_ctfbase_redteam
@@ -62,7 +61,7 @@ ingame.lvl
     com_prop_barrel
     com_prop_cratelg_01
 
-  missing textures:
+  missing textures (from stock req, not needed):
     noise
     redlaser_1
     spray
@@ -79,5 +78,6 @@ ingame.lvl
     msh - complete, binary unequal
     lua - verified
     animation - binary equal
+    odf - binary equal
 
 	
