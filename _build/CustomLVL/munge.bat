@@ -28,6 +28,7 @@
 @if not exist %MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM% mkdir %MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM%
 @if not exist %MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM%\CustomLVL mkdir %MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM%\CustomLVL
 @if not exist %OUTPUT_DIR% mkdir %OUTPUT_DIR%
+@if not exist %MUNGE_DIR%\globalfiles mkdir %MUNGE_DIR%\globalfiles
 
 @REM ===== copy premunged files
 @set SOURCE_SUBDIR=CustomLVL
@@ -82,7 +83,17 @@ if /I "%MUNGE_PLATFORM%"=="PS2" binmunge -inputfile ps2bin\*.ps2bin %MUNGE_ARGS%
 levelpack -inputfile REQ\*.req %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 move /y levelpack.log levelpack_sublvl.log
 
-levelpack -inputfile %INPUT_FILE% %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+
+@set SOURCE_SUBDIR=CustomLVL
+@set SOURCE_DIR=
+@set SOURCE_DIR=%SOURCE_DIR% %MUNGE_ROOT_DIR%\%SOURCE_SUBDIR%
+
+if exist %SOURCE_DIR%\globalfiles.req (
+	levelpack -inputfile globalfiles.req -writefiles %MUNGE_DIR%\globalfiles\globalfiles.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% -outputdir %MUNGE_DIR%\globalfiles 2>>%MUNGE_LOG%
+	levelpack -inputfile %INPUT_FILE% -common %MUNGE_DIR%\globalfiles\globalfiles.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+) else (
+	levelpack -inputfile %INPUT_FILE% %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+) 
 
 if /I "%MUNGE_PLATFORM%"=="PS2" levelpack -inputfile %INPUT_FILE% -common Common\MUNGED\%MUNGE_PLATFORM%\core.files Common\MUNGED\%MUNGE_PLATFORM%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
 
