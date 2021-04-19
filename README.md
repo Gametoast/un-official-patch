@@ -18,4 +18,4 @@ We do have some of the source code and can get more of it by reverse-engineering
 * there needs to be a globalfiles.req (in general it's just common.req)
 * be aware that if you munge common.lvl nothing is gonna be in there
 * to avoid, remove globalfiles.req
-* or just take \data_UOP\_build\CustomLVL\MUNGED\PC\globalfilesglobalfiles.lvl and rename it.
+* or just take \data_UOP\_build\CustomLVL\MUNGED\PC\globalfiles\globalfiles.lvl and rename it.
