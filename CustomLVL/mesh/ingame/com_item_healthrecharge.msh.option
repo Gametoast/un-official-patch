@@ -1,2 +1,1 @@
--keep com_item_health_recharge pH_tester_arm10 Equipment_Operator_Arm_Socket pH_tester_arm6 
--nocollision
+-keep pH_tester_arm10 pH_tester_arm6 Equipment_Operator_Arm_Socket -hiresshadow

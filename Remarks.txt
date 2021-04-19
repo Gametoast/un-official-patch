@@ -67,15 +67,11 @@ ingame.lvl
     spray
     walker_icon
 
-  hud differences:
-    1playerhud.hud - restored
-    hudtransforms - restored
-
   checked:
     effects - binary equal
     config - binary equal
     hud - binary equal
-    msh - complete, binary unequal
+    msh - largely binary equal
     lua - verified
     animation - binary equal
     odf - binary equal
@@ -85,46 +81,18 @@ ingame.lvl
               uop ingame. Anyway it wouldn't hurt if they are missing in ingame, since
               they are already in common. MAYBE be a problem of the custom munge tool
               Anyway it does not hurt if they are there twice.
-    lvl - for some reason the new file is smaller although there are more files.
-          unmunged all files have the same size, so maybe a packing order reason??
 
-  binary unqual textures (but they look the same)
-    binoculars.tga
-    common_bldg_commandpost.tga
-    common_bldg_commandpost_bump.tga
-    com_1st_weap_inf_grenadethermal.tga
-    com_1st_weap_inf_torpedo.tga
-    com_1st_weap_inf_torpedo_bump.tga
-    com_icon_ctfflag_neutral.tga
-    com_item_healthrecharge.tga
-    com_item_healthrecharge_bump.tga
-    com_sfx_explosion2.tga
-    com_sfx_explosion4.tga
-    com_sfx_flames1.tga
-    com_sfx_flames2.tga
-    com_sfx_flames3.tga
-    com_sfx_laser_orange.tga
-    com_sfx_lightning.tga
-    com_sfx_scorchmark.tga
-    com_sfx_smoke2.tga
-    com_sfx_smoke4.tga
-    com_sfx_waterspray1.tga
-    com_weap_inf_grenadethermal.tga
-    com_weap_inf_landmine.tga
-    com_weap_inf_seismic_mine.tga
-    com_weap_probedroid.tga
-    construction create.tga
-    cor1_prop_holocron.tga
-    gonk.tga
-    hud_poison.tga
-    hud_thermaldetonator.tga
-    item_powerup_ammo.tga
-    item_powerup_health.tga
-    item_powerup_health_green.tga
-    item_powerup_health_red.tga
-    item_powerup_health_yellow.tga
-    missile.tga
-    shell_cube.tga
+  binary unequal textures (but they look the same)
+    com_sfx_laser_orange.tga - different color
+    com_sfx_scorchmark.tga - no visible differences
+
+  binary unequal msh
+    com_bldg_ctfbase.msh - no visible differences
+    hud_arrow.msh -  no visible differences
+    hud_force_pull.msh -  no visible differences
+    hud_force_push.msh -  no visible differences
+
+ 
 
 
 	
