@@ -14,6 +14,7 @@ common.lvl:
     error_popup - restored
     popup_prompt - restored
     startup - not part of the final build??
+     --> 'startup' was BF1 only, I think they just forgot to remove it from the common.req during BF2 dev
 
   scripts binary differences:
     error_popup.script
