@@ -1,3 +1,7 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
 -- missionlist.lua (Zerted UOP recovery )
 -- 
 --
@@ -363,7 +367,7 @@ end
 function missionlist_ExpandMaplist(bForMP)
     print("missionlist_ExpandMapList()")
 
-    if (not gSortedMaplist) then
+    if (not gSortedMaplist) then --else 63
         --table.sort(sp_missionselect_listbox_contents, missionlist_mapsorthelper)
         --table.sort(mp_missionselect_listbox_contents, missionlist_mapsorthelper)
 		--[[
@@ -407,18 +411,42 @@ function missionlist_ExpandMaplist(bForMP)
 			end
 		end]]
 		
-		if ( __mp_n_limit__ ~= nil ) then 
-			
+		if ( __mp_n_limit__ ~= nil ) then --else 29
 			local r1 =  table.getn(mp_missionselect_listbox_contents) - __mp_n_limit__ 
-			local r2 = table.getn(mp_missionselect_listbox_contents) 
-			table.remove( mp_missionselect_listbox_contents, r2)
 			
-		else 
+			while 0 < r1 do
+				local r2 = table.getn(mp_missionselect_listbox_contents) 
+				table.remove( mp_missionselect_listbox_contents, r2)
+				r1 = r1 - 1
+			end
+		end
+		--lbl 29
+		if __sp_n_limit__ ~= nil then --else 51
+			local r1 = table.getn(sp_missionselect_listbox_contents) - __sp_n_limit__
 			
+			while 0 < r1 do
+				local r2 = table.getn(sp_missionselect_listbox_contents) 
+				table.remove( sp_missionselect_listbox_contents, r2)
+				r1 = r1 - 1
+			end
 		end 
+		--lbl 51
+		table.sort(sp_missionselect_listbox_contents, missionlist_mapsorthelper)
+		table.sort(mp_missionselect_listbox_contents, missionlist_mapsorthelper)
 		
 		gSortedMaplist = 1
 	end 
+	--lbl 63
+	
+	local r1, r2, r3, r4, r5, SourceList = nil
+	
+	if bForMP == true then
+		SourceList = mp_missionselect_listbox_contents
+	else
+		SourceList = sp_missionselect_listbox_contents
+	end
+	
+	missionselect_listbox_contents = {}
 	
     for i = 1, table.getn(SourceList) do
         if (SourceList[i].mapluafile ~= gAllMapsStr) then
