@@ -34,13 +34,13 @@ MovieProperties()
 
 MovieProperties()
 {
-	Name("bounuga");
+	Name("preview-loop");
 	Movie("pre-movie");
 	FadeInTime(0);
 	FadeOutTime(0);
 	SegmentList()
 	{
-		Segment("bounuga", 1, -1);
+		Segment("preview-loop", 1, -1);
 	}
 
 }
