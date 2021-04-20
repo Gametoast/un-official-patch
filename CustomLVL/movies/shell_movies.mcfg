@@ -20,6 +20,32 @@ MovieProperties()
     FadeOutTime(1.0);
 }
 
+MovieProperties()
+{
+	Name("preview");
+	Inherit("flythrough_template");
+	Movie("pre-movie");
+	SegmentList()
+	{
+		Segment("preview", 1, -1);
+	}
+
+}
+
+MovieProperties()
+{
+	Name("bounuga");
+	Movie("pre-movie");
+	FadeInTime(0);
+	FadeOutTime(0);
+	SegmentList()
+	{
+		Segment("bounuga", 1, -1);
+	}
+
+}
+
+
 //-----------------------------------------------------------------------------
 //- Shell screen background movies
 

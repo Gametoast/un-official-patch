@@ -51,8 +51,10 @@ shell.lvl
     iface_instant_action
     small_title
 
-  binary unequal
-    shell_movies.mcfg
+  checked:
+    textures - largely binary equal
+    mcfg - binary equal
+    lua - tbd
 
   binary unequal textures (but they look the same)
     iface_bgmeta_space.tga
@@ -93,12 +95,7 @@ ingame.lvl
     lua - verified
     animation - binary equal
     odf - binary equal
-    texture - recovered has too many textures (rep_icon, all_icon, cis_icon, imp_icon)
-              they come from common and are added automatically because they are used
-              with the flag items in the odf folder. IDK why they are not added in the
-              uop ingame. Anyway it wouldn't hurt if they are missing in ingame, since
-              they are already in common. MAYBE be a problem of the custom munge tool
-              Anyway it does not hurt if they are there twice.
+    texture - largely binary equal
 
   binary unequal textures (but they look the same)
     com_sfx_laser_orange.tga - different color
