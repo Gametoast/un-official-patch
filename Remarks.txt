@@ -46,6 +46,24 @@ shell.lvl
     ifs_mp_leaderboard        - restored
     ifs_era_handler           - restored
 
+  missing textures (from stock req, not needed):
+    active_glow
+    iface_instant_action
+    small_title
+
+  binary unequal
+    shell_movies.mcfg
+
+  binary unequal textures (but they look the same)
+    iface_bgmeta_space.tga
+    mode_icon_race.tga
+    mode_icon_rpg.tga
+    mode_icon_space.tga
+    mode_icon_survival.tga
+    mode_icon_uber.tga
+    mode_icon_vh.tga
+    mode_icon_xl.tga
+
 addme.script
    scripts:
      addme.lua - restored
