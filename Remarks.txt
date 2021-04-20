@@ -31,9 +31,9 @@ common.lvl:
 shell.lvl
   scripts:
     shell_interface           - restored
-    ifs_login                 - tbd
+    ifs_login                 - restored
     ifs_missionselect         - tbd
-    missionlist               - WIP
+    missionlist               - restored
     ifs_sp                    - restored
     ifs_sp_campaign           - tbd
     ifs_missionselect_pcmulti - tbd 
