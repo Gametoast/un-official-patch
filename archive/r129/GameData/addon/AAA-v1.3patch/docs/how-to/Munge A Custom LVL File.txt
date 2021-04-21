@@ -1,0 +1,31 @@
+Overview
+* This tutorial will guide you through munging a custom lvl file
+
+Requirements
+* SWBF2 mod tools
+* Basic understanding of modding
+* Basic understanding of the munge process
+
+How To Do It
+1) This guide will assume the mod map is XXX
+2) Create the folder: "data_XXX\Shell"
+3) Create the text file: "data_XXX\Shell\shell.req"
+4) Create the folder "data_XXX\Shell\scripts"
+5) Create the script file: "data_XXX\Shell\scripts\test.lua"
+6) In shell.req, add the following code.  The 'test' should match the name of the script created in step 5, but without its file extension:
+
+ucft
+{
+    REQN
+    {
+        "script"
+        "test"
+    }
+}
+
+7) Open VisualMunge, click "Unselect All", check "Shell", click "Munge"
+8) When VisualMunge finishes, it will have created the lvl file: "data_XXX\_LVL_PC\shell.lvl"
+9) Rename shell.lvl to whatever name you need, then move it to where you need the file.
+
+Notes
+* The test.lua script is just an example script file.  You should change the req file to reflect whatever it is you are trying to munging.

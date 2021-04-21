@@ -1,0 +1,68 @@
+
+This tutorial will take you through the process of adding the 'y' era with a Conquest game mode to the 'LVL' map.
+
+Basic Era Support
+1) In addme/addme.lua, add "era_y = 1, " to the sp_missionselect_listbox_contents table.  This tells the game to display the Y era checkbox when the map is selected in the selection screen.
+2) In addme/addme.lua, add "mode_con_y = 1, " to the sp_missionselect_listbox_contents table.  This tells the game to display the Conquest mode checkbox when the map is selected in the selection screen.  The "_y" allows the game to know that this game mode corresponds to the Y era.
+3)) As an example, this is the orginal listbox table line: sp_missionselect_listbox_contents[sp_n+1] = { isModLevel = 1, mapluafile = "LVL%s_%s", era_g = 1, era_c = 1, mode_con_g = 1, mode_con_c = 1, }
+3))                this is the updated listbox table line: sp_missionselect_listbox_contents[sp_n+1] = { isModLevel = 1, mapluafile = "LVL%s_%s", era_g = 1, era_c = 1, era_y = 1, mode_con_g = 1, mode_con_c = 1, mode_con_y = 1, }
+4) In addme/addme.lua, add the line "AddDownloadableContent("LVL","LVLy_con",4)"  before the "-- all done" comment
+5) In Common/mission/, create the file "LVLy_con.req".  This file name sort-of corresponds to the 'LVLy_con' in AddDownloadableContent() and the values entered into the listbox table.
+6) In Common/mission/LVLy_con.req, put the following code.  The code tells VisualMunge what is needed when building the map's lvls.  The "script" section tells what additional scripts to include and the "config" section deals with the video configurations.  The following code to put is:
+
+ucft
+{
+	REQN
+   	{
+        "config"
+       	"cor_movies"	
+   	}
+	REQN
+	{
+		"script"
+		"LVLy_con"
+	}
+}
+
+7) In Common/mission.req, add "LVLy_con" to the "lvl" section.  This tells VistualMunge to include everything in our newly created Common/mission/LVLy_con file when munging the map's mission.lvl.  Mission.lvl is where all of the map's game mode script files should end up.
+8) In Common/scripts/LVL/, create the file "LVLy_con.lua"  It is easiest do this by copying an exist Conquest script, such as LVLg_con.lua.  If you don't copy the file, you will need to manually add in all the Conquest scripting details.  This tutorial does not cover the finer parts of game mode scripting, but only what changes are needed for a custom era.  Our new LVLy_con.lua is the script we referrenced a few steps ago in the "script"ing section of Common/mission/LVLy_con.req.  Following through the reqs, this is the actual lua script file which will be munged into the map's mission.lvl.  
+9) Munge Common
+10) Thats it. If you only want basic era support for the map you are done.  If you open up SWBF2, your map will now display a Y era Conquest mode.  If thats all you wanted, you can stop reading this tutorial right here -> |.  However, if you want full era integeration there is still much to do...
+
+Full Era Integeration
+1) The parts that are missing from basic era support are custom side icons, custom CP icons, and custom side names.  This advanced part of the tutorial will help you enable or add these features to your map.  Step wise, it continues were the basic era support section left off.
+2) In Common/scripts/LVL/LVLy_con.lua, add the line "SupportsCustomEraTeams = true" at the top of the file.  This will tell the team selection screen to around the game's orginal design and use your custom team/side names instead.
+3) In Common/scripts/LVL/LVLy_con.lua, add the line "CustomEraTeam2 = "Era Team 2"" right below the SupportsCustomEraTeams line.  Replace 'Era Team 2' with the name of your second team's name.
+4) In Common/scripts/LVL/LVLy_con.lua, add the line "CustomEraTeam1 = "Era Team 1"" right below the SupportsCustomEraTeams line.  Replace 'Era Team 1' with the name of your first team's name.
+5) In Common/scripts/LVL/LVLy_con.lua, take a close look at the 'SetupTeams' section.  You will see something like:
+
+SetupTeams{
+	all = {
+		team = ALL,
+		units = 20,
+		reinforcements = 150,
+		soldier	= { "all_inf_rifleman",9, 25},
+
+The little "all" is the real team name.  According to the 'Battlefront2_scripting_system.doc' doc, SWBF2 has nine predefined team names (neutral, neu, alliance, all, empire, imp, republic, rep, cis).  Everything else maps to locals.  This is not truly the case as "Villains" is also predeinfed, but those that are predefined and those that aren't has never been fully researched (would you like to be the first?).  The team name manages the game's references for the team's name, team's icon, team's CP icons, and the team's unit names.
+6) Make note of your two team names.  'all' maps to 'alliance', 'imp' maps to 'imperial', 'rep' maps to 'republic', and 'cis' maps to 'CIS'.  The team names are case-insenstive.
+7) Create your CP holo icon meshes.  You can start from scratch or build off of an existing one like Common/mshs/com_icon_cis.msh.  If needed, don't forget to create the msh's .option file too.
+8) The custom CP holo icons go in Common/mshs/.  Depending on your team name mappings, each icon should have one of the following names: com_icon_alliance, com_icon_imperial, com_icon_republic, or com_icon_CIS.  If your map is CTF based, you might also want to look into com_icon_swap.
+9) Open Common/ingame.req and wipe everything out.  We since are going to be creating a custom ingame.lvl for this map, we only want to override the elements which have been changed.  If you try to include everything the game might crash, but you would also override any other ingame.lvl mods the user might have installed.
+10) Put the following code in Common/ingame.req.  Make sure to adjuest it for your team names.  The example uses a SetupTeams section with 'all' and 'imp' team names:
+
+ucft
+{
+	REQN
+	{
+		"model"
+		"com_icon_alliance"
+		"com_icon_imperial"
+	}
+}
+
+11) Munge Common
+12) In data_LVL/_LVL_PC, rename the new ingame.lvl to "y_con-ingame.lvl".  The 'y_con' part stands for the Y era and game mode Conquest.  The renaming is not required, but should be done if you want to override the icons with different icons in other era/game modes of your map.
+13) In Common/scripts/LVL/LVLy_con.lua, add "ReadDataFile("dc:y_con-ingame.lvl")" right before the non-'dc:' version of the line.  This tells the game to read your map's ingame.lvl before reading the default ingame.lvl.  Since your ingame.lvl is read first, its CP icons will be the ones used.  
+14) You will need to remember to manually copy the munged data_LVL/_LVL_PC/y_con-ingame.lvl to your munged map's GameData/addon/LVL/data/_LVL_PC/ folder any time you need to create a new y_con-ingame.lvl.  A 'normal' mod map does not have a custom ingame.lvl, so VisualMunge will not move it for you.  Do that copy now, so you don't forget to later.
+15) Rename Common/ingame.req to "y_con-ingame.req".  This is so you always have a copy of the req that created the y_con-ingame.lvl.  If you want to make a new y_con-ingame.lvl, rename that file back to "ingame.lvl".  VisualMunge does not build custom named lvls by you just creating a differently named req file.
+16) Test your map

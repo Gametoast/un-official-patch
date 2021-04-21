@@ -1,0 +1,3 @@
+
+Attempts to load custom_gc_11.lvl and above.  cGC scripts with an incremented number will be loaded until the next numbered cGC script doesn't exist.
+

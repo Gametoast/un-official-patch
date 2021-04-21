@@ -1,0 +1,23 @@
+
+
+How to change the displayed color of your map in the map selection screens:
+
+Background Color Info:
+SWBF2, like may other computer programs, deals with colors in terms of rgb or red, green, and blue.  Using different combinations of red, green, and blue allows you to make almost any color.  A value of zero means none of that color and a value of 255 means all of that color.  For example: a r,g,b value of 0,255,0 would be shown as a pure green.
+
+0) This guide will assume the mod map is named DMD.
+1) Open up your addme\addme.lua
+2) Search for your map's configuration line.  It will look something like:
+sp_missionselect_listbox_contents[sp_n+1] = { isModLevel = 1, mapluafile = "DMD%s_%s", era_g = 1, mode_con_g = 1, }
+3) To change the color of your map, just add in the color and its value.  For example, the following line would cause your map name to become black:
+sp_missionselect_listbox_contents[sp_n+1] = { red = 255, blue = 255, green = 255, isModLevel = 1, mapluafile = "DMD%s_%s", era_g = 1, mode_con_g = 1, }
+
+You don't have to include all of the colors (red, blue, green).  You could just change the red or two of the three colors:
+sp_missionselect_listbox_contents[sp_n+1] = { red = 151, green = 87, isModLevel = 1, mapluafile = "DMD%s_%s", era_g = 1, mode_con_g = 1, }
+
+4) Save the addme.lua
+5) Munge your map (Common can be unchecked, but it doesn't really matter)
+
+Tip: Some colors are hard to see in the selection screen.  Try to use the easy to see colors.
+Note: Players can disable the custom map colors through the v1.3 patch's installer menu.
+

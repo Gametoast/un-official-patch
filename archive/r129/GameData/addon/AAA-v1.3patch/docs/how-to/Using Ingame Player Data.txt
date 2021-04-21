@@ -1,0 +1,124 @@
+
+Overview:
+* The new function 'uf_processPlayers()' allows modders to handle ingame player data.  This data is the same as what you see in the player list.  There are many things that can be done with this information.
+* This 'tutorial' will describe the player's data table format, and show you example code to kill a player based on on his name.
+
+Player Data Format:
+* The player data is in the form of a Lua table.  The table contains of a table for each player playing in the server.  The player's table consists of the 'indexstr' and the 'namestr'.
+* The 'indexstr' is that player's character id.  The character id is what you use in functions like 'GetCharacterUnit(charId)' or event triggers like 'OnCharacterSpawn(charId, funtion() end)'
+* The 'namestr' is that player's ingame name.  It is the name you see in the player list and the name you see running around on the map.
+* I am not sure if no-namers are not included in this table, but I think they are not included...
+* Example player data table: 
+
+exampleTable = {
+		{ indexstr = "1", namestr = "Alpha"},
+		{ indexstr = "3", namestr = "Bravo"},
+		{ indexstr = "2", namestr = "Player 1"},
+		{ indexstr = "4", namestr = "LastJoinedPlayer"},
+	}
+
+Kill A Player By Name:
+* The uf_processPlayers() function takes one argument/parameter, another function.  This argument is called when the player data table has been created.  It is given that player table as its only argument/parameter too.  In Lua, functions are just like other variables.  Create your function just like you would a new number:
+
+--a function to kill [RDH]Zerted, the function takes a single table 'players' as an argument/parameter
+local killZerted = function( players )
+	--can't do anything if the player data table is missing
+	if not players then return end
+end
+
+* Now we have a function that doesn't really do anything.  We want to search the player table until we find [RDH]Zerted.  After adding the searching in, the code now looks like:
+	
+--a function to kill [RDH]Zerted, the function takes a single table 'players' as an argument/parameter
+local killZerted = function( players )
+	--can't do anything if the player data table is missing
+	if not players then return end
+
+	--for each player ingame,
+	local i
+	for i=1,table.getn(players) do
+		--search for the player with the name [RDH]Zerted
+		if players[i].namestr == "[RDH]Zerted" then
+			--found [RDH]Zerted creeping around our map!
+		end
+	end
+end
+
+* When we find [RDH]Zerted, we want to kill him.  This done by killing his unit.  First, we have to make sure that he even has a unit (he could be dead already...):
+
+--a function to kill [RDH]Zerted, the function takes a single table 'players' as an argument/parameter
+local killZerted = function( players )
+	--can't do anything if the player data table is missing
+	if not players then return end
+
+	--for each player ingame,
+	local i
+	for i=1,table.getn(players) do
+		--search for the player with the name [RDH]Zerted
+		if players[i].namestr == "[RDH]Zerted" then
+			--get [RDH]Zerted's unit
+			local unit = GetCharacterUnit(players[i].indexstr])
+			if not unit then return end	--[RDH]Zerted is already dead, so there is nothing more for us to do
+		end
+	end
+end
+
+* Now that we know [RDH]Zerted is alive, we can kill him:
+
+--a function to kill [RDH]Zerted, the function takes a single table 'players' as an argument/parameter
+local killZerted = function( players )
+	--can't do anything if the player data table is missing
+	if not players then return end
+
+	--for each player ingame,
+	local i
+	for i=1,table.getn(players) do
+		--search for the player with the name [RDH]Zerted
+		if players[i].namestr == "[RDH]Zerted" then
+			--get [RDH]Zerted's unit
+			local unit = GetCharacterUnit(players[i].indexstr])
+			if not unit then return end	--[RDH]Zerted is already dead, so there is nothing more for us to do
+			
+			--kill [RDH]Zerted's ingame unit
+			KillObject( unit )
+			return
+		end
+	end
+end
+
+* Almost done.  We have a function that takes the player data table as an argument and kills [RDH]Zerted if hes playing in the server.  But how does this function get called?  Just keep reading:
+
+--gets the player list, then calls the given function with the player data
+uf_processPlayers( killZerted )
+
+* Thats it.  uf_processPlayers will create the player data table and pass it into our killZerted function.  The entire code block follows.  An additional check was put around the whole section to make sure the uf_processPlayers() function exists.  If a person doesn't have the v1.3 patch r115+, then the code would cause a crash without the extra check:
+
+if uf_processPlayers then
+	--a function to kill [RDH]Zerted, the function takes a single table 'players' as an argument/parameter
+	local killZerted = function( players )
+		--can't do anything if the player data table is missing
+		if not players then return end
+	
+		--for each player ingame,
+		local i
+		for i=1,table.getn(players) do
+			--search for the player with the name [RDH]Zerted
+			if players[i].namestr == "[RDH]Zerted" then
+				--get [RDH]Zerted's unit
+				local unit = GetCharacterUnit(players[i].indexstr])
+				if not unit then return end	--[RDH]Zerted is already dead, so there is nothing more for us to do
+				
+				--kill [RDH]Zerted's ingame unit
+				KillObject( unit )
+				return
+			end
+		end
+	end
+	
+	--gets the player list, then calls the given function with the player data
+	uf_processPlayers( killZerted )
+else
+	--of course, the player won't see this debug message, but it doesn't hurt to have it...
+	print("WARNING: Cannot kill [RDH]Zerted: The uf_processPlayers function is missing.  Please update your game to the latest UnOfficial v1.3 patch")
+end
+
+* It is important to note that uf_processPlayers() jumps into the player list screen for a second to grab the player data.  If used in a map, the player's screen may flash as switching screens doesn't happen instantly.  Because of this, its best not to use the function too often.  However, the visual flashing shouldn't matter on dedicated servers.  

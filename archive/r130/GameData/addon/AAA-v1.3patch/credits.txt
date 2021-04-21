@@ -1,0 +1,41 @@
+(Note: All names reference GameToast members or XFire users)
+
+Aman/Pinguin - German translation, Testing, front icon, Feature ideas
+AQT - Localization bug reports
+ARC_Commander - BFX era icons, Advice, Bug reports
+authraw - Advice
+Broken_Hope - Saber hilts
+Caleb1117 - 
+Challenger - Marine skin
+Commander_Keller - 501st first person skins
+Conversion Pack - RC pistol
+Darth Revan - Installation testing
+datinmadnx2 - HUD research
+delta 47 - Bug reports
+epm01 - Installation testing
+Fragme - YV, New Rep, Old Rep and sit?
+Fragme! - Commando pistol fixed it at least from ML Kashyyyk, Icons: yv, new republic, old republic and sith?
+GCMOD Team - Weapon models
+Hebes24 - Bug reports
+Jawa Killer - ML kashyyk assets with help from dragonum
+Maveritchell - Much needed help with v1.2 patch, Advice, Testing, Icons: tdf, hctf, race, earth, oldsith, rvb, rebirth, wacky, exGCW, space, vehicle, siege, rpg, survival, wav, avh, c1, c2, c3, c4. 
+MasterSaitek009 - Fixed dooku
+MandeRek - Era, team/sides, and CP research, Advice, jhu icon, wea icon
+Maxunit - Installation testing
+OOM-9 - Dc15s
+Pahricida - Dc15 rifle
+Pint - Testing
+Pyroblade - German translation
+RepSharpshooter - Asset creation, Hud changes, Unit and weapon compliations, ctrl icon, koh icon, Advice, testing, v1.2 patch main developer
+RED51 - Testing, Suggestions
+saldrfingerfood - Installation testing
+Skipper 24 - Bug reports
+SlyCoopersButt - Bug reports
+Super_Clone - Bug reports, Testing
+Syth - Jango and accessories
+Teancum - Advice, Bug reports, Support
+The_Emperor - Bug reports
+Trainmaster611 - Less laggy mine effect
+woner11 - Icons: lego, newsithwars, toys
+Zerted - Research, Shell changes, Docs, FakeConsole, Main developer/modder of v1.3, Installer writer, Everything else
+

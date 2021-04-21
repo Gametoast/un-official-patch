@@ -1,0 +1,93 @@
+How To Make A Preview Video:
+
+Video Suggestions:
+-Keep it short
+-Keep its file size small
+-There is no audio, so don't include any
+-Don't expect any viewers to be able to read any ingame text
+-The video will be displayed in a box of 150 by 150 (pixels?)
+-There is a one second fade in and a one second fade out.  If you do not want the fading, use 'preview-loop' instead of 'preview'
+-The video loops until another map is selected
+-If you can create the two video formats, both pre-movie.mvs and pre-moviepal.mvs should be used
+
+Tools Needed:
+-A video recorder such as Taksi (free), Fraps (trial), XFire (free), webcam, etc...
+-RAD Game Tools (free): http://www.radgametools.com/binkhcwb.htm
+-SWBF2 UnOfficial v1.3 patch (so you can see your video ingame)
+
+Assumptions:
+1) You have SWBF2 and its mod tools installed
+2) You have done some modding before and you sort-of know what you are doing
+3) You know how to pick your own video capture/recorder tool
+4) You have a map you want to add a preview video to  (this example uses a map named PVE, so whenever you see PVE or pve, replace it with your map's code)
+5) Your map has had its 'Common' munged at least once
+6) You are not using the PAL version of the game.  If you are, pre-movie.mvs should be pre-moviepal.mvs.  I think that is the only change (can't test it as don't have the PAL version).
+7) You have the Custom Era shell installed or a mod which includes it installed.
+
+Setup:
+1) Have SWBF2 installed
+2) Have the SWBF2 mod tools installed
+4) Install RAD Game Tools
+
+Create the video:
+1) Start Battlefront and load your map
+2) Start your video capture tool and create whatever video you want to make
+
+Convert the video:
+0) Note: the following values are only suggested values.  They may be changed for each video.  The goal is to make the video as small as possible without losing too much graphically quality
+1) Open the RAD Video Tools
+2) Select your video and click 'Bink it!'
+3) Set 'Compress to data rate (bytes)' to 750000
+4) Select the radio button 'multiple of the overall data rate:' and use 3.0
+5) Set 'Scaling compression' to 'No scalling'
+6) Set 'How many frames to preview during bandwidth allocation' to 12
+7) Set the width to 150 and the height to 150
+8) Set the contrast to 8
+9) Set the 'Smooth %' to 3
+10) Check 'De-interlace'
+11) When you are done changing the settings, click 'Blink' to convert your video
+12) Wait for the tool to finish converting your video.
+
+Munge the video:
+1) Move and rename your bik video to data_PVE/Shell/movies/PC/preview.bik
+2) Create a movie list text file called pre-movie.mlst in /data_PVE/Shell/movies/PC.  When munged, this file will turn into the pre-movie.mvs, which contains your preview movie embedded inside.
+3) In pre-movie.mlst, type in the path to your video.  Example:   ..\..\Shell\movies\PC\preview.bik
+4) Optional step (prevents a munge error): Create shell.req in data_PVE/Shell
+5) Optional step (prevents a munge error): In shell.req, add:
+
+ucft{}
+
+6) Run VisualMunge for you map
+7) Click 'Unselect All'
+8) Check 'Shell'
+9) Click 'Munge'
+10) When the munge has finished, you will find your new pre-movie.mvs in data_PVE/_LVL_PC/Movies
+
+Add the video:
+1) Pick a location for your movie file.  It can be placed anywere, but the recommended location is GameData/addon/PVE/data/_LVL_PC/movies
+2) Copy your munged video (pre-movie.mvs) to this location
+3) Open the addme.lua (data_PVE/addme/addme.lua) file from your mod map
+4) Around line 23 is the line that you edit to change your map's game modes.  Edit this line to include the movie file, the movie name, and 'dnldable = 1' (dnldable is optional).  An expanded example is shown below.  Its important to note that the 'movieFile' does include the file name of the video, but does not include its '.mvs' extension or the 'pal' part for PAL users.  Also, the 'movieName' is the name you used in movies.mcfg's MovieProperties() Name variable:
+
+sp_missionselect_listbox_contents[sp_n+1] = {
+						movieFile = "..\\..\\addon\\PVE\\data\\_LVL_PC\\PVE\\movies\\pre-movie",
+						movieName = "preview",
+						dnldable = 1,
+						isModLevel = 1,
+						mapluafile = "PVE%s_%s",
+						era_c = 1,
+						mode_con_g = 1,
+					}
+mp_n = table.getn(mp_missionselect_listbox_contents)
+mp_missionselect_listbox_contents[mp_n+1] = sp_missionselect_listbox_contents[sp_n+1]
+
+5) Run VisualMunge for you map
+6) Click 'Unselect All'
+7) Click 'Munge'
+
+Viewing your video in SWBF2 (v1.3):
+1) Start the game
+2) Go to the IA or MP map selection screen
+3) Click on your map
+4) Watch the preview video box for your video
+

@@ -1,0 +1,70 @@
+
+This tutorial will take you through the process changing the displayed label, icon, and description of a Conquest, G era map.
+
+Backgound:
+* The v1.3 patch supports over 38 game modes and 27 eras.  If you want to add a new game mode or era, look at these predefined ones first.  Checkout the change log for shell.lvl and common.lvl to see exactly what was added and is directly supported.
+* This tutorial will assume you have created a basic LVLg_con map.
+
+Basic Era Support
+1) In addme/addme.lua, expand your sp_missionselect_listbox_contents table.  Meaning, put each element on a line by itself so the table is easier to read, like this:
+
+sp_missionselect_listbox_contents[sp_n+1] = {
+	isModLevel = 1,
+	mapluafile = "LVL%s_%s",
+	era_g = 1,
+	mode_con_g = 1,
+}
+
+2) Edit the table to add the 'change' table:
+
+sp_missionselect_listbox_contents[sp_n+1] = {
+	isModLevel = 1,
+	mapluafile = "LVL%s_%s",
+	era_g = 1,
+	mode_con_g = 1,
+	change = {
+	
+	},
+}
+
+3) We want to change the Conquest game mode, so add another table inside the new 'change' table.  The name/index of the new table has to match the game mode key.  For Conquest, the key is 'mode_con'.  So:
+
+sp_missionselect_listbox_contents[sp_n+1] = {
+	isModLevel = 1,
+	mapluafile = "LVL%s_%s",
+	era_g = 1,
+	mode_con_g = 1,
+	change = {
+		mode_con = {  },
+	},
+}
+
+4) Add indexes for Conquest's new name ('name'), new icon ('icon'), and new description ('about').  You only need to add the indexes you want to change, but this tutorial changes all of them so:
+
+sp_missionselect_listbox_contents[sp_n+1] = {
+	isModLevel = 1,
+	mapluafile = "LVL%s_%s",
+	era_g = 1,
+	mode_con_g = 1,
+	change = {
+		mode_con = { name="Candy Conquest", icon="mode_icon_holo", about="Drop off ten cubes of sugar at your ant hill (CP) to win.  Watch out for human overlords, kids with magnifying glasses, other ant colonies, and sticky traps..." },
+	},
+}
+
+5) Munge your map.  Since we only changed addme.lua, you don't need to check or select anything in VisualMunge.  This will greatly decrease its munge time.
+6) Start the game.  In the map selection screens, your map's Conquest game mode checkbox will now be labeled 'Candy Conquest' and its icon and description will have changed too.
+7) In addition to Conquest, we also wanted to chagne the era's name and icon (eras display no descriptions).  The procedure is the same except we use the era's key instead of the game mode's key and an index of 'icon2' instead of 'icon'.  Here is the completed example table:
+
+sp_missionselect_listbox_contents[sp_n+1] = {
+	isModLevel = 1,
+	mapluafile = "LVL%s_%s",
+	era_g = 1,
+	mode_con_g = 1,
+	change = {
+		era_g = { name="Ant Wars", icon2="rvb_icon" },
+		mode_con = { name="Candy Conquest", icon="mode_icon_holo", about="Drop off ten cubes of sugar at your ant hill (CP) to win.  Watch out for humans overlords, kids with magnifying glasses, other ant colonies, and sticky traps..." },
+	},
+}
+
+8) In your map's readme, make sure to list that the 'v1.3 patch r112+' is required to correctly view the game mode/era.  If the player doesn't have the v1.3 patch, then the map's mission will still be displayed, but it will show the original values (i.e. 'Conquest' instead of 'Candy Conquest').
+9) Thats it!

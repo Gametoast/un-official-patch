@@ -1,0 +1,26 @@
+Overview
+* The UnOfficial v1.3 patch r102+ supports up to 11 custom Galactic Conquests (cgc).  Custom Galactic Conquest scripts are loaded and processed near the start of shell_interface.lua.  
+* The UnOfficial v1.3 patch r129+ supports an unlimited number of cGC scripts.  These scripts must start at number 11 and increment that number one at a time. If there is a break in the numbering, such as: custom_gc_12, custom_gc_13, custom_gc_15, and custom_gc_16, then when the game sees script 14 missing, it will stop checking for other scripts.  Thus custom_gc_15 and custom_gc_16 won't be loaded. 
+
+
+Requirements
+* SWBF2 mod tools
+* v1.3 patch r94+ installed
+* Basic understanding of Lua
+* Basic understanding of how the game works
+* A willingness to look through the game's ifs_freeform shell stripts to learn how Galactic Conquest is really configured and played
+
+How To Do It:
+1) First, you will need to read and understand the 'Munge A Custom LVL File.txt' document
+2) Then you need to pick a custom Galactic Conquest slot.  This guide will use slot four: "3".  If you plan to distribute your scripts to others, it is best to include the source code, as users might have to recompile it for a different slot.
+3) Configure your map to munge the custom lvl: "custom_gc_3.lvl" (see the custom lvl doc for help)
+4) custom_gc_3.lvl must, at the very least, contain the lua script: "custom_gc_3".  When your custom lvl is processed by the game, it will load only this script.  You can always include more scripts or resources in the lvl if you need them (and you do), but the expected script (custom_gc_3) must load them (use ScriptCB_DoFile() or ReadDataFile()).
+) Look in the v1.3 patch's "code examples" folder for the "custom_gc_example.zip" file.  Extract this zip file and rename its template custom_gc_1.lua to custom_gc_3.lua
+) In custom_gc_3.lua, read the beginning section of comments.  It goes over the 7 simple things you need to change for easily integerating your custom Galactic Conquest into the game's shell.
+) Create the other scripts for your custom Galactic Conquest.  You can look at the example and use its scripts as a guide.
+) After you munge your custom_gc_3.lvl, copy it to the folder: "GameData\Data\_LVL_PC"
+) Thats it!  Run your game and check its debug output.  You should see it saying it found and loaded your script each time the shell is reloaded.
+
+More Info
+* For an example custom Galactic Conquest, see "custom_gc_example.zip" in the "code eamples" folder of the v1.3 patch.
+

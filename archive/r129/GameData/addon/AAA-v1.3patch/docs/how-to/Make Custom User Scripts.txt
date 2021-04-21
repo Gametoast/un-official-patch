@@ -1,0 +1,24 @@
+Overview
+* The UnOfficial v1.3 patch r102+ supports up to 11 custom user scripts.  User scripts are loaded and processed at the start of game_interface.lua.  This allows the scripts to control or adjust almost everything that happens ingame.  For instance, you can create a script that does a few FakeConsole commands at the start of any map or a script that changes the server name to reflect the amount of people on the server.
+* The UnOfficial v1.3 patch r129+ supports an unlimited number of custom user scripts.  These scripts must start at number 11 and increment that number one at a time. If there is a break in the numbering, such as: user_script_12, user_script_13, user_script_15, and user_script_16, then when the game sees script 14 missing, it will stop checking for other scripts.  Thus user_script_15 and user_script_16 won't be loaded. 
+
+Requirements
+* SWBF2 mod tools
+* v1.3 patch r141+ installed
+* Basic understanding of Lua
+* Basic understanding of how the game works
+
+How To Do It:
+1) First, you will need to read and understand the 'Munge A Custom LVL File.txt' document
+2) Next, you need to pick a user script slot.  The open slots start at 11 and must go up one at a time.  Check your "GameData\data\_LVL_PC folder" and see which 'user_script_##.lvl' files you have.  If the script name in the req file doesn't match the lvl file name, the script won't work.
+x) If you are using a v1.3 patch below version r141, then only slots 0-10 are available.
+X) This guide will use slot eleven: "11".  If you plan to distribute your scripts to others, it is best to include the source code.  This will allow each person to adjust the code for the amount of user scripts that person already has.
+3) Configure your map to munge the custom lvl: "user_script_11.lvl" (see the custom lvl doc for help)
+4) user_script_11.lvl must, at the very least, contain the lua script: "user_script_11".  When your custom lvl is processed by the game, it will load only this script.  You can always include more scripts or resources in the lvl if you need them, but the expected script (user_script_11) must load them (use ScriptCB_DoFile() or ReadDataFile()).
+5) After you munge your user_script_11.lvl, copy it to the folder: "GameData\Data\_LVL_PC"
+6) Thats it!  Run your game and check its debug output.  You should see it saying it found and loaded your script each time you load a map/level.
+
+More Info
+* For an example user script that runs a few FakeConsole commands when you play a single-player map (easy to remove the SP part), see "user_script_example.zip" in the "code eamples" folder of the v1.3 patch.
+* You can use these scripts to better configure a dedicated server or enforce rules, such as 'no vehicles' by using the FakeConsole command 'Lock Vehicles' or a snipers only rule by listening in on AddUnitClass() and canceling any non-sniper units from being added to the team!
+ 

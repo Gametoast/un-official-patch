@@ -1,0 +1,43 @@
+
+Added support to get the lobby's player list data (put a function in __TempProcessPlayersFunction__ and it will call that method with the data the next time ifs_mp_lobby is entered)
+Added 'Esc' shortcut key to cancel the Popup_Prompt
+Added 'Enter' shortcut key to accept the Popup_Prompt
+Added popup: Popup_Prompt
+Added lobby button to track enemy units
+Added lobby button to track friendly units
+Added lobby button to untrack units
+Added lobby button to teleport single unit to marked unit
+Added lobby button to teleport enemy units to marked unit
+Added lobby button to teleport firendly units to marked unit
+Added lobby button to mark a unit
+Added lobby button to make the enemy AI follow the selected unit
+Added lobby button to make the friendly AI follow the selected unit
+Added lobby button to boot the no-name players
+Unhidden Free Cam button
+Unhidden Fake Console button
+Added kill player on FreeCam mode switch code, but left code disabled
+Added 'l' shortcut key to close team stats screen
+Added era icon: bfx_cw_icon.tga
+Added era icon: bfx_gcw_icon.tga
+Added era icon: newsithwars_icon.tga
+Added era icon: earth_icon.tga
+Added era icon: front_icon.tga
+Added era icon: halo_icon.tga
+Added era icon: i_icon.tga
+Added era icon: j_icon.tga
+Added era icon: kotor_icon.tga
+Added era icon: lego_icon.tga
+Added era icon: newrep_icon.tga
+Added era icon: oldsith_icon.tga
+Added era icon: rvb_icon.tga
+Added era icon: rebirth_icon.tga
+Added era icon: toys_icon.tga
+Added era icon: u_icon.tga
+Added era icon: v_icon.tga
+Added era icon: wacky_icon.tga
+Added era icon: exGCW_icon.tga
+Added era icon: yuz_icon.tga
+Added era icon: z_icon.tga
+
+
+

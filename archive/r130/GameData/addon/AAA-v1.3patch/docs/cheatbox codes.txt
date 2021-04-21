@@ -1,0 +1,79 @@
+
+
+--------------------------------------------------------------------------------
+Added Code: name:
+Result: Changes the net login name
+Example Usage:     name: TheBiggestMiner
+       Output:     Set Name To 'TheBiggestMiner'
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Added Code: print:
+Result: Prints whatever else is typed into the box
+Example Usage:     print: Hello to you
+       Output:     Hello to you
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Code: 456123
+Result: Displays a hidden button under the Campaign tab.  The Campaign List button allows you to directly play any Campaign level.
+Note: This cheat code is outdated as the v1.3 patch makes the button visible by default anyway.
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Code: mostimpressive
+Result: Invincibility
+Output: You are not a Jedi yet
+Output 2: Weesa gonna die!
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Code: agoodblasteratyourside
+Result: unlimited ammo
+Output: Hoky religions and ancient weapons are no match...
+Output 2: Don't get *****, kid!
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Code: ?
+Result: ?
+Output: It wasn't your video card.
+Output 2: The goggles do nothing!
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Code: ?
+Result: Lowres
+Output: They ain't pretty no more!
+Output 2: The way Leia was meant to be ogled.
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Code: ?
+Result: Nohud
+Output: Trust your instincts
+Output 2: Targeting computer it is, then.
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Code: ?
+Result: Pow
+Output: Holy Wampa Stompa
+Output 2: What, no more Batwampa?
+--------------------------------------------------------------------------------
+
+
+--------------------------------------------------------------------------------
+Code: ?
+Result: Slowmo
+Output 1: NNNNnnnOOOOOOOOOOOOooooooooooo!
+Output 2: Ya, that was dumb
+--------------------------------------------------------------------------------

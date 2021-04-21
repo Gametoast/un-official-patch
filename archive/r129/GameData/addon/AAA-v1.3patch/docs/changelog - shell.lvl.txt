@@ -1,0 +1,126 @@
+
+Added support for modder changable era names and icons
+Added support for modder changable game mode names, icons, and descriptions
+Truncates the MP and SP map lists if the 'mission checker' addon map detects over 499 missions (Note: should remove most FATAL missions, but won't get all if missions were added to any existing maps)
+Attempts to load custom_gc_0.lvl through custom_gc_10.lvl (does file custom_gc_# for each found lvl)
+Added support for 11 custom Galactic Conquests
+Increased Galactic Conquest's debug output
+Enabled the 'Versus' Galactic Conquest (might be unstable...)
+Unlocked the 'Campaign List' button
+Set the preview video for all the shipped maps to movies\pre-movie.mvs:preview-loop
+Added ability to disable custom map colors by using the toggle file: AAA-v1.3patch\settings\noColors.txt
+Changed the eli game mode showstr and string to 'modename.name.hero-assualt'
+Changed the ass game mode showstr to 'modename.name.spa-assualt'
+Increased MP list's game mode filter display to show 15 elements
+Increased MP list's era filter display to show 15 elements
+Loads the Popup_Prompt script
+Reads in custom strings from 'v1.3patch_strings.lvl'
+Removed doing of non-PC scripts
+Added crashing code to some possibly unused functions
+Added support for custom map colors
+Added cheatbox to MP map selection screen
+Added cheatbox code: name:
+Added cheatbox code: print:
+Added support for map preview videos
+Added Campaign maps to SP map selection screen
+Game Mode checkboxes now uncheck by default
+Era checkboxes now unchecked by default
+Changed displayed era checkboxes to 5
+Changed displayed game mode checkboxes to 14
+Expanded game mode gui section to fix 12 checkboxes
+Made slight layout changes to the map selection screens
+Added game mode generation tables
+Added era generation tables
+Added support for game mode: tdm
+Added support for game mode: xl
+Added support for game mode: obj
+Added support for game mode: uber
+Added support for game mode: bf1
+Added support for game mode: holo
+Added support for game mode: ord66
+Added support for game mode: dm
+Added support for game mode: space
+Added support for game mode: c1
+Added support for game mode: c2
+Added support for game mode: c3
+Added support for game mode: c4
+Added support for game mode: hctf
+Added support for game mode: vhcon
+Added support for game mode: vhtdm
+Added support for game mode: vhctf
+Added support for game mode: avh
+Added support for game mode: lms
+Added support for game mode: vh
+Added support for game mode: race
+Added support for game mode: koh
+Added support for game mode: tdf
+Added support for game mode: surv
+Added support for game mode: rpg
+Added support for game mode: wav
+Added support for game mode: ctrl
+Added support for game mode: seige
+Added support for game mode: siege
+Added support for game mode: jhu
+Added support for game mode: wea
+Added support for game mode: ins
+Added support for era: a
+Added support for era: b
+Added support for era: d
+Added support for era: e
+Added support for era: f
+Added support for era: h
+Added support for era: i
+Added support for era: j
+Added support for era: k
+Added support for era: l
+Added support for era: m
+Added support for era: n
+Added support for era: o
+Added support for era: p
+Added support for era: q
+Added support for era: r
+Added support for era: s
+Added support for era: t
+Added support for era: u
+Added support for era: v
+Added support for era: w
+Added support for era: x
+Added support for era: y
+Added support for era: z
+Added support for era: 1
+Added support for era: 2
+Added mode icon: mode_icon_ins.tga
+Added mode icon: mode_icon_c4.tga
+Added mode icon: mode_icon_c3.tga
+Added mode icon: mode_icon_c2.tga
+Added mode icon: mode_icon_c1.tga
+Added mode icon: mode_icon_avh.tga
+Added mode icon: mode_icon_wav.tga
+Added mode icon: mode_icon_survival.tga
+Added mode icon: mode_icon_rpg.tga
+Added mode icon: mode_icon_siege.tga
+Added mode icon: mode_icon_vehicle.tga
+Added mode icon: mode_icon_space.tga
+Added mode icon: mode_icon_wea.tga
+Added mode icon: mode_icon_jhu.tga
+Added mode icon: mode_icon_tdf.tga
+Added mode icon: mode_icon_hctf.tga
+Added mode icon: mode_icon_race.tga
+Added mode icon: mode_icon_koh.tga
+Added mode icon: mode_icon_control.tga
+Added mode icon: mode_icon_bf1.tga
+Added mode icon: mode_icon_tdm.tga
+Added mode icon: mode_icon_uber.tga
+Added mode icon: mode_icon_vh.tga
+Added mode icon: mode_icon_xtra.tga
+Added mode icon: mode_icon_obj.tga
+Added mode icon: mode_icon_dm.tga
+Added mode icon: mode_icon_holo.tga
+Added mode icon: mode_icon_ord66.tga
+Added mode icon: mode_icon_lms.tga
+Added mode icon: mode_icon_c.tga
+Changed mode icon: mode_icon_XL.tga
+Changed mode icon: mode_icon_eli.tga
+Changed background image: iface_bgmeta_space.tga
+
+

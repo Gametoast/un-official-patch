@@ -1,0 +1,3 @@
+
+Attempts to load user_script_11.lvl and above.  User scripts with an incremented number will be loaded until the next numbered user script doesn't exist.
+Fixes r117's AddUnitClass() to return the index of the added class

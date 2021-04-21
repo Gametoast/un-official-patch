@@ -1,0 +1,31 @@
+
+Attempts to load user_script_0.lvl through user_script_10.lvl (does file user_script_# for each found lvl)
+Listens to ReadDataFile() calls in an attempt to detect the maps 3-char code and loaded mode (stores the values in '__thisMapsCode__' and '__thisMapsMode__')
+Listens to AddUnitClass() calls to help generate the map's unit class table
+Listens to SetHeroClass() calls to help generate the map's unit class table
+Added ability to disable award effects (same function call as the FC command) by using the toggle file: AAA-v1.3patch\settings\noAwards.txt
+Changes FakeConsole command color depending on sucessful run of the command (exe commands always show up as errored if when they work)
+Added support for custom FakeConsole commands
+Added hud from UnOfficial v1.2 patch
+Change mine effect to reduce lag online
+Spark texture is now more towards white instead of orange
+Tweaked laser textures and increased lighting radius
+Dimmed background when in FakeConsole
+Displays description of selected FakeConsole command
+Added text area to the right of the FakeConsole List
+Moved the FakeConsole list more to the right
+Increased the amount of FakeConsole commands displayed in the FakeConsole list
+Reads in utility_function.lua
+Reads in fakeconsole_functions.lua
+Loads the Popup_Prompt script
+Reads in custom strings from 'v1.3patch_strings.lvl'
+Added support for overriding the team selection screen's team names
+Added 'Esc' shortcut key to close the FakeConsole list
+Added 'a' shortcut key to select auto-assign's button in the team selection screen
+Added 'b' shortcut key to select auto-assign's button in the team selection screen
+Added '1' shortcut key to select team 1's button in the team selection screen
+Added '2' shortcut key to select team 2's button in the team selection screen
+Added '3' shortcut key to select auto-assign's button in the team selection screen
+Added '4' shortcut key to select spectator's button in the team selection screen
+
+
