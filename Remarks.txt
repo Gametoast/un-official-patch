@@ -32,7 +32,7 @@ shell.lvl
   scripts:
     shell_interface           - restored
     ifs_login                 - restored
-    ifs_missionselect         - tbd
+    ifs_missionselect         - WIP
     missionlist               - restored
     ifs_sp                    - restored
     ifs_sp_campaign           - restored
