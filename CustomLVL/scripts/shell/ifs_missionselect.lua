@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -26,11 +31,7 @@
 local USING_NEW_PC_SHELL = 1
 
 function ifs_missionselect_fnUsingNewShell( this )
-	if( USING_NEW_PC_SHELL ) then
-		-- hide option list box		
-		IFObj_fnSetVis( this.InfoboxOptions, nil )
-		IFObj_fnSetVis( this.OptionListbox, nil )
-	end
+	ifs_missionselect_pcMulti_fnUsingNewShell(this)
 end
 
 -- Pull in list of missions.
@@ -39,112 +40,25 @@ end
 -- Helper function. Given a layout (x,y,width, height), returns a
 -- fully-built item.
 function MissionSelectListboxL_CreateItem(layout)
-	-- Make a coordinate system pegged to the top-left of where the cursor would go.
-	local Temp = NewIFContainer { 
-		x = layout.x - 0.5 * layout.width, 
-		y = layout.y,
-	}
-
-	local HAlign = "left"
-	local XPos = 5
-	local WidthAdj = -5
-
-	Temp.map = NewIFText { 
-		x = XPos,
-		y = layout.height * -0.5 + 2,
-		halign = HAlign, valign = "vcenter",
-		font = "gamefont_tiny", 
-		textw = layout.width + WidthAdj, texth = layout.height,
-		startdelay=math.random()*0.5, nocreatebackground=1, 
-	}
-
-	return Temp
+	return pcMissionSelectListboxL_CreateItem(layout)
 end
 
 -- Helper function. Given a layout (x,y,width, height), returns a
 -- fully-built item.
 function MissionSelectListboxR_CreateItem(layout)
-	-- Make a coordinate system pegged to the top-left of where the cursor would go.
-	local Temp = NewIFContainer { 
-		x = layout.x - 0.5 * layout.width, 
-		y = layout.y,
-	}
-
-	local HAlign = "left"
-	local XPos = 5
-	local WidthAdj = -5
-
-	Temp.map = NewIFText { 
-		x = XPos,
-		y = layout.height * -0.5 + 2,
-		halign = HAlign, valign = "vcenter",
-		font = "gamefont_tiny", 
-		textw = layout.width + WidthAdj, texth = layout.height,
-		startdelay=math.random()*0.5, 
-		nocreatebackground=1, 
-	}
-	
-	-- the icon
-	local iconSize = layout.height * 0.65
-	Temp.icon1 = NewIFImage {
- 		ZPos = 0, 
- 		x = layout.width - iconSize * 1.3, 
- 		y = -4,
- 		localpos_l = 0, localpos_t = 0,
- 		localpos_r = iconSize, localpos_b = iconSize,
-		texture = "imp_icon",
-	}
-	Temp.icon2 = NewIFImage {
- 		ZPos = 0, 
- 		x = layout.width - iconSize * 2.5,
- 		y = -4,
- 		localpos_l = 0, localpos_t = 0,
- 		localpos_r = iconSize, localpos_b = iconSize,
-		texture = "imp_icon",
-	}
-
-	return Temp
+	return pcMissionSelectListboxR_CreateItem(layout)
 end
 
 -- Helper function. For a destination item (previously created w/
 -- CreateItem), fills it in with data, which may be nil (==blank it)
 function MissionSelectListboxL_PopulateItem(Dest,Data)
-	if(Data) then
-		-- Show the data
-		local DisplayUStr,iSource = missionlist_GetLocalizedMapName(Data.mapluafile)
-		IFText_fnSetUString(Dest.map,DisplayUStr)
-	end
-
-	IFObj_fnSetVis(Dest.map,Data)
-
+	pcMissionSelectListboxL_PopulateItem(Dest, Data)
 end
 
 -- Helper function. For a destination item (previously created w/
 -- CreateItem), fills it in with data, which may be nil (==blank it)
 function MissionSelectListboxR_PopulateItem(Dest,Data)
-	if(Data) then
-		local DisplayUStr,iSource = missionlist_GetLocalizedMapName(Data.Map)
-		IFText_fnSetUString(Dest.map,DisplayUStr)
-
-		-- set the icon texture
-		if (Data.SideChar == "g") then
-			IFImage_fnSetTexture(Dest.icon1,"imp_icon")
-			IFImage_fnSetTexture(Dest.icon2,"all_icon")
-			IFObj_fnSetVis(Dest.icon1,1)
-			IFObj_fnSetVis(Dest.icon2,1)
-		elseif (Data.SideChar == "c") then
-			IFImage_fnSetTexture(Dest.icon1,"rep_icon")
-			IFImage_fnSetTexture(Dest.icon2,"cis_icon")
-			IFObj_fnSetVis(Dest.icon1,1)
-			IFObj_fnSetVis(Dest.icon2,1)
-		else
-			IFObj_fnSetVis(Dest.icon1,nil)
-			IFObj_fnSetVis(Dest.icon2,nil)
-		end		
-	end
-
-	-- Turn on/off depending on whether data's there or not
-	IFObj_fnSetVis(Dest,Data)
+	pcMissionSelectListboxR_PopulateItem(Dest, Data)
 end
 
 missionselect_name_listboxL_layout = {
@@ -172,68 +86,27 @@ missionselect_name_listboxR_layout = {
 }
 
 function ifs_missionselect_fnShowHideListboxes(this,bShowThem)
-	local A1,A2
-	local fAnimTime = 0.3
-
-	if(bShowThem) then
-		A1 = 0
-		A2 = 1
-		this.AddDelContainer.add.bHidden = 1
-		this.AddDelContainer.del.bHidden = 1
-	else
-		A1 = 1
-		A2 = 0
-		this.AddDelContainer.add.bHidden = nil
-		this.AddDelContainer.del.bHidden = nil
-	end
-
-	AnimationMgr_AddAnimation(this.AddDelContainer, { fStartAlpha = A1, fEndAlpha = A2,})
-	--AnimationMgr_AddAnimation(this.listboxL, { fStartAlpha = A1, fEndAlpha = A2,})
-	--AnimationMgr_AddAnimation(this.listboxR, { fStartAlpha = A1, fEndAlpha = A2,})
+	ifs_missionselect_pcMulti_fnShowHideListboxes(this, bShowThem)
 end
 
 function ifs_missionselect_fnFullPopupDone()
-	local this = ifs_missionselect
-	ifs_missionselect_fnShowHideListboxes(this,1)
+	ifs_missionselect_pcMulti_fnFullPopupDone()
 end
 
 
 -- Flips map order
 function ifs_missionselect_fnToggleOrder(this)
-	this.bRandomOrder = not this.bRandomOrder
-	if(this.bRandomOrder) then
-		RoundIFButtonLabel_fnSetString(this.OrderButton,"ifs.missionselect.random")
-	else
-		RoundIFButtonLabel_fnSetString(this.OrderButton,"ifs.missionselect.inorder")
-	end
+	ifs_missionselect_pcMulti_fnToggleOrder(this)
 end
 
 -- Sets up the map preview based on the current selection
 function ifs_missionselect_fnSetMapPreview(this)
-	local movieName = nil
-	local movieFile = nil
-	local num = missionselect_name_listboxL_layout.SelectedIdx or 1
-
-	local Selection = missionselect_listbox_contents[num]
-	print("num, Selection =", num, Selection)
-	movieName, movieFile = missionlist_fnGetMovieName(Selection)
-	
-	if (movieName) then
-		--ifelem_shellscreen_fnStartMovie(movieName.."fly", nil, this.movieX,this.movieY,this.movieW,this.movieH)
-		this.movieName = movieName
-		this.movieTime = 0.5
-		this.movieFile = movieFile
-	else
-		ifelem_shellscreen_fnStopMovie()		
-	end
-	IFObj_fnSetVis(this.Map,nil)
+	ifs_missionselect_pcMulti_fnSetMapPreview(this)
 end
 
 -- Helper function, manages the state of the 'Delete' button
 function ifs_missionselect_fnUpdateDelButton(this)
-	local bShouldBeOn = (this.iPage == 0) and (not this.bOnLeft) and (not this.bOnButtons) and (table.getn(gPickedMapList) > 0)
-	
-	bShouldBeOn = nil
+	ifs_missionselect_pcMulti_fnUpdateDelButton(this)
 end
 
 -- Sets the current button to the specified table (which can be nil)
@@ -263,207 +136,26 @@ end
 
 -- Sets up the screen for the specified page
 function ifs_missionselect_fnSetPage(this,iNewPage)
-	-- Early exit if changing to same page
-	if(this.iPage == iNewPage) then
-		return
-	end
-	local iLastPage = this.iPage
-
-	-- Page 2 isn't allowed anymore - NM 4/5/04
-	assert(iNewPage ~= 2)
-
-	-- Turn off items as appropriate when leaving a page
-	if(iLastPage == 0) then
-		-- Listboxes will always be off on the other pages
-		--AnimationMgr_AddAnimation(this.listboxL, { fStartAlpha = 1, fEndAlpha = 0.0,})
-		--AnimationMgr_AddAnimation(this.listboxR, { fStartAlpha = 1, fEndAlpha = 0.5,})
-		--this.listboxL.bHidden = 1
-		--this.listboxR.bHidden = 1
-		this.OrderButton.bHidden = 1
-		--this.LaunchButton.bHidden = 1
-		AnimationMgr_AddAnimation(this.Map, { fStartAlpha = 1, fEndAlpha = 0.5,})
-		AnimationMgr_AddAnimation(this.OrderButton, { fStartAlpha = 1, fEndAlpha = 0,})
-		--AnimationMgr_AddAnimation(this.LaunchButton, { fStartAlpha = 1, fEndAlpha = 0,})
-
-		this.AddDelContainer.add.bHidden = 1
-		this.AddDelContainer.del.bHidden = 1
-		AnimationMgr_AddAnimation(this.AddDelContainer, { fStartAlpha = 1, fEndAlpha = 0.0,})
-
-		-- Also, update title
---		AnimationMgr_AddAnimation(this.titleL, { fStartAlpha = 1, fEndAlpha = 0,})
---		AnimationMgr_AddAnimation(this.titleR, { fStartAlpha = 1, fEndAlpha = 0,})
-	elseif (iLastPage == 1) then
-		-- Fade off buttons if they won't be on anymore
-		if(iNewPage == 0) then
-			AnimationMgr_AddAnimation(this.buttons, { fStartAlpha = 1, fEndAlpha = 0,})
-			this.buttons.bHidden = 1
-		end
-	elseif (iLastPage == 2) then
-		-- Fade off buttons if they won't be on anymore
-		if(iNewPage == 0) then
-			AnimationMgr_AddAnimation(this.buttons, { fStartAlpha = 1, fEndAlpha = 0,})
-			this.buttons.bHidden = 1
-		end
-	end
-
-	-- Set the new page
-	this.iPage = iNewPage
-
-	-- Turn off items as appropriate when leaving a page
-	if(iNewPage == 0) then
-		-- Listboxes will always be on for this page
-		--AnimationMgr_AddAnimation(this.listboxL, { fStartAlpha = 0, fEndAlpha = 1,})
-		--AnimationMgr_AddAnimation(this.listboxR, { fStartAlpha = 0.5, fEndAlpha = 1,})
-		--this.listboxL.bHidden = nil
-		--this.listboxR.bHidden = nil
-		AnimationMgr_AddAnimation(this.Map, { fStartAlpha = 0, fEndAlpha = 1,})
-		AnimationMgr_AddAnimation(this.OrderButton, { fStartAlpha = 0, fEndAlpha = 1,})
-		--AnimationMgr_AddAnimation(this.LaunchButton, { fStartAlpha = 0, fEndAlpha = 1,})
-		-- Also, update title
---		AnimationMgr_AddAnimation(this.titleL, { fStartAlpha = 0, fEndAlpha = 1,})
---		AnimationMgr_AddAnimation(this.titleR, { fStartAlpha = 0, fEndAlpha = 1,})
-		this.OrderButton.bHidden = nil
-		--this.LaunchButton.bHidden = nil
-
-		this.AddDelContainer.add.bHidden = nil
-		this.AddDelContainer.del.bHidden = nil
-		AnimationMgr_AddAnimation(this.AddDelContainer, { fStartAlpha = 0.0, fEndAlpha = 1,})
-
-		this.bOnButtons = nil
-		this.AttackerChar = nil
-	elseif (iNewPage == 1) then
-		-- Turn on buttons if they weren't on before
-		if(iLastPage == 0) then
-			AnimationMgr_AddAnimation(this.buttons, { fStartAlpha = 0, fEndAlpha = 1,})
-			this.buttons.bHidden = nil
-			-- also set the title bar of the era buttons to the mission name
-			-- it probably ain't gonna fit for other languages
-			if(gLangStr == "english") then
-				local MapNameUStr = missionlist_GetLocalizedMapName(missionselect_listbox_contents[missionselect_name_listboxL_layout.SelectedIdx].mapluafile)
-				IFText_fnSetUString(this.buttons._titlebar_,MapNameUStr)
-			end
-		end
-		--this.listboxL.bHidden = 1
-		--this.listboxR.bHidden = 1
-		this.OrderButton.bHidden = 1
-		--this.LaunchButton.bHidden = 1
-
-		SetCurButton("c")
-
-	elseif (iNewPage == 2) then
-		-- Turn on buttons if they weren't on before
-		if(iLastPage == 0) then
-			AnimationMgr_AddAnimation(this.buttons, { fStartAlpha = 0, fEndAlpha = 1,})
-			this.buttons.bHidden = nil
-		end
-		--this.listboxL.bHidden = 1
-		--this.listboxR.bHidden = 1
-		this.OrderButton.bHidden = 1
-		--this.LaunchButton.bHidden = 1
-	end
-
-	ifs_missionselect_fnUpdateDelButton(this)
+	ifs_missionselect_pcMulti_fnSetPage(this, iNewPage)
 end
 
 -- Adds the currently selected map to the maplist.
 function ifs_missionselect_fnAddMap(this)
-	local Selection = missionselect_listbox_contents[missionselect_name_listboxL_layout.SelectedIdx]
-
-	local Team1Name
-	local Team2Name
-
-	-- Turn era into side character
-	if(this.CurButton == "c") then
-		this.SideChar = "c"
-		Team1Name = "common.sides.rep.name"
-		Team2Name = "common.sides.cis.name"
-	else
-		this.SideChar = "g"
-		Team1Name = "common.sides.all.name"
-		Team2Name = "common.sides.imp.name"
-	end
-
-	ifs_missionselect_fnSetMapAndTeam(this,Selection,Team1Name,Team2Name)
-	this.Team1Name = ScriptCB_getlocalizestr(Team1Name)
-	this.Team2Name = ScriptCB_getlocalizestr(Team2Name)
-
-	ifs_missionselect_fnSetPage(this,0)
+	ifs_missionselect_pcMulti_fnAddMap(this)
 end
 
 -- Utility function - based on the .hidden flag in buttons (already
 -- created), shows/hides buttons. Adjusts spacing too. Returns tag of
 -- first selectable button.
 function ifs_missionselect_fnShowHideItems(dest,layout)
-	local xWidth = layout.xWidth or 40
-	local xSpacing = layout.xSpacing or 10
-	local height = layout.height or 40
-	local Font = layout.font or "gamefont_small"
-	local yTop = layout.yTop or 0
-
-	local i
-	local Count = table.getn(layout.buttonlist)
-	local TagOfFirst = nil
-
-	-- Figure out how many are actually visible
-	local ShowCount = 0
-	for i = 1,Count do
-		local label = layout.buttonlist[i].tag
-		if(not dest[label].hidden) then
-			ShowCount = ShowCount + 1
-		end
-	end
-
-	local xLeft = ((ShowCount - 1) * (xWidth + xSpacing)) * -0.5
-
-	for i = 1,Count do
-		local label = layout.buttonlist[i].tag
-		local label2 = layout.buttonlist[i].tag .. "_image"
-		IFObj_fnSetVis(dest[label], not dest[label].hidden)
-		IFObj_fnSetVis(dest[label2], not dest[label].hidden)
-
-		dest[label].bHidden = dest[label].hidden
-		dest[label2].bHidden = dest[label].hidden
-
-		if(not dest[label].hidden) then
-			-- not hidden. Show it
-			TagOfFirst = TagOfFirst or label -- note which was the first
-
-			IFObj_fnSetVis(dest[label], 1)
-			IFObj_fnSetPos(dest[label], xLeft, yTop + 20)
-			IFObj_fnSetVis(dest[label2], 1)
-			IFObj_fnSetPos(dest[label2], xLeft, 0)
-
-		 xLeft = xLeft + xWidth + xSpacing
-		end -- showing this one
-	end
-
-	return ShowCount,TagOfFirst
+	return ifs_missionselect_pcMulti_fnShowHideItems(dest, layout)
 end
 
 -- Tthe side selection is implicit in the selection here, except for
 -- the maps that only have one side, and you have to go back around
 -- and handle them as special cases. 
 function ifs_missionselect_fnSetMapAndTeam(this,Selection,Team1Str,Team2Str)
-	local SelectedMap = string.format(Selection.mapluafile, this.SideChar, "con")
-	local Side = 1 -- 1 or 2
-
-	local Idx = table.getn(gPickedMapList) + 1
-	gPickedMapList[Idx] = {
-		Map = SelectedMap,
-		dnldable = Selection.dnldable,
-		Side = Side,
-		SideChar = this.SideChar,
-		Team1 = Team1Str,
-		Team2 = Team2Str,
-	}
-
-	missionselect_name_listboxR_layout.FirstShownIdx = missionselect_name_listboxR_layout.FirstShownIdx or 1
-	missionselect_name_listboxR_layout.SelectedIdx = missionselect_name_listboxR_layout.SelectedIdx or 1
-	missionselect_name_listboxR_layout.CursorIdx = nil
-
-	--ListManager_fnFillContents(this.listboxR,gPickedMapList,missionselect_name_listboxR_layout)
-	-- Hack - refresh the left column next to get the cursor back.
-	--ListManager_fnFillContents(this.listboxL,missionselect_listbox_contents,missionselect_name_listboxL_layout)
+	ifs_missionselect_pcMulti_fnSetMapAndTeam(this, Selection, Team1Str, Team2Str)
 end
 
 function ifs_missionselect_fnFlipLeftRight(this)
@@ -489,19 +181,7 @@ end
 -- Helper function - returns a bool as to whether the selection has
 -- multiple sides, and also the char of the last (only?) side noticed.
 function ifs_missionselect_fnGetSides(Selection)
-	local bMultipleSides
-	local LastSideChar = nil
-	
-	if(Selection.era_g) then
-		bMultipleSides = (LastSideChar ~= nil)
-		LastSideChar = "g"
-	end
-	if(Selection.era_c) then
-		bMultipleSides = (LastSideChar ~= nil)
-		LastSideChar = "c"
-	end
-
-	return bMultipleSides,LastSideChar
+	return ifs_missionselect_pcMulti_fnGetSides(Selection)
 end
 
 function ifs_missionselect_fnLaunch(this)
@@ -517,38 +197,7 @@ end
 -- pass the name of the downloadable content movie file to open it, or nil to open
 -- the normal DVD flythrough movie file.
 function ifs_missionselect_ChangeMovieFile(movieFile)
---	print("ifs_missionselect_ChangeMovieFile(",movieFile,")")
-	local this = ifs_missionselect
-	
-	-- don't change anything if its the same file
-	if(movieFile == this.lastMovieFile) then
-		return
-	end
-	-- remember this for next time
-	this.lastMovieFile = movieFile
-	
-	-- close the last one
-	ScriptCB_CloseMovie()
-	
-	-- set the DC directory, so we can find the correct movie file
-	ScriptCB_SetDCMap(movieFile)
-	
-	-- open the new one
-	local dcPrefix = "dc:"
-	local pal = ""
-	if(not movieFile) then
-		dcPrefix = ""
-		movieFile = "fly"
-	end
-	if (ScriptCB_IsPAL() == 1) then
-		pal = "pal"
-	end	
-	-- downloadable pal looks like:     "dc:movies\\RHN3pal.mvs"
-	-- downloadable content looks like: "dc:movies\\RHN3.mvs"
-	-- normal pal looks like this:      "movies\\flypal.mvs"
-	-- normal looks like this:          "movies\\fly.mvs"	
-	ScriptCB_OpenMovie(dcPrefix .. "movies\\" .. movieFile .. pal .. ".mvs", "")
-	
+	ifs_missionselect_pcMulti_ChangeMovieFile(movieFile, true)	
 end
 
 ifs_missionselect = NewIFShellScreen {
@@ -647,7 +296,8 @@ ifs_missionselect = NewIFShellScreen {
 		end
 
 		if(bFwd) then
-			missionlist_ExpandMaplist(this.bForMP) -- TODO: filter era/mode here
+			this.bForMp = false
+			missionlist_ExpandMaplist(false) -- TODO: filter era/mode here
 			--gPickedMapList = {}
 			this.movieTime = 0.5
 
@@ -731,13 +381,7 @@ ifs_missionselect = NewIFShellScreen {
 		gIFShellScreenTemplate_fnUpdate(this, fDt)
 		
 		--time to change movies?
-		this.movieTime = this.movieTime - fDt
-		if( this.movieName and this.movieTime<=0 ) then
-			print("play movie", this.movieName, " ", this.movieX, ",", this.movieY, " ", this.movieW, "x", this.movieH);
-			ifs_missionselect_ChangeMovieFile(this.movieFile)
-    		ifelem_shellscreen_fnStartMovie(this.movieName.."fly", 1, nil, nil, this.movieX,this.movieY,this.movieW,this.movieH)
-		    this.movieName = nil;
-		end
+		custom_CheckChangeMovies(this, fDt)
 		
 		-- animate the left/right arrows?
 		IFObj_UpdateBlinkyAnim(this.AddDelContainer.add,
@@ -752,6 +396,43 @@ ifs_missionselect = NewIFShellScreen {
 		ifs_missionselect_pcMulti_fnUpdateKeyboard( this )		
 	end,
 	
+	Input_KeyDown = function(this, iKey)
+		if(gCurEditbox) then
+			if(gCurEditbox == this.cheatBox) then
+				if((iKey == 10) or (iKey == 13)) then -- handle Enter differently
+					local str = IFEditbox_fnGetString(gCurEditbox)
+					local retVal = nil
+					
+					-- special case - campaign list
+					if(str == "456123") then
+						retVal = "cheats.levels_on"
+						ifelm_shellscreen_fnPlaySound(this.acceptSound)
+						if(ifs_sp_campaign) then
+							ifs_sp_campaign.showCampaignList = true
+						end
+					else
+						retVal = custom_ExtraCheats(str)
+						if not retVal then
+							retVal = ScriptCB_MrMrsEval(str)
+						end
+					end
+					
+					for t=1,200 do
+						IFEditbox_fnAddChar(gCurEditbox, 8)	-- backspace
+					end
+					if(retVal ~= nil) then
+						IFText_fnSetString(this.cheatOutput, retVal)
+						IFObj_fnSetVis( this.cheatOutput, 1 )
+					else
+						IFObj_fnSetVis( this.cheatOutput, nil )
+					end
+				else
+					IFEditbox_fnAddChar(gCurEditbox, iKey)
+					IFObj_fnSetVis( this.cheatOutput, nil )
+				end
+			end -- if cheatBox
+		end -- if gCurEditBox
+	end, --end of Input_KeyDown
 
 	Input_Accept = function(this)
    		-- If the tab manager handled this event, then we're done
@@ -900,41 +581,6 @@ ifs_missionselect = NewIFShellScreen {
 --		print("Input_Accept Bot, CurButton = ", this.CurButton)
 	end, -- end of Input_Accept
 
-	Input_KeyDown = function(this, iKey)
-		if(gCurEditbox) then
-			if(gCurEditbox == this.cheatBox) then
-				if((iKey == 10) or (iKey == 13)) then -- handle Enter differently
-					local str = IFEditbox_fnGetString(gCurEditbox)
-					local retVal = nil
-					
-					-- special case - campaign list
-					if(str == "456123") then
-						retVal = "cheats.levels_on"
-						ifelm_shellscreen_fnPlaySound(this.acceptSound)
-						if(ifs_sp_campaign) then
-							ifs_sp_campaign.showCampaignList = true
-						end
-					else
-						retVal = ScriptCB_MrMrsEval(str)
-					end
-					
-					for t=1,200 do
-						IFEditbox_fnAddChar(gCurEditbox, 8)	-- backspace
-					end
-					if(retVal ~= nil) then
-						IFText_fnSetString(this.cheatOutput, retVal)
-						IFObj_fnSetVis( this.cheatOutput, 1 )
-					else
-						IFObj_fnSetVis( this.cheatOutput, nil )
-					end
-				else
-					IFEditbox_fnAddChar(gCurEditbox, iKey)
-					IFObj_fnSetVis( this.cheatOutput, nil )
-				end
-			end -- if cheatBox
-		end -- if gCurEditBox
-	end, --end of Input_KeyDown
-
 	Input_Back = function(this)
 		-- Hack - if just 1 map, then can't go back to the listboxL
 		if(table.getn(missionselect_listbox_contents) == 1) then
@@ -1078,16 +724,17 @@ ifs_missionselect = NewIFShellScreen {
 gPickedMapList = {}
 
 function ifs_missionselect_fnBuildScreen(this)
-	gPickedMapList = {}
+	local w,h = ScriptCB_GetSafeScreenInfo() -- of the usable screen
 
 	-- add pc profile & title version text
 	AddPCTitleText( this )
 
+	gPickedMapList = {}
+	
 	if(USING_NEW_PC_SHELL) then
 		new_shell_offset_x = 240		
 	end
 
-	local w,h = ScriptCB_GetSafeScreenInfo() -- of the usable screen
 
 	missionselect_name_listboxL_layout.width = (w * 0.48) - 35
 	missionselect_name_listboxR_layout.width = (w * 0.48) - 35
@@ -1174,15 +821,17 @@ function ifs_missionselect_fnBuildScreen(this)
 	
 	
 	--size the background
-	local wScreen,hScreen,vScreen,widescreen = ScriptCB_GetScreenInfo()
--- 	this.backImg.localpos_r = wScreen*widescreen
--- 	this.backImg.localpos_b = hScreen
--- 	this.backImg.uvs_b = vScreen
-	-- calc the position of the movie preview window
-	this.movieW = 510.0
-	this.movieH = 400.0
-	this.movieX = wScreen - 600.0
-	this.movieY = hScreen - this.movieH + 100.0 
+	custom_SetMovieLocation(this)
+	
+	-- local wScreen,hScreen,vScreen,widescreen = ScriptCB_GetScreenInfo()
+-- -- 	this.backImg.localpos_r = wScreen*widescreen
+-- -- 	this.backImg.localpos_b = hScreen
+-- -- 	this.backImg.uvs_b = vScreen
+	-- -- calc the position of the movie preview window
+	-- this.movieW = 510.0
+	-- this.movieH = 400.0
+	-- this.movieX = wScreen - 600.0
+	-- this.movieY = hScreen - this.movieH + 100.0 
 
 	-- Also, add buttons
 	--this.CurButton = AddVerticalButtons(this.buttons,ifs_era_vbutton_layout)
@@ -1239,8 +888,11 @@ function ifs_missionselect_fnBuildScreen(this)
 	---------------------------------------------------
 	this.iColumn = 0
 	this.iMap = 0
-	this.bEra_CloneWar = 1
-	this.bEra_Galactic = 1
+	
+	custom_SetEraBooleans(this, nil)
+	-- this.bEra_CloneWar = 1
+	-- this.bEra_Galactic = 1
+	
 	
 	this.iLastClickTime = nil
 	this.bDoubleClicked = nil
@@ -1388,41 +1040,42 @@ function ifs_missionselect_fnBuildScreen(this)
 	-- add mode boxes
 	ifs_missionselect_pcMulti_fnAddModeBoxes( this )	
 	
+	custom_AddCheatBox(this)
 	-- cheat bits
-	local cheatBoxY = 400
-	local cheatBoxX = 30
-	local cheatBoxW = 121
-	local cheatBoxH = 77
+	-- local cheatBoxY = 400
+	-- local cheatBoxX = 30
+	-- local cheatBoxW = 121
+	-- local cheatBoxH = 77
 
-	this.cheatOutput = NewIFText { 
-			x = cheatBoxX-28,
-			y = cheatBoxY+40,
-			halign = "left", valign = "vcenter",
-			font = "gamefont_small", 
-			textw = 120, texth = 90,
-			font = "gamefont_tiny",
-			nocreatebackground=1, 
-			string = "",
-	}
+	-- this.cheatOutput = NewIFText { 
+			-- x = cheatBoxX-28,
+			-- y = cheatBoxY+40,
+			-- halign = "left", valign = "vcenter",
+			-- font = "gamefont_small", 
+			-- textw = 120, texth = 90,
+			-- font = "gamefont_tiny",
+			-- nocreatebackground=1, 
+			-- string = "",
+	-- }
 	
-	this.cheatBox = NewEditbox {
-			ScreenRelativeX = 0, 
-			ScreenRelativeY = 0, 
-			y = cheatBoxY,
-			x = cheatBoxX,
+	-- this.cheatBox = NewEditbox {
+			-- ScreenRelativeX = 0, 
+			-- ScreenRelativeY = 0, 
+			-- y = cheatBoxY,
+			-- x = cheatBoxX,
 
-			width = cheatBoxW,
-			height = cheatBoxH,
-			font = "gamefont_tiny",
-			--		string = "Player 1",
-			MaxLen = nil,
-			MaxChars = 60,
-			bKeepsFocus = nil,
-			bSilentAndInvisible = 1,
-			bClearOnHilightChange = 1,
-			noChangeSound = 1,
-			bIsTheCheatBox = 1,
-	}
+			-- width = cheatBoxW,
+			-- height = cheatBoxH,
+			-- font = "gamefont_tiny",
+			-- --		string = "Player 1",
+			-- MaxLen = nil,
+			-- MaxChars = 60,
+			-- bKeepsFocus = nil,
+			-- bSilentAndInvisible = 1,
+			-- bClearOnHilightChange = 1,
+			-- noChangeSound = 1,
+			-- bIsTheCheatBox = 1,
+	-- }
 end
 
 ifs_missionselect_fnBuildScreen(ifs_missionselect)

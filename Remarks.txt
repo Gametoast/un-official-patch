@@ -33,11 +33,11 @@ shell.lvl
   scripts:
     shell_interface           - restored
     ifs_login                 - restored
-    ifs_missionselect         - WIP
+    ifs_missionselect         - restored
     missionlist               - restored
     ifs_sp                    - restored
     ifs_sp_campaign           - restored
-    ifs_missionselect_pcmulti - tbd 
+    ifs_missionselect_pcmulti - tbd
     ifs_instant_options_tags  - restored
     ifs_freeform_init_common  - restored
     ifs_freeform_main         - restored
