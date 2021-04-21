@@ -46,6 +46,7 @@ shell.lvl
     ifs_mp_sessionlist        - restored
     ifs_mp_leaderboard        - restored
     ifs_era_handler           - restored
+    ifs_mpgs_pclogin          - questions -- I am seeing differences from the modtools version; I have recovered r129 & r130
 
   missing textures (from stock req, not needed):
     active_glow

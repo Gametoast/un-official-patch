@@ -1,8 +1,8 @@
 -- ifs_mpgs_pclogin.lua
--- Zerted 1.3 uop
+-- Zerted 1.3 uop (r130)
 --
 -- Recovered with the help of SWBF2CodeHelper 
--- verified decompile (cbadal)
+-- verified decompile (BAD_AL)
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
