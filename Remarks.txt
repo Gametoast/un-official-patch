@@ -43,7 +43,7 @@ shell.lvl
     ifs_freeform_main         - restored
     ifs_freeform_battle_mode  - restored
     ifs_freeform_battle_card  - restored
-    ifs_mp_sessionlist        - WIP
+    ifs_mp_sessionlist        - restored
     ifs_mp_leaderboard        - restored
     ifs_era_handler           - restored
 

@@ -1,5 +1,5 @@
 -- Zerted 1.3 patch, 
--- Decompile by BAD_AL (WIP)
+-- Decompile by BAD_AL (verified)
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -1299,11 +1299,11 @@ function ifs_mp_sessionlist_fnShowHideInterface(this, bHideInterface)
 	
 	--IFObj_fnSetVis(this.SourceText, not bHideInterface)
 
-	if( ScriptCB_IsLoggedIn() ) then
+	if( not ScriptCB_IsLoggedIn()  ) then
 		this.source_value = 2
 	end
 	
-	IFObj_fnSetVis(this.source_button, (not bHideInterface) or (ScriptCB_IsLoggedIn()) )
+	IFObj_fnSetVis(this.source_button, (not bHideInterface) and (ScriptCB_IsLoggedIn()) )
 	
 	--[[local show_ip = nil
 	if( this.source_value == 3 ) then
@@ -1507,10 +1507,9 @@ function ifs_mp_sessionlist_fnShowStats(this)
 end
 
 function ifs_mp_sessionlist_fnConnectTypeUpdate( this )
-	-- TODO: figure out decompile here ...
-	if( ScriptCB_IsLoggedIn() and ( this.source_value == 1 ) )then 
+	if( (not ScriptCB_IsLoggedIn()) and ( this.source_value == 1 ) )then 
 		this.source_value = 2
-	end 
+	end
 	if( this.source_value == 1 ) then	
 		ScriptCB_SetConnectType("wan")
 		gOnlineServiceStr = ScriptCB_GetOnlineService()
