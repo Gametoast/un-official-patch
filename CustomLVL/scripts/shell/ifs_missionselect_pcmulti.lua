@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -11,11 +16,13 @@ local USING_NEW_PC_SHELL = 1
 
 function ifs_missionselect_pcMulti_fnUsingNewShell( this )
 	if( USING_NEW_PC_SHELL ) then
-		-- hide option list box		
---		IFObj_fnSetVis( this.InfoboxOptions, nil )
+		-- hide option list box	
 		IFObj_fnSetVis( this.OptionListbox, nil )
 --		IFObj_fnSetVis( this.InfoboxHostOptions, nil )
 --		IFObj_fnSetVis( this.HostOptionListbox, nil )		
+		if this == ifs_missionselect then 
+			IFObj_fnSetVis( this.InfoboxOptions, nil )
+		end
 	end
 end
 
@@ -215,51 +222,44 @@ function ifs_missionselect_pcMulti_fnShowHostOptionButton( this, bHideButton )
 end
 
 function ifs_missionselect_pcMulti_fnClickCheckButtons( this )
-	-- update era checkbox
-	if(this.CurButton == "check_era1") then
-		--print("check era1 clicked")
-		if( this.bEra_CloneWar ) then
-			this.bEra_CloneWar = nil
-			IFImage_fnSetTexture(this.Era_C_box.Check_Era,"check_no")
-		else
-			this.bEra_CloneWar = 1
-			IFImage_fnSetTexture(this.Era_C_box.Check_Era,"check_yes")
-		end
-	elseif(this.CurButton == "check_era2") then
-		--print("check era2 clicked")
-		if( this.bEra_Galactic ) then
-			this.bEra_Galactic = nil
-			IFImage_fnSetTexture(this.Era_G_box.Check_Era,"check_no")
-		else
-			this.bEra_Galactic = 1
-			IFImage_fnSetTexture(this.Era_G_box.Check_Era,"check_yes")
-		end
-	else
-		local i
-		for i = 1, table.getn( this.mode_checkbox ) do
-			if( this.CurButton == "check_mode"..i ) then
-				if( this.mode_checkbox[i].bChecked ) then
-					this.mode_checkbox[i].bChecked = nil
-					IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_no")
-				else
-					this.mode_checkbox[i].bChecked = 1
-					IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_yes")
-				end
-			end
-		end
-	end
-	
+	custom_ClickCheckButtons(this)
 end
 
 function ifs_missionselect_pcMulti_fnSetMapListColor(Dest, Data, bSelected)
 	local iColor = 128
+	local r4, r5 = nil
+	local red = Data.red		--r6
+	local green = Data.green	--r7
+	local blue = Data.blue		--r8
+	
+	if ScriptCB_IsFileExist(__v13patchSettings_noColors__) == 0 then
+	else
+		red = nil
+		green = nil
+		blue = nil
+	end
+
+	
 	if((ifs_missionselect_pcMulti.iColumn == 0) or (bSelected)) then
 		iColor = 255
 	end
+	
+	if Data.isModLevel == 1 then
+		r4 = 128
+		r5 = 0
+	end
+	
 	if( Data.bSelected ) then
-		IFObj_fnSetColor(Dest.map, iColor, 0, 0 )
+		local r9 = 200
+		local r10 = 0
+		local r11 = 0
+		IFObj_fnSetColor(Dest.map, r9, r10, r11 )
 	else
-		IFObj_fnSetColor(Dest.map, iColor, iColor, iColor)
+		local r9 = red or 255
+		local r10 = green or r4 or iColor
+		local r11 = blue or r5 or iColor
+		IFObj_fnSetColor(Dest.map, r9, r10, r11)
+		
 	end
 end
 
@@ -494,7 +494,7 @@ function pcMissionSelectListboxR_CreateItem(layout)
  		y = -4,
  		localpos_l = 0, localpos_t = 0,
  		localpos_r = iconSize, localpos_b = iconSize,
-		texture = "imp_icon",
+		texture = custom_UnknownEraIcon1,
 	}
 	Temp.icon2 = NewIFImage {
  		ZPos = 0, 
@@ -502,7 +502,7 @@ function pcMissionSelectListboxR_CreateItem(layout)
  		y = -4,
  		localpos_l = 0, localpos_t = 0,
  		localpos_r = iconSize, localpos_b = iconSize,
-		texture = "imp_icon",
+		texture = custom_UnknownEraIcon2,
 	}	
 
 	return Temp
@@ -528,22 +528,27 @@ function pcMissionSelectListboxR_PopulateItem(Dest,Data)
 		-- Update contents
 		local DisplayUStr,iSource = missionlist_GetLocalizedMapName(Data.Map)
 		IFText_fnSetUString(Dest.map,DisplayUStr)
-
+	
+		local r4, r5, r6, r7 = custom_GetSideCharIconInfo(Data.SideChar)
+		IFImage_fnSetTexture(Dest.icon1,r4)
+		IFImage_fnSetTexture(Dest.icon2,r5)
+		IFObj_fnSetVis(Dest.icon1,r6)
+		IFObj_fnSetVis(Dest.icon2,r7)
+		
 		-- set the icon texture
-		if (Data.SideChar == "g") then
-			IFImage_fnSetTexture(Dest.icon1,"imp_icon")
-			IFImage_fnSetTexture(Dest.icon2,"all_icon")
-			IFObj_fnSetVis(Dest.icon1,1)
-			IFObj_fnSetVis(Dest.icon2,1)
-		elseif (Data.SideChar == "c") then
-			IFImage_fnSetTexture(Dest.icon1,"rep_icon")
-			IFImage_fnSetTexture(Dest.icon2,"cis_icon")
-			IFObj_fnSetVis(Dest.icon1,1)
-			IFObj_fnSetVis(Dest.icon2,1)
-		else
-			IFObj_fnSetVis(Dest.icon1,nil)
-			IFObj_fnSetVis(Dest.icon2,nil)
-		end
+		-- if (Data.SideChar == "g") then
+			-- IFImage_fnSetTexture(Dest.icon1,"imp_icon")
+			-- IFImage_fnSetTexture(Dest.icon2,"all_icon")
+			-- IFObj_fnSetVis(Dest.icon2,1)
+		-- elseif (Data.SideChar == "c") then
+			-- IFImage_fnSetTexture(Dest.icon1,"rep_icon")
+			-- IFImage_fnSetTexture(Dest.icon2,"cis_icon")
+			-- IFObj_fnSetVis(Dest.icon1,1)
+			-- IFObj_fnSetVis(Dest.icon2,1)
+		-- else
+			-- IFObj_fnSetVis(Dest.icon1,nil)
+			-- IFObj_fnSetVis(Dest.icon2,nil)
+		-- end
 	end
 
 	-- Turn on/off depending on whether data's there or not
@@ -617,16 +622,34 @@ function ifs_missionselect_pcMulti_fnSetMapPreview(this)
 --	print("ifs_missionselect_pcMulti_fnSetMapPreview")
 	local movieName = nil
 	local movieFile = nil
-	local num = pc_missionselect_name_listboxL_layout.SelectedIdx or 1
+	local idx = nil
+	
+	for i = 1, table.getn(missionselect_listbox_contents), 1 do
+		if missionselect_listbox_contents[i].bSelected then
+			idx = i
+		end
+	end
+	
+	--lbl 16
+	if idx == nil then
+		idx = 1
+		print("ifs_missionselect_pcMulti_fnSetMapPreview(): Defaulting index to 1")
+	end
+	local r4 = missionselect_listbox_contents[idx]
+	movieName, movieFile = missionlist_fnGetMovieName(r4)
+	
+	--local num = pc_missionselect_name_listboxL_layout.SelectedIdx or 1
 
-	local Selection = missionselect_listbox_contents[num]
-	movieName, movieFile = missionlist_fnGetMovieName(Selection)
+	--local Selection = missionselect_listbox_contents[num]
+	--movieName, movieFile = missionlist_fnGetMovieName(Selection)
 
 	if (movieName) then
 		--ifelem_shellscreen_fnStartMovie(movieName.."fly", nil, this.movieX,this.movieY,this.movieW,this.movieH)
 		this.movieName = movieName
 		this.movieTime = 0.5
 		this.movieFile = movieFile
+		
+		print("ifs_missionselect_pcMulti_fnSetMapPreview(): Stored movie name, file: ", movieName, movieFile)
 	else
 		ifelem_shellscreen_fnStopMovie()		
 	end
@@ -3327,33 +3350,34 @@ function ifs_missionselect_pcMulti_fnAddEraBoxes(this)
 	}
 end
 
-mode_list = {
-	{
-		key = "mode_con", showstr = "modename.name.con", 
-		descstr = "modename.description.con", subst = "con",
-		icon = "mode_icon_con",
-	},
-	{
-		key = "mode_ctf", showstr = "modename.name.ctf",
-		descstr = "modename.description.ctf", subst = "ctf",
-		icon = "mode_icon_2ctf",
-	},
-	{
-		key = "mode_1flag", showstr = "modename.name.1flag",
-		descstr = "modename.description.1flag", subst = "1flag",
-		icon = "mode_icon_ctf",
-	},
-	{
-		key = "mode_assault", showstr = "modename.name.assault",
-		descstr = "modename.description.assault", subst = "ass",
-		icon = "mode_icon_ass",
-	},
-	{
-		key = "mode_hunt", showstr = "modename.name.hunt",
-		descstr = "modename.description.hunt", subst = "hunt",
-		icon = "mode_icon_hunt",
-	},		
-}
+mode_list = custom_GetGMapModes()
+-- {
+	-- {
+		-- key = "mode_con", showstr = "modename.name.con", 
+		-- descstr = "modename.description.con", subst = "con",
+		-- icon = "mode_icon_con",
+	-- },
+	-- {
+		-- key = "mode_ctf", showstr = "modename.name.ctf",
+		-- descstr = "modename.description.ctf", subst = "ctf",
+		-- icon = "mode_icon_2ctf",
+	-- },
+	-- {
+		-- key = "mode_1flag", showstr = "modename.name.1flag",
+		-- descstr = "modename.description.1flag", subst = "1flag",
+		-- icon = "mode_icon_ctf",
+	-- },
+	-- {
+		-- key = "mode_assault", showstr = "modename.name.assault",
+		-- descstr = "modename.description.assault", subst = "ass",
+		-- icon = "mode_icon_ass",
+	-- },
+	-- {
+		-- key = "mode_hunt", showstr = "modename.name.hunt",
+		-- descstr = "modename.description.hunt", subst = "hunt",
+		-- icon = "mode_icon_hunt",
+	-- },		
+-- }
 
 function ifs_missionselect_pcMulti_fnAddModeBoxes(this)
 
