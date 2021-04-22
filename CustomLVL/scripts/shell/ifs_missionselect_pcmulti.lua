@@ -1,6 +1,6 @@
 ------------------------------------------------------------------
 -- uop recovered source
--- by Anakain
+-- by Anakain & BAD_AL 
 ------------------------------------------------------------------
 
 --
@@ -706,23 +706,29 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		this.listboxL.bHidden = 1
 --		this.listboxR.bHidden = 1
 		this.OrderButton.bHidden = 1
---		this.LaunchButton.bHidden = 1
---		this.LanButton.bHidden = 1
---		this.EditGameName.bHidden = 1
---		this.EditPass.bHidden = 1
-		this.EditContainer.bHidden = 1
-		this.EditPwdContainer.bHidden = 1
---		this.OptionButton.bHidden = 1
+
+		if( this ~= ifs_missionselect  ) then 
+	--		this.LaunchButton.bHidden = 1
+	--		this.LanButton.bHidden = 1
+	--		this.EditGameName.bHidden = 1
+	--		this.EditPass.bHidden = 1
+			this.EditContainer.bHidden = 1
+			this.EditPwdContainer.bHidden = 1
+	--		this.OptionButton.bHidden = 1
+		end 
+		
 		AnimationMgr_AddAnimation(this.Map, { fStartAlpha = 1, fEndAlpha = 0.5,})
 		AnimationMgr_AddAnimation(this.OrderButton, { fStartAlpha = 1, fEndAlpha = 0,})
+		
 --		AnimationMgr_AddAnimation(this.LaunchButton, { fStartAlpha = 1, fEndAlpha = 0,})
 --		AnimationMgr_AddAnimation(this.LanButton, { fStartAlpha = 1, fEndAlpha = 0,})
 --		AnimationMgr_AddAnimation(this.EditGameName, { fStartAlpha = 1, fEndAlpha = 0,})
 --		AnimationMgr_AddAnimation(this.EditPass, { fStartAlpha = 1, fEndAlpha = 0,})
-		AnimationMgr_AddAnimation(this.EditContainer, { fStartAlpha = 1, fEndAlpha = 0,})
-		AnimationMgr_AddAnimation(this.EditPwdContainer, { fStartAlpha = 1, fEndAlpha = 0,})
---		AnimationMgr_AddAnimation(this.OptionButton, { fStartAlpha = 1, fEndAlpha = 0,})
-		
+		if ( this ~= ifs_missionselect ) then 
+			AnimationMgr_AddAnimation(this.EditContainer, { fStartAlpha = 1, fEndAlpha = 0,})
+			AnimationMgr_AddAnimation(this.EditPwdContainer, { fStartAlpha = 1, fEndAlpha = 0,})
+	--		AnimationMgr_AddAnimation(this.OptionButton, { fStartAlpha = 1, fEndAlpha = 0,})
+		end 
 		this.AddDelContainer.add.bHidden = 1
 		this.AddDelContainer.del.bHidden = 1
 		AnimationMgr_AddAnimation(this.AddDelContainer, { fStartAlpha = 1, fEndAlpha = 0,})
@@ -760,8 +766,10 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		AnimationMgr_AddAnimation(this.LanButton, { fStartAlpha = 0, fEndAlpha = 1,})
 --		AnimationMgr_AddAnimation(this.EditGameName, { fStartAlpha = 0, fEndAlpha = 1,})
 --		AnimationMgr_AddAnimation(this.EditPass, { fStartAlpha = 0, fEndAlpha = 1,})
-		AnimationMgr_AddAnimation(this.EditContainer, { fStartAlpha = 0, fEndAlpha = 1,})
-		AnimationMgr_AddAnimation(this.EditPwdContainer, { fStartAlpha = 0, fEndAlpha = 1,})		
+		if ( this ~= ifs_missionselect ) then 
+			AnimationMgr_AddAnimation(this.EditContainer, { fStartAlpha = 0, fEndAlpha = 1,})
+			AnimationMgr_AddAnimation(this.EditPwdContainer, { fStartAlpha = 0, fEndAlpha = 1,})		
+		end 
 --		AnimationMgr_AddAnimation(this.OptionButton, { fStartAlpha = 0, fEndAlpha = 1,})
 		-- Also, update title
 --		AnimationMgr_AddAnimation(this.titleL, { fStartAlpha = 0, fEndAlpha = 1,})
@@ -771,9 +779,12 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		this.LanButton.bHidden = 1
 --		this.EditGameName.bHidden = nil
 --		this.EditPass.bHidden = nil
-		this.EditContainer.bHidden = nil
-		this.EditPwdContainer.bHidden = nil
---		this.OptionButton.bHidden = nil
+		
+		if ( this ~= ifs_missionselect ) then 
+			this.EditContainer.bHidden = nil
+			this.EditPwdContainer.bHidden = nil
+	--		this.OptionButton.bHidden = nil
+		end 
 
 		this.AddDelContainer.add.bHidden = nil
 		this.AddDelContainer.del.bHidden = nil
@@ -800,9 +811,12 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		this.LanButton.bHidden = 1
 --		this.EditGameName.bHidden = 1
 --		this.EditPass.bHidden = 1
-		this.EditContainer.bHidden = 1
-		this.EditPwdContainer.bHidden = 1		
---		this.OptionButton.bHidden = 1
+		
+		if ( this ~= ifs_missionselect ) then 
+			this.EditContainer.bHidden = 1
+			this.EditPwdContainer.bHidden = 1		
+	--		this.OptionButton.bHidden = 1
+		end
 
 		SetCurButton("c")
 
@@ -819,16 +833,27 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		this.LanButton.bHidden = 1
 --		this.EditGameName.bHidden = 1
 --		this.EditPass.bHidden = 1
-		this.EditContainer.bHidden = 1
-		this.EditPwdContainer.bHidden = 1		
---		this.OptionButton.bHidden = 1
+		if ( this ~= ifs_missionselect ) then 
+			this.EditContainer.bHidden = 1
+			this.EditPwdContainer.bHidden = 1		
+	--		this.OptionButton.bHidden = 1
+		end 
 	end
 
-	ifs_missionselect_pcMulti_fnUpdateDelButton(this)
+	if ( this ~= ifs_missionselect ) then 
+		ifs_missionselect_pcMulti_fnUpdateDelButton(this)
+	else 
+		ifs_missionselect_fnUpdateDelButton(this)
+	end 
 end
 
 -- Adds the currently selected map to the maplist.
 function ifs_missionselect_pcMulti_fnAddMap(this)
+	print("Zerted: ifs_missionselect_pcMulti_fnAddMap(): IS THIS EVEN EVER CALLED?")
+	print("Zerted: ifs_missionselect_pcMulti_fnAddMap(): CRASHING THE GAME SO WE KNOW WE GOT HERE!")
+	print(nil)
+	
+	--[[
 	local Selection = missionselect_listbox_contents[pc_missionselect_name_listboxL_layout.SelectedIdx]
 	local Team1Name
 	local Team2Name
@@ -849,7 +874,8 @@ function ifs_missionselect_pcMulti_fnAddMap(this)
 	this.Team2Name = ScriptCB_getlocalizestr(Team2Name)
 
 	ifs_missionselect_pcMulti_fnSetPage(this,0)
-
+	]]
+	
 end
 
 -- Utility function - based on the .hidden flag in buttons (already
@@ -906,7 +932,12 @@ end
 -- the maps that only have one side, and you have to go back around
 -- and handle them as special cases. 
 function ifs_missionselect_pcMulti_fnSetMapAndTeam(this,Selection,Team1Str,Team2Str)
-	local SelectedMap = string.format(Selection.mapluafile, this.SideChar, "con")
+
+	print("Zerted: ifs_missionselect_pcMulti_fnSetMapAndTeam(): IS THIS EVEN EVER CALLED?")
+	print("Zerted: ifs_missionselect_pcMulti_fnSetMapAndTeam(): CRASHING THE GAME SO WE KNOW WE GOT HERE!")
+	print(nil)
+	
+	--[[local SelectedMap = string.format(Selection.mapluafile, this.SideChar, "con")
 	local Side = 1 -- 1 or 2
 
 	local Idx = table.getn(gPickedMapList) + 1
@@ -927,6 +958,7 @@ function ifs_missionselect_pcMulti_fnSetMapAndTeam(this,Selection,Team1Str,Team2
 --	ListManager_fnFillContents(this.listboxR,gPickedMapList,pc_missionselect_name_listboxR_layout)
 	-- Hack - refresh the left column next to get the cursor back.
 --	ListManager_fnFillContents(this.listboxL,missionselect_listbox_contents,pc_missionselect_name_listboxL_layout)
+]]
 end
 
 function ifs_missionselect_pcMulti_fnFlipLeftRight(this)
@@ -952,7 +984,10 @@ end
 -- Helper function - returns a bool as to whether the selection has
 -- multiple sides, and also the char of the last (only?) side noticed.
 function ifs_missionselect_pcMulti_fnGetSides(Selection)
-	local bMultipleSides
+
+	print("Zerted: ifs_missionselect_pcMulti_fnGetSides(): IS THIS EVEN EVER CALLED?")
+	return custom_GetSides(Selection)
+	--[[local bMultipleSides
 	local LastSideChar = nil
 	
 	if(Selection.era_g) then
@@ -964,7 +999,7 @@ function ifs_missionselect_pcMulti_fnGetSides(Selection)
 		LastSideChar = "c"
 	end
 
-	return bMultipleSides,LastSideChar
+	return bMultipleSides,LastSideChar]]
 end
 
 function ifs_missionselect_pcMulti_fnLaunch(this)
@@ -1012,6 +1047,12 @@ end
 -- the normal DVD flythrough movie file.
 function ifs_missionselect_pcMulti_ChangeMovieFile(movieFile)
 --	print("ifs_missionselect_pcMulti_ChangeMovieFile(",movieFile,")")
+
+	if(not movieFile ) then 
+		print("ifs_missionselect_pcMulti_ChangeMovieFile(): MovieFile is nil")
+	else 
+		print("ifs_missionselect_pcMulti_ChangeMovieFile(): MovieFile:", file) -- looks like defect. -BAD_AL 
+	end 
 	local this = ifs_missionselect_pcMulti
 	
 	-- don't change anything if its the same file
