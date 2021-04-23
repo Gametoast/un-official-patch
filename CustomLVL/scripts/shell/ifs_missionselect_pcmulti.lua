@@ -1045,7 +1045,7 @@ end
 
 -- pass the name of the downloadable content movie file to open it, or nil to open
 -- the normal DVD flythrough movie file.
-function ifs_missionselect_pcMulti_ChangeMovieFile(movieFile)
+function ifs_missionselect_pcMulti_ChangeMovieFile(movieFile, isMissionselect)
 --	print("ifs_missionselect_pcMulti_ChangeMovieFile(",movieFile,")")
 
 	if(not movieFile ) then 
@@ -1053,36 +1053,54 @@ function ifs_missionselect_pcMulti_ChangeMovieFile(movieFile)
 	else 
 		print("ifs_missionselect_pcMulti_ChangeMovieFile(): MovieFile:", file) -- looks like defect. -BAD_AL 
 	end 
-	local this = ifs_missionselect_pcMulti
+	
+	local this = nil
+	if isMissionselect then
+		this = ifs_missionselect
+	else
+		this = ifs_missionselect_pcMulti
+	end
 	
 	-- don't change anything if its the same file
 	if(movieFile == this.lastMovieFile) then
+		print("ifs_missionselect_pcMulti_ChangeMovieFile(): Same as last movie")
 		return
 	end
 	-- remember this for next time
 	this.lastMovieFile = movieFile
+	print("ifs_missionselect_pcMulti_ChangeMovieFile(): Closed any open movie")
 	
 	-- close the last one
 	ScriptCB_CloseMovie()
 	
 	-- set the DC directory, so we can find the correct movie file
-	ScriptCB_SetDCMap(movieFile)
+	--ScriptCB_SetDCMap(movieFile)
+	
+	if not movieFile then
+		return
+	end
+	
 	
 	-- open the new one
-	local dcPrefix = "dc:"
-	local pal = ""
-	if(not movieFile) then
-		dcPrefix = ""
-		movieFile = "fly"
-	end
+	-- local dcPrefix = "dc:"
+	 local pal = ""
+	-- if(not movieFile) then
+		-- dcPrefix = ""
+		-- movieFile = "fly"
+	-- end
 	if (ScriptCB_IsPAL() == 1) then
 		pal = "pal"
 	end	
 	-- downloadable pal looks like:     "dc:movies\\RHN3pal.mvs"
 	-- downloadable content looks like: "dc:movies\\RHN3.mvs"
 	-- normal pal looks like this:      "movies\\flypal.mvs"
-	-- normal looks like this:          "movies\\fly.mvs"	
-	ScriptCB_OpenMovie(dcPrefix .. "movies\\" .. movieFile .. pal .. ".mvs", "")
+	-- normal looks like this:          "movies\\fly.mvs"
+	local fullpath = movieFile .. pal .. ".mvs"
+	print("ifs_missionselect_pcMulti_ChangeMovieFile(): Opening movie:", fullpath)
+	
+	ScriptCB_OpenMovie(fullpath, "")
+	
+	print("ifs_missionselect_pcMulti_ChangeMovieFile(): Finished opening movie")
 	
 end
 
@@ -1118,103 +1136,114 @@ function ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this )
 end
 
 function ifs_missionselect_pcMulti_fnShowHideGameModesMulti( this )
-	local i, j
-	for i = 1, table.getn(missionselect_listbox_contents) do
-		if( missionselect_listbox_contents[i].bSelected ) then
-			local MapSelection = missionselect_listbox_contents[i]
-			local MissionselectModes = missionlist_ExpandModelist(MapSelection.mapluafile)
-			for j = 1, table.getn(MissionselectModes) do
-				for k = 1, table.getn(this.mode_checkbox) do
-					if( ( this.mode_checkbox[k].key == MissionselectModes[j].key ) or 
-						( (this.mode_checkbox[k].key == "mode_assault") and (MissionselectModes[j].key == "mode_eli") ) )then
-						IFObj_fnSetVis(this.mode_checkbox[k], 1)
-					end
-				end
-			end
-		end
-	end
+
+	custom_ShowHideGameModesMulti(this)
+	
+	-- local i, j
+	-- for i = 1, table.getn(missionselect_listbox_contents) do
+		-- if( missionselect_listbox_contents[i].bSelected ) then
+			-- local MapSelection = missionselect_listbox_contents[i]
+			-- local MissionselectModes = missionlist_ExpandModelist(MapSelection.mapluafile)
+			-- for j = 1, table.getn(MissionselectModes) do
+				-- for k = 1, table.getn(this.mode_checkbox) do
+					-- if( ( this.mode_checkbox[k].key == MissionselectModes[j].key ) or 
+						-- ( (this.mode_checkbox[k].key == "mode_assault") and (MissionselectModes[j].key == "mode_eli") ) )then
+						-- IFObj_fnSetVis(this.mode_checkbox[k], 1)
+					-- end
+				-- end
+			-- end
+		-- end
+	-- end
 end
 
 function ifs_missionselect_pcMulti_fnShowHideGameModes( this )
-	local i, j
-	local number = ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this )
-	if( number > 1 ) then
-		ifs_missionselect_pcMulti_fnShowHideGameModesMulti( this )
-	else
-		for i = 1, table.getn(this.mode_checkbox) do
-			IFObj_fnSetVis(this.mode_checkbox[i], nil)
-			for j = 1, table.getn(gMissionselectModes) do
-				if( ( this.mode_checkbox[i].key == gMissionselectModes[j].key ) or 
-					( (this.mode_checkbox[i].key == "mode_assault") and (gMissionselectModes[j].key == "mode_eli") ) )then
-					-- make "mode_eli" equal to "mode_assault" for mos eisley
-					--print(" missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx].mapluafile = ", missionlist_GetLocalizedMapName( missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx].mapluafile ) )
-					IFObj_fnSetVis(this.mode_checkbox[i], 1)
-				end
-			end
-		end
-	end
 	
-	-- reset position
-	number = 0
-	for i = 1, table.getn(this.mode_checkbox) do
-		if( IFObj_fnGetVis(this.mode_checkbox[i] ) ) then
-			-- reset position
-			IFObj_fnSetPos(this.mode_checkbox[i], this.mode_checkbox[i].x, this.mode_checkbox[1].y + 25 * number )			
-			number = number + 1
-		end
-	end	
+	custom_ShowHideGameModes(this)
+	
+	-- local i, j
+	-- local number = ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this )
+	-- if( number > 1 ) then
+		-- ifs_missionselect_pcMulti_fnShowHideGameModesMulti( this )
+	-- else
+		-- for i = 1, table.getn(this.mode_checkbox) do
+			-- IFObj_fnSetVis(this.mode_checkbox[i], nil)
+			-- for j = 1, table.getn(gMissionselectModes) do
+				-- if( ( this.mode_checkbox[i].key == gMissionselectModes[j].key ) or 
+					-- ( (this.mode_checkbox[i].key == "mode_assault") and (gMissionselectModes[j].key == "mode_eli") ) )then
+					-- -- make "mode_eli" equal to "mode_assault" for mos eisley
+					-- --print(" missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx].mapluafile = ", missionlist_GetLocalizedMapName( missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx].mapluafile ) )
+					-- IFObj_fnSetVis(this.mode_checkbox[i], 1)
+				-- end
+			-- end
+		-- end
+	-- end
+	
+	-- -- reset position
+	-- number = 0
+	-- for i = 1, table.getn(this.mode_checkbox) do
+		-- if( IFObj_fnGetVis(this.mode_checkbox[i] ) ) then
+			-- -- reset position
+			-- IFObj_fnSetPos(this.mode_checkbox[i], this.mode_checkbox[i].x, this.mode_checkbox[1].y + 25 * number )			
+			-- number = number + 1
+		-- end
+	-- end	
 end
 
 function ifs_missionselect_pcMulti_fnShowHideEra( this )
-	if( ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this ) > 1 ) then
-		IFObj_fnSetVis(this.Era_C_box,1)
-		IFObj_fnSetVis(this.Era_G_box,1)
-	else
-		IFObj_fnSetVis(this.Era_C_box,nil)
-		IFObj_fnSetVis(this.Era_G_box,nil)
-		for i = 1,table.getn(gMissionselectEras) do
-			local EraSelection = gMissionselectEras[i]
-			if(not EraSelection.bIsWildcard) then
-				local DisplayUStr = ScriptCB_getlocalizestr(EraSelection.showstr)
-				print( "EraSelection.subst = ", EraSelection.subst, EraSelection.key )
-				--if( ( EraSelection.subst == "c" ) or ( EraSelection.subst == "C" ) ) then
-				if( ( EraSelection.key == "era_c" ) ) then
-					--print( "it's true! EraSelection.key = ", EraSelection.key )
-					IFObj_fnSetVis(this.Era_C_box,1)
-				else
-					IFObj_fnSetVis(this.Era_G_box,1)
-				end
-			end
-		end	
-	end
+
+	custom_ShowHideEra(this)
 	
-	-- reset position
-	if( IFObj_fnGetVis(this.Era_C_box) ) then
-		IFObj_fnSetPos(this.Era_G_box, this.Era_G_box.x, this.Era_C_box.y + 15)
-	else
-		IFObj_fnSetPos(this.Era_G_box, this.Era_G_box.x, this.Era_C_box.y - 22)
-	end
+	-- if( ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this ) > 1 ) then
+		-- IFObj_fnSetVis(this.Era_C_box,1)
+		-- IFObj_fnSetVis(this.Era_G_box,1)
+	-- else
+		-- IFObj_fnSetVis(this.Era_C_box,nil)
+		-- IFObj_fnSetVis(this.Era_G_box,nil)
+		-- for i = 1,table.getn(gMissionselectEras) do
+			-- local EraSelection = gMissionselectEras[i]
+			-- if(not EraSelection.bIsWildcard) then
+				-- local DisplayUStr = ScriptCB_getlocalizestr(EraSelection.showstr)
+				-- print( "EraSelection.subst = ", EraSelection.subst, EraSelection.key )
+				-- --if( ( EraSelection.subst == "c" ) or ( EraSelection.subst == "C" ) ) then
+				-- if( ( EraSelection.key == "era_c" ) ) then
+					-- --print( "it's true! EraSelection.key = ", EraSelection.key )
+					-- IFObj_fnSetVis(this.Era_C_box,1)
+				-- else
+					-- IFObj_fnSetVis(this.Era_G_box,1)
+				-- end
+			-- end
+		-- end	
+	-- end
+	
+	-- -- reset position
+	-- if( IFObj_fnGetVis(this.Era_C_box) ) then
+		-- IFObj_fnSetPos(this.Era_G_box, this.Era_G_box.x, this.Era_C_box.y + 15)
+	-- else
+		-- IFObj_fnSetPos(this.Era_G_box, this.Era_G_box.x, this.Era_C_box.y - 22)
+	-- end
 end
 
 function ifs_missionselect_pcMulti_fnInitModeEra( this )
+	
+	custom_InitModeEra(this)
 	-- only first one is checked
 	-- init gamemode
-	local i
-	for i = 1, table.getn( this.mode_checkbox ) do
-		if( i == 1 ) then
-			this.mode_checkbox[i].bChecked = 1
-			IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_yes")		
-		else
-			this.mode_checkbox[i].bChecked = nil
-			IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_no")
-		end
-	end
+	-- local i
+	-- for i = 1, table.getn( this.mode_checkbox ) do
+		-- if( i == 1 ) then
+			-- this.mode_checkbox[i].bChecked = 1
+			-- IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_yes")		
+		-- else
+			-- this.mode_checkbox[i].bChecked = nil
+			-- IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_no")
+		-- end
+	-- end
 	
-	-- init era
-	this.bEra_CloneWar = 1
-	IFImage_fnSetTexture(this.Era_C_box.Check_Era,"check_yes")
-	this.bEra_Galactic = nil
-	IFImage_fnSetTexture(this.Era_G_box.Check_Era,"check_no")
+	-- -- init era
+	-- this.bEra_CloneWar = 1
+	-- IFImage_fnSetTexture(this.Era_C_box.Check_Era,"check_yes")
+	-- this.bEra_Galactic = nil
+	-- IFImage_fnSetTexture(this.Era_G_box.Check_Era,"check_no")
 end
 
 function ifs_missionselect_pcMulti_fnUpdateLists( this )
