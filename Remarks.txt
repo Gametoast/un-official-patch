@@ -37,7 +37,7 @@ shell.lvl
     missionlist               - restored
     ifs_sp                    - restored
     ifs_sp_campaign           - restored
-    ifs_missionselect_pcmulti - WIP
+    ifs_missionselect_pcmulti - restored
     ifs_instant_options_tags  - restored
     ifs_freeform_init_common  - restored
     ifs_freeform_main         - restored
@@ -46,7 +46,6 @@ shell.lvl
     ifs_mp_sessionlist        - restored
     ifs_mp_leaderboard        - restored
     ifs_era_handler           - restored
-    ifs_mpgs_pclogin          - questions -- I am seeing differences from the modtools version; I have recovered r129 & r130
 
   missing textures (from stock req, not needed):
     active_glow
@@ -57,6 +56,11 @@ shell.lvl
     textures - largely binary equal
     mcfg - binary equal
     lua - tbd
+
+  unequal scripts for r129
+    ifs_mpgs_pclogin.script
+    ifs_mp_leaderboard.script
+    ifs_mp_sessionlist.script
 
   binary unequal textures (but they look the same)
     iface_bgmeta_space.tga

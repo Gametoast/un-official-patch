@@ -106,6 +106,8 @@ ucft
 		"ifs_mp_heroopts"
 		"ifs_missionselect_pcMulti"
 		"ifs_mpgs_pclogin"
+		
+		"ifs_era_handler"
 	}
 
 	REQN
