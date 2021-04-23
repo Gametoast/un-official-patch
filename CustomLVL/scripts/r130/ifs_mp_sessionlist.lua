@@ -1,7 +1,6 @@
--- ifs_mp_sessionlist.lua (Zerted UO) 1.3 r129)
--- 
--- verified decompile by BAD_AL 
--- 
+-- Zerted 1.3 patch, (r130)
+-- Decompile by BAD_AL (verified) 
+--
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
 
@@ -184,7 +183,12 @@ function MPSessionList_Listbox_PopulateItem(Dest,Data)
 		else
 			IFImage_fnSetTexture(Dest.isfavorite, "check_no")
 		end
-		IFObj_fnSetVis(Dest.isfavorite, 1)
+		
+		if( gOnlineServiceStr == "Galaxy" or gOnlineServiceStr == "LAN" )then
+			IFObj_fnSetVis(Dest.isfavorite , nil)
+		else 
+			IFObj_fnSetVis(Dest.isfavorite , 1)
+		end
 
 		if(Data.bWrongVer) then
 			IFImage_fnSetTexture(Dest.lockicon, "version_icon")
@@ -480,7 +484,7 @@ mpsessionlist_servertypelist_layout = {
 mpsessionlist_servertypelist_contents = {
 	{ text = "ifs.gsprofile.all", },
 	{ text = "ifs.mp.sessionlist.servertypes.pc", },
-	{ text = "ifs.mp.sessionlist.servertypes.pcdedicated", },
+	--{ text = "ifs.mp.sessionlist.servertypes.pcdedicated", },
 }
 
 
@@ -641,8 +645,7 @@ mpsessionlist_gamemodelist_layout = {
 	PopulateFn = MPSessionList_Gamemodelist_PopulateItem,
 }
 
-mpsessionlist_gamemodelist_contents = custom_GetMPGameModeList()
---[[{
+mpsessionlist_gamemodelist_contents = {
 		{ string = "ifs.gsprofile.all",				subst = "ifs.gsprofile.all", icon = nil, },
 		{ string = "ifs.mp.leaderboard.conquest",	subst = "con",				 icon = "mode_icon_con", },
 		{ string = "ifs.mp.leaderboard.CTF2",		subst = "ctf",				 icon = "mode_icon_2ctf", },
@@ -651,7 +654,7 @@ mpsessionlist_gamemodelist_contents = custom_GetMPGameModeList()
 --		{ string = "ifs.mp.leaderboard.teamdm",		subst = "tdm", },
 		{ string = "modename.name.assault",			subst = "ass", 				 icon = "mode_icon_ass", },
 		{ string = "modename.name.hunt",			subst = "hunt", 			 icon = "mode_icon_hunt", },
-}]]
+}
 ----------------------------------------------------
 ----------------------------------------------------
 
@@ -954,7 +957,7 @@ function ifs_mp_sessionlist_buddymatch_fnOnSuccess()
 	local this = ifs_mp_sessionlist
 --	print(" ** ifs_mp_sessionlist_buddymatch_fnOnSuccess")
 	Popup_Busy:fnActivate(nil)
-
+	--[[
 	if(ScriptCB_IsQuickmatchPassworded()) then
 		if(gPlatformStr == "PC") then
 			if( ScriptCB_IsGamespyArcadePasswordReady() ) then
@@ -983,12 +986,12 @@ function ifs_mp_sessionlist_buddymatch_fnOnSuccess()
 			vkeyboard_specs.MaxLen = 16
 			ifs_movietrans_PushScreen(ifs_vkeyboard)
 		end
-	else
+	else]]
 
 		ScriptCB_LaunchQuickmatch()
 		ifs_missionselect.bForMP = 1
 		ifs_movietrans_PushScreen(ifs_mp_lobby_quick)
-	end
+	--end
 end
 
 function ifs_mp_sessionlist_buddymatch_fnPostOKPopup()
@@ -1238,6 +1241,11 @@ function ifs_mp_sessionlist_fnUpdateFilterText(this)
 	Selection = mpsessionlist_servertypelist_contents[mpsessionlist_servertypelist_layout.SelectedIdx]
 	IFText_fnSetString(this.DropBoxes.filter_servertypeLabel.showtext,Selection.text)
 
+	if( gOnlineServiceStr == "Galaxy") then 
+		IFObj_fnSetVis(this.DropBoxes.filter_servertypeLabel, nil)
+		IFObj_fnSetVis(this.ResortButtons.favoriteLabel, nil)
+	end 
+
 	ifs_mp_sessionlist_fnApplyFilters(this)
 end
 
@@ -1286,13 +1294,18 @@ function ifs_mp_sessionlist_fnShowHideInterface(this, bHideInterface)
 	IFObj_fnSetVis(this.LoginAsText1, (not bHideInterface) )
 	IFObj_fnSetVis(this.LoginAsText2, (not bHideInterface) and show_login_name )
 
-	IFObj_fnSetVis(this.Gamespy_IconL, not bHideInterface)
-	IFObj_fnSetVis(this.Gamespy_IconR, not bHideInterface)
+	--IFObj_fnSetVis(this.Gamespy_IconL, not bHideInterface)
+	--IFObj_fnSetVis(this.Gamespy_IconR, not bHideInterface)
 	
 	--IFObj_fnSetVis(this.SourceText, not bHideInterface)
 
+	if( not ScriptCB_IsLoggedIn()  ) then
+		this.source_value = 2
+	end
 	
-	local show_ip = nil
+	IFObj_fnSetVis(this.source_button, (not bHideInterface) and (ScriptCB_IsLoggedIn()) )
+	
+	--[[local show_ip = nil
 	if( this.source_value == 3 ) then
 		show_ip = 1
 	end	
@@ -1309,7 +1322,7 @@ function ifs_mp_sessionlist_fnShowHideInterface(this, bHideInterface)
 --	IFObj_fnSetVis(this.bar_listbox, not bHideInterface)
 --	IFObj_fnSetVis(this.bar_serverinfo, not bHideInterface)
 --	IFObj_fnSetVis(this.bar_playerinfo, (not bHideInterface) and (gOnlineServiceStr ~= "LAN"))
-	
+	]]
 	IFObj_fnSetVis(this.Era_Filter_Image, not bHideInterface)
 	if(not bHideInterface) then
 		ifs_mp_sessionlist_fnUpdateFilterEra(this)
@@ -1445,11 +1458,11 @@ function ifs_mp_sessionlist_fnDoRefresh(this)
 			Popup_Busy.bCallerSetsString = nil
 			Popup_Busy.fTimeout = 3 -- seconds
 			IFText_fnSetString(Popup_Busy.BusyTimeStr,"")
-		elseif(	gOnlineServiceStr == "Direct" ) then
+		--[[elseif(	gOnlineServiceStr == "Direct" ) then
 			-- direct connected
 			ifs_mp_sessionlist_fnShowHideInterface(this,nil)
 			ifs_sessionlist_joinpopup_fnShowListbox(this,1)
-			return
+			return]]
 		else
 			-- internet
 			Popup_Busy.bCallerSetsString = 1 -- we'll manage the text ourselves
@@ -1494,6 +1507,9 @@ function ifs_mp_sessionlist_fnShowStats(this)
 end
 
 function ifs_mp_sessionlist_fnConnectTypeUpdate( this )
+	if( (not ScriptCB_IsLoggedIn()) and ( this.source_value == 1 ) )then 
+		this.source_value = 2
+	end
 	if( this.source_value == 1 ) then	
 		ScriptCB_SetConnectType("wan")
 		gOnlineServiceStr = ScriptCB_GetOnlineService()
@@ -1504,26 +1520,27 @@ function ifs_mp_sessionlist_fnConnectTypeUpdate( this )
 		-- Whine like crazy
 		ScriptCB_SetNoticeNoCable(1)
 		RoundIFButtonLabel_fnSetString( this.source_button, "ifs.mp.join.lan" )
-	elseif( this.source_value == 3 ) then
+	--[[elseif( this.source_value == 3 ) then
 		ScriptCB_SetConnectType("direct")
 		gOnlineServiceStr = "Direct"
 		RoundIFButtonLabel_fnSetString( this.source_button, "ifs.mp.join.direct_con" )
+		]]
 	else
 		RoundIFButtonLabel_fnSetString( this.source_button, "common.none" )
 	end
 	--ScriptCB_GetSessionList()
 end
 
-function ifs_mp_sessionlist_fnSourceButtonClickUpdate( this )
+--[[function ifs_mp_sessionlist_fnSourceButtonClickUpdate( this )
 	this.source_value = this.source_value + 1	
 	if( this.source_value > this.source_value_max ) then
 		this.source_value = 1
 	end
 	
 	ifs_mp_sessionlist_fnDoRefresh( this )
-end
+end]]
 
-function ifs_mp_sessionlist_fnDirectConnect( this )
+--[[function ifs_mp_sessionlist_fnDirectConnect( this )
 	local ip_string = IFEditbox_fnGetString( this.IPEdit )
 	local password = ""
 
@@ -1554,7 +1571,7 @@ function ifs_mp_sessionlist_fnDirectConnect( this )
 	Popup_Busy.fTimeout = 15 -- seconds
 	IFText_fnSetString(Popup_Busy.title,"common.mp.joining")
 	Popup_Busy:fnActivate(1)
-end
+end]]
 
 ifs_mp_sessionlist = NewIFShellScreen {
 	nologo = 1,
@@ -1727,11 +1744,11 @@ ifs_mp_sessionlist = NewIFShellScreen {
 		end		
 
 		-- set direct connect ip addr
-		local JoinIP = ScriptCB_GetProfileJoinIP()
+		--[[local JoinIP = ScriptCB_GetProfileJoinIP()
 		if( JoinIP ) then
 --			print("JoinIP = ", JoinIP)
 			IFEditbox_fnSetString(this.IPEdit, JoinIP)
-		end
+		end]]
 
 		if(this.bFirstTime) then
 			this.bFirstTime = nil
@@ -1772,8 +1789,8 @@ ifs_mp_sessionlist = NewIFShellScreen {
 		ifs_mp_sessionlist_fnShowStats(this)
 
 		local bIsGamespy = (gOnlineServiceStr == "GameSpy")
-		IFObj_fnSetVis(this.Gamespy_IconL, bIsGamespy)
-		IFObj_fnSetVis(this.Gamespy_IconR, bIsGamespy)
+		--IFObj_fnSetVis(this.Gamespy_IconL, bIsGamespy)
+		--IFObj_fnSetVis(this.Gamespy_IconR, bIsGamespy)
 		this.bShowRefresh = (gOnlineServiceStr ~= "XLive")
 		IFObj_fnSetVis(this.Helptext_Refresh, nil)
 		IFObj_fnSetVis(this.Helptext_SortMode, nil)
@@ -2041,7 +2058,8 @@ ifs_mp_sessionlist = NewIFShellScreen {
 			this:Input_Misc()
 		elseif (this.CurButton == "gamespy") then
 			ScriptCB_CancelSessionList()
-			gOnlineServiceStr = "GameSpy"
+			--gOnlineServiceStr = "GameSpy"
+			gOnlineServiceStr = "Galaxy"
 			ScriptCB_SetConnectType("wan")
 			this:Enter(1)
 		elseif (this.CurButton == "filter_mapname") then
@@ -2099,7 +2117,7 @@ ifs_mp_sessionlist = NewIFShellScreen {
 			ScriptCB_SetDedicated(nil)
 			
 			if( this.source_value == 3 ) then
-				ifs_mp_sessionlist_fnDirectConnect( this )
+				--ifs_mp_sessionlist_fnDirectConnect( this )
 			elseif(table.getn(mpsessionlist_listbox_contents) > 0) then
 				-- Can join only when the list has data in it.			
 				if (ScriptCB_IsSessionReady()) then
@@ -2508,7 +2526,7 @@ function ifs_mp_sessionlist_fnAddGamespyLogin(this)
 		login_as_x = -35
 		login_as_y = 510
 	--end
-	
+	--[[
 	this.Gamespy_IconL = NewIFImage {
 		ScreenRelativeX = 1.0, -- right
 		ScreenRelativeY = 0.0, -- top
@@ -2531,7 +2549,7 @@ function ifs_mp_sessionlist_fnAddGamespyLogin(this)
 		localpos_t = -32,
 		localpos_r = 64,
 		localpos_b = 0,
-	}
+	}]]
 
 	-- login as text	
 	this.LoginAsText1 = NewIFText {
@@ -2693,7 +2711,7 @@ function ifs_mp_sessionlist_fnBuildScreen(this)
 --		nocreatebackground = 1,
 --	}
 
-	-- ip text	
+	--[[ ip text	
 	this.IPText = NewIFText {
 		string = "ifs.mp.join.ip",
 		font = "gamefont_small",
@@ -2742,7 +2760,7 @@ function ifs_mp_sessionlist_fnBuildScreen(this)
  --		MaxLen = EditBoxW,
  		MaxChars = 8,
  		bPasswordMode = 1,
- 	}
+ 	}]]
 
 	-- era filter image
 	local	icon_height = 18
@@ -2797,6 +2815,8 @@ function ifs_mp_sessionlist_fnBuildScreen(this)
 			texture = "cis_icon", 
 		},		
 	}
+	
+	this.source_value = 1
 	
 	-- game mode filter image
 

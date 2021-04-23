@@ -1,4 +1,4 @@
--- ifs_mp_leaderboard.lua (Zerted1.3 patch r129 ) 
+-- ifs_mp_leaderboard.lua (Zerted1.3 patch r130 ) 
 -- verified (BAD_AL)
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
@@ -848,22 +848,30 @@ ifs_mp_leaderboard_details_listbox_layout = {
 	
 }
 
-
+-- this one is tricky for me
 function ifs_mp_leaderboard_fnUpdateDetailListbox(this)
 
-	local index = leaderboard_listbox_layout.SelectedIdx
-	leaderboard_detail_listbox_contents_onecolumn[1].value = leaderboard_listbox_contents[index].ratingfield
-	leaderboard_detail_listbox_contents_onecolumn[2].value = leaderboard_listbox_contents[index].HeroPoints
-	leaderboard_detail_listbox_contents_onecolumn[3].value = leaderboard_listbox_contents[index].Starts
-	leaderboard_detail_listbox_contents_onecolumn[4].value = leaderboard_listbox_contents[index].Finishes
-	leaderboard_detail_listbox_contents_onecolumn[5].value = leaderboard_listbox_contents[index].Kills
-	leaderboard_detail_listbox_contents_onecolumn[6].value = leaderboard_listbox_contents[index].Deaths
-	leaderboard_detail_listbox_contents_onecolumn[7].value = leaderboard_listbox_contents[index].TotalTimePlayed
-	leaderboard_detail_listbox_contents_onecolumn[8].value = leaderboard_listbox_contents[index].LastGamePlayed
-	leaderboard_detail_listbox_contents_onecolumn[9].value = leaderboard_listbox_contents[index].LongestLiving
+	if leaderboard_listbox_layout ~= nil and 
+	   leaderboard_detail_listbox_contents_onecolumn ~= nil and 
+	   this.detail_listbox ~= nil
+    then 
+		local index = leaderboard_listbox_layout.SelectedIdx
+	--if( index and ( this.detail_index ~= index ) and leaderboard_listbox_contents[index].ratingfield ) then
+	--	this.detail_index = index
+		if leaderboard_listbox_contents[index] ~= nil then 
+			leaderboard_detail_listbox_contents_onecolumn[1].value = leaderboard_listbox_contents[index].ratingfield
+			leaderboard_detail_listbox_contents_onecolumn[2].value = leaderboard_listbox_contents[index].HeroPoints
+			leaderboard_detail_listbox_contents_onecolumn[3].value = leaderboard_listbox_contents[index].Starts
+			leaderboard_detail_listbox_contents_onecolumn[4].value = leaderboard_listbox_contents[index].Finishes
+			leaderboard_detail_listbox_contents_onecolumn[5].value = leaderboard_listbox_contents[index].Kills
+			leaderboard_detail_listbox_contents_onecolumn[6].value = leaderboard_listbox_contents[index].Deaths
+			leaderboard_detail_listbox_contents_onecolumn[7].value = leaderboard_listbox_contents[index].TotalTimePlayed
+			leaderboard_detail_listbox_contents_onecolumn[8].value = leaderboard_listbox_contents[index].LastGamePlayed
+			leaderboard_detail_listbox_contents_onecolumn[9].value = leaderboard_listbox_contents[index].LongestLiving
 
-	ListManager_fnFillContents( this.detail_listbox, leaderboard_detail_listbox_contents_onecolumn, ifs_mp_leaderboard_details_listbox_layout )
-		
+			ListManager_fnFillContents( this.detail_listbox, leaderboard_detail_listbox_contents_onecolumn, ifs_mp_leaderboard_details_listbox_layout )
+		end 
+	end 
 end
 -- 
 

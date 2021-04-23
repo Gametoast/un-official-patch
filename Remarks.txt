@@ -8,11 +8,11 @@ common.lvl:
     toys_icon.tga
 
   scripts:
-    ifs_mp_lobby - closure definition upvalues wrong order, but function is correct
-    ifs_pausemenu - restored
-    ifs_teamstats - restored
-    error_popup - restored
-    popup_prompt - restored
+    ifs_mp_lobby - closure definition upvalues wrong order, but function is correct 
+    ifs_pausemenu - restored  
+    ifs_teamstats - restored 
+    error_popup - restored 
+    popup_prompt - restored 
     startup - not part of the final build??
      --> 'startup' was BF1 only, I think they just forgot to remove it from the common.req during BF2 dev
 
@@ -20,10 +20,11 @@ common.lvl:
     error_popup.script
     ifs_awardstats.script
     ifs_careerstats.script
-    ifs_mp_lobby.script
+    ifs_mp_lobby.script     (differences between r129 & r130)
+    ifs_mpgs_friends.script (differences between r129 & r130)
     ifs_opt_general.script
-    ifs_opt_mp.script
-    ifs_pausemenu.script
+    ifs_opt_mp.script       (differences between r129 & r130)
+    ifs_pausemenu.script    (differences between r129 & r130)
     ifs_personalstats.script
     ifs_teamstats.script
     popup_prompt.script
@@ -31,21 +32,21 @@ common.lvl:
 	
 shell.lvl
   scripts:
-    shell_interface           - restored
-    ifs_login                 - restored
-    ifs_missionselect         - restored
-    missionlist               - restored
-    ifs_sp                    - restored
-    ifs_sp_campaign           - restored
-    ifs_missionselect_pcmulti - restored
-    ifs_instant_options_tags  - restored
-    ifs_freeform_init_common  - restored
-    ifs_freeform_main         - restored
-    ifs_freeform_battle_mode  - restored
-    ifs_freeform_battle_card  - restored
-    ifs_mp_sessionlist        - restored
-    ifs_mp_leaderboard        - restored
-    ifs_era_handler           - restored
+    shell_interface           - restored 
+    ifs_login                 - restored 
+    ifs_missionselect         - restored 
+    missionlist               - restored 
+    ifs_sp                    - restored 
+    ifs_sp_campaign           - restored 
+    ifs_missionselect_pcmulti - restored 
+    ifs_instant_options_tags  - restored (differences between r129 & r130)
+    ifs_freeform_init_common  - restored 
+    ifs_freeform_main         - restored 
+    ifs_freeform_battle_mode  - restored 
+    ifs_freeform_battle_card  - restored 
+    ifs_mp_sessionlist        - restored (differences between r129 & r130)
+    ifs_mp_leaderboard        - restored (differences between r129 & r130)
+    ifs_era_handler           - restored 
 
   missing textures (from stock req, not needed):
     active_glow
@@ -73,10 +74,12 @@ shell.lvl
     mode_icon_xl.tga
 
 addme.script
+   (no differences from r129 to r130)
    scripts:
      addme.lua - restored
 
 ingame.lvl
+  (no script differences from r129 to r130)
   missing odfs (from stock req, not needed):
     com_prop_barrier_01
     com_bldg_ctfbase_greenteam
