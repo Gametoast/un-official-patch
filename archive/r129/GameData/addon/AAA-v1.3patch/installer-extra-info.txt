@@ -1,0 +1,56 @@
+When picking the installation path in the next step, choose the main folder where SWBF2 was installed.  Don't pick its GameData folder or its addon folder.
+
+
+Changes from r117 to r129:
+* Installer supports Vista and Win7
+* Fixed non-spawning Leia bug
+* Supports unlimited user scripts
+* Supports unlimited cGC scripts
+
+
+This version of the Unofficial v1.3 Patch has no uninstaller.  How many patches can you uninstall?  However, this version shouldn't cause any harm to your SWBF2.  The single campaign bug has been fixed.  But as always, I'm not promising anything.  
+
+
+WARNING:
+* This installer will delete any other v1.3 installations and their related files and folders even if those folders are not empty.  This is not a problem unless you added files to those folders.  
+
+* Any user_script_10.lvl or custom_gc_10.lvl files will be replaced.
+
+
+Installation Problems and Notes
+* If you see a message similar to "Too many missions: ### >= 500" on the profile selection screen, then you have too many mod maps.  Some of your mod maps will be removed from the map selection screen.  These maps would have crashed with FATAL errors if you attempted to play them.  There still might be a few other missions that crash too which were not removed.  To fix this, remove some of your mod maps until the message goes away.  Do not remove the AAA-v1.3path folder or its contents.
+
+* If you cannot see any of the new strings in the game (or if they look like 'modename.name.koh'), find an 8MB version of BattlefrontII.exe online (look at the different version switchers).  Download the exe, then rename it to something other then 'BattlefrontII.exe'.  Put this renamed exe file into the GameData folder and doucle-click the renamed exe to play the game.
+
+* The patch is untested on v1.0 of the game, but it should work (mod map names will be messed up).  
+
+* If you have instllation problems, feel free to contact [RDH]Zerted at:
+          XFire: zerted
+          Email: zerted+SWBF2_v1.3@gmail.com
+          GameToast User: [RDH]Zerted
+          GameToast's v1.3 patch topic: http://www.gametoast.com/forums/viewtopic.php?f=35&t=14483
+
+
+This patch, its data, and its source are for non-profit use only.  If you want to profit from it, contact its main author (Zerted) for more details.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Ha ha, made you look.  :P
