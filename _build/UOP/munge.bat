@@ -61,6 +61,11 @@ REM ===== Merge and munge localization files
 localizemunge -inputfile *.cfg %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %MUNGE_DIR% 2>>%MUNGE_LOG%
 @move /y localizemunge.log UOP\localizemunge.log
 
+@REM ===== Addme
+@set SOURCE_SUBDIR=CustomLVL\addme
+@set SOURCE_DIR=
+@set SOURCE_DIR=%SOURCE_DIR% %MUNGE_ROOT_DIR%\%SOURCE_SUBDIR%
+scriptmunge -inputfile addme.lua %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -outputdir %OUTPUT_DIR%
 
 @REM ===== Handle files in CustomLVL\
 @set SOURCE_SUBDIR=CustomLVL

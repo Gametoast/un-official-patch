@@ -11,7 +11,13 @@ This GitHub repo is a space where users can download the patch and a space for m
 
 We do have some of the source code and can get more of it by reverse-engineering the compiled Lua scripts. At some point we may have all of the source and will be able to build/munge completely from source.
 
+
 # build notes
+
+2021/04/24 new munge bats
+* there are stand alone munge bats that can munge both versions r129 and r130
+* run the bat in _build folder
+* output will be in _lvl_PC\BUILD_NUMBER
 
 2021/04/19 modified munge.bat
 * now when the lvl is packed you can ignore stuff that is already munged in a global file.

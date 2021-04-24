@@ -1,5 +1,24 @@
 --------------------------------------------
--- r129
+-- Overview
+
+File                |  r129 | r130
+--------------------+-------+------
+addme.script        |  #    |  #
+common.lvl          |  +    |  #
+shell.lvl           |  +    |  #
+ingame.lvl          |  +    |  +
+custom_gc_10.lvl    |  +    |  +
+user_script_10.lvl  |  +    |  +
+v1.3patch_strings   |  -    |  -
+pre-movie.mvs       |  -    |  -
+
++ : done and verified
+# : Done, to be verified
+* : WIP
+- : TBD
+
+--------------------------------------------
+-- details
 
 common.lvl:
   texture differences:
@@ -8,13 +27,11 @@ common.lvl:
     toys_icon.tga
 
   scripts:
-    ifs_mp_lobby - closure definition upvalues wrong order, but function is correct 
+    ifs_mp_lobby - closure definition upvalues wrong order, but function is correct
     ifs_pausemenu - restored  
     ifs_teamstats - restored 
     error_popup - restored 
     popup_prompt - restored 
-    startup - not part of the final build??
-     --> 'startup' was BF1 only, I think they just forgot to remove it from the common.req during BF2 dev
 
   scripts binary differences:
     error_popup.script
@@ -53,11 +70,6 @@ shell.lvl
     iface_instant_action
     small_title
 
-  checked:
-    textures - largely binary equal
-    mcfg - binary equal
-    lua - tbd
-
   unequal scripts for r129
     ifs_mpgs_pclogin.script
     ifs_mp_leaderboard.script
@@ -95,16 +107,6 @@ ingame.lvl
     redlaser_1
     spray
     walker_icon
-
-  checked:
-    effects - binary equal
-    config - binary equal
-    hud - binary equal
-    msh - largely binary equal
-    lua - verified
-    animation - binary equal
-    odf - binary equal
-    texture - largely binary equal
 
   binary unequal textures (but they look the same)
     com_sfx_laser_orange.tga - different color
