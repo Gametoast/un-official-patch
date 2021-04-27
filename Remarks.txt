@@ -4,7 +4,7 @@
 File                |  r129 | r130
 --------------------+-------+------
 addme.script        |  +    |  +
-common.lvl          |  +    |  #
+common.lvl          |  +    |  +
 shell.lvl           |  +    |  +
 ingame.lvl          |  +    |  +
 custom_gc_10.lvl    |  +    |  +
@@ -64,7 +64,7 @@ shell.lvl
     ifs_mp_sessionlist        - restored (differences between r129 & r130)
     ifs_mp_leaderboard        - restored (differences between r129 & r130)
     ifs_era_handler           - restored 
-	ifs_mpgs_galaxylogin      - restored missing file, from steam/gog
+    ifs_mpgs_galaxylogin      - restored missing file, from steam/gog
     ifs_instant_options       - restored (differences between DVD and Steam)
 
   missing textures (from stock req, not needed):
