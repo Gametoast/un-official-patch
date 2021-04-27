@@ -266,20 +266,11 @@ ifs_opt_mp = NewIFShellScreen {
 
 		local form = this.formcontainer.form
 
-		-- FIXME BAD_AL 
-		form.elements["appear"].hidden = bCouldBeXLive and bIsGalaxy or true
-		-- local r8 = form.elements["appear"] --.hidden = (bCouldBeXLive and bIsGalaxy or true)
-		-- if bCouldBeXLive then
-			-- r8.hidden = bIsGalaxy
-		-- else
-			-- r8.hidden = true
-		-- end
-		-- r8 = nil
-
-		form.elements["voicemask"].hidden = bCouldBeXLive and bIsGalaxy or true
+		form.elements["appear"].hidden = not bCouldBeXLive or bIsGalaxy  
+		form.elements["voicemask"].hidden =  not bCouldBeXLive or bIsGalaxy 
 		form.elements["prompt"].hidden = true
 		form.elements["turns"].hidden = bIsPC
-		form.elements["allregions"].hidden = bIsPC and bIsGalaxy or true
+		form.elements["allregions"].hidden = not bIsPC or bIsGalaxy
 		form.elements["voicevol"].hidden = not bIsXBox
 		form.elements["voiceplayback"].hidden = bIsPC or bIsXbox
 		form.elements["voicerecord"].hidden = bIsPC or bIsXbox
