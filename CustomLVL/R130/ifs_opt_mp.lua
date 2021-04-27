@@ -1,7 +1,14 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+-- Enter function is not binary equal, but hopefully does the same
+-- this is a steam/gog file. No changes by UOP
+------------------------------------------------------------------
+
 -- ifs_opt_mp.lua 
 -- Zerted 1.3 UOP r130
 --
---  WIP decompile by BAD_AL
+--  WIP decompile by BAD_AL 
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -260,11 +267,19 @@ ifs_opt_mp = NewIFShellScreen {
 		local form = this.formcontainer.form
 
 		-- FIXME BAD_AL 
-		form.elements["appear"].hidden =  bCouldBeXLive 
-		form.elements["voicemask"].hidden = not bCouldBeXLive
+		form.elements["appear"].hidden = bCouldBeXLive and bIsGalaxy or true
+		-- local r8 = form.elements["appear"] --.hidden = (bCouldBeXLive and bIsGalaxy or true)
+		-- if bCouldBeXLive then
+			-- r8.hidden = bIsGalaxy
+		-- else
+			-- r8.hidden = true
+		-- end
+		-- r8 = nil
+
+		form.elements["voicemask"].hidden = bCouldBeXLive and bIsGalaxy or true
 		form.elements["prompt"].hidden = true
 		form.elements["turns"].hidden = bIsPC
-		form.elements["allregions"].hidden = not bIsPC
+		form.elements["allregions"].hidden = bIsPC and bIsGalaxy or true
 		form.elements["voicevol"].hidden = not bIsXBox
 		form.elements["voiceplayback"].hidden = bIsPC or bIsXbox
 		form.elements["voicerecord"].hidden = bIsPC or bIsXbox
