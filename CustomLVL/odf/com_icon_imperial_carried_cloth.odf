@@ -1,6 +1,8 @@
-[GameObjectClass]       
-ClassLabel          = "cloth"
+[GameObjectClass]
+
+ClassParent = "cloth"
 
 [Properties]
-attachedmesh	= "com_icon_imperial_flag_carried"
+
+attachedmesh = "com_icon_imperial_flag_carried"
 priority = 10.0

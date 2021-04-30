@@ -1,3 +1,7 @@
+-- ifs_mpgs_friends.lua 
+-- Zerted UOP r130 
+-- 
+-- Verified decompile by BAD_AL 
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -437,6 +441,12 @@ ifs_mpgs_friends = NewIFShellScreen {
 				if( ScriptCB_IsLoggedIn() ) then
 					IFText_fnSetString( this.LoginAsText1, "ifs.mp.join.login_as" )
 					local NickStr, EmailStr, PasswordStr, iSaveType, iPromptType = ScriptCB_GetGSProfileInfo()
+					
+					if( ScriptCB_GetLoginName ) then 
+						NickStr =  ScriptCB_GetLoginName() 
+					else 
+						NickStr =  "Get latest executable!"
+					end 
 					IFText_fnSetString( this.LoginAsText2, NickStr )
 					IFObj_fnSetVis( this.LoginAsText2, 1 )
 				else

@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain & BAD_AL 
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -11,11 +16,13 @@ local USING_NEW_PC_SHELL = 1
 
 function ifs_missionselect_pcMulti_fnUsingNewShell( this )
 	if( USING_NEW_PC_SHELL ) then
-		-- hide option list box		
---		IFObj_fnSetVis( this.InfoboxOptions, nil )
+		-- hide option list box	
 		IFObj_fnSetVis( this.OptionListbox, nil )
 --		IFObj_fnSetVis( this.InfoboxHostOptions, nil )
 --		IFObj_fnSetVis( this.HostOptionListbox, nil )		
+		if this == ifs_missionselect then 
+			IFObj_fnSetVis( this.InfoboxOptions, nil )
+		end
 	end
 end
 
@@ -215,51 +222,44 @@ function ifs_missionselect_pcMulti_fnShowHostOptionButton( this, bHideButton )
 end
 
 function ifs_missionselect_pcMulti_fnClickCheckButtons( this )
-	-- update era checkbox
-	if(this.CurButton == "check_era1") then
-		--print("check era1 clicked")
-		if( this.bEra_CloneWar ) then
-			this.bEra_CloneWar = nil
-			IFImage_fnSetTexture(this.Era_C_box.Check_Era,"check_no")
-		else
-			this.bEra_CloneWar = 1
-			IFImage_fnSetTexture(this.Era_C_box.Check_Era,"check_yes")
-		end
-	elseif(this.CurButton == "check_era2") then
-		--print("check era2 clicked")
-		if( this.bEra_Galactic ) then
-			this.bEra_Galactic = nil
-			IFImage_fnSetTexture(this.Era_G_box.Check_Era,"check_no")
-		else
-			this.bEra_Galactic = 1
-			IFImage_fnSetTexture(this.Era_G_box.Check_Era,"check_yes")
-		end
-	else
-		local i
-		for i = 1, table.getn( this.mode_checkbox ) do
-			if( this.CurButton == "check_mode"..i ) then
-				if( this.mode_checkbox[i].bChecked ) then
-					this.mode_checkbox[i].bChecked = nil
-					IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_no")
-				else
-					this.mode_checkbox[i].bChecked = 1
-					IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_yes")
-				end
-			end
-		end
-	end
-	
+	custom_ClickCheckButtons(this)
 end
 
 function ifs_missionselect_pcMulti_fnSetMapListColor(Dest, Data, bSelected)
 	local iColor = 128
+	local r4, r5 = nil
+	local red = Data.red		--r6
+	local green = Data.green	--r7
+	local blue = Data.blue		--r8
+	
+	if ScriptCB_IsFileExist(__v13patchSettings_noColors__) == 0 then
+	else
+		red = nil
+		green = nil
+		blue = nil
+	end
+
+	
 	if((ifs_missionselect_pcMulti.iColumn == 0) or (bSelected)) then
 		iColor = 255
 	end
+	
+	if Data.isModLevel == 1 then
+		r4 = 128
+		r5 = 0
+	end
+	
 	if( Data.bSelected ) then
-		IFObj_fnSetColor(Dest.map, iColor, 0, 0 )
+		local r9 = 200
+		local r10 = 0
+		local r11 = 0
+		IFObj_fnSetColor(Dest.map, r9, r10, r11 )
 	else
-		IFObj_fnSetColor(Dest.map, iColor, iColor, iColor)
+		local r9 = red or 255
+		local r10 = green or r4 or iColor
+		local r11 = blue or r5 or iColor
+		IFObj_fnSetColor(Dest.map, r9, r10, r11)
+		
 	end
 end
 
@@ -494,7 +494,7 @@ function pcMissionSelectListboxR_CreateItem(layout)
  		y = -4,
  		localpos_l = 0, localpos_t = 0,
  		localpos_r = iconSize, localpos_b = iconSize,
-		texture = "imp_icon",
+		texture = custom_UnknownEraIcon1,
 	}
 	Temp.icon2 = NewIFImage {
  		ZPos = 0, 
@@ -502,7 +502,7 @@ function pcMissionSelectListboxR_CreateItem(layout)
  		y = -4,
  		localpos_l = 0, localpos_t = 0,
  		localpos_r = iconSize, localpos_b = iconSize,
-		texture = "imp_icon",
+		texture = custom_UnknownEraIcon2,
 	}	
 
 	return Temp
@@ -528,22 +528,27 @@ function pcMissionSelectListboxR_PopulateItem(Dest,Data)
 		-- Update contents
 		local DisplayUStr,iSource = missionlist_GetLocalizedMapName(Data.Map)
 		IFText_fnSetUString(Dest.map,DisplayUStr)
-
+	
+		local r4, r5, r6, r7 = custom_GetSideCharIconInfo(Data.SideChar)
+		IFImage_fnSetTexture(Dest.icon1,r4)
+		IFImage_fnSetTexture(Dest.icon2,r5)
+		IFObj_fnSetVis(Dest.icon1,r6)
+		IFObj_fnSetVis(Dest.icon2,r7)
+		
 		-- set the icon texture
-		if (Data.SideChar == "g") then
-			IFImage_fnSetTexture(Dest.icon1,"imp_icon")
-			IFImage_fnSetTexture(Dest.icon2,"all_icon")
-			IFObj_fnSetVis(Dest.icon1,1)
-			IFObj_fnSetVis(Dest.icon2,1)
-		elseif (Data.SideChar == "c") then
-			IFImage_fnSetTexture(Dest.icon1,"rep_icon")
-			IFImage_fnSetTexture(Dest.icon2,"cis_icon")
-			IFObj_fnSetVis(Dest.icon1,1)
-			IFObj_fnSetVis(Dest.icon2,1)
-		else
-			IFObj_fnSetVis(Dest.icon1,nil)
-			IFObj_fnSetVis(Dest.icon2,nil)
-		end
+		-- if (Data.SideChar == "g") then
+			-- IFImage_fnSetTexture(Dest.icon1,"imp_icon")
+			-- IFImage_fnSetTexture(Dest.icon2,"all_icon")
+			-- IFObj_fnSetVis(Dest.icon2,1)
+		-- elseif (Data.SideChar == "c") then
+			-- IFImage_fnSetTexture(Dest.icon1,"rep_icon")
+			-- IFImage_fnSetTexture(Dest.icon2,"cis_icon")
+			-- IFObj_fnSetVis(Dest.icon1,1)
+			-- IFObj_fnSetVis(Dest.icon2,1)
+		-- else
+			-- IFObj_fnSetVis(Dest.icon1,nil)
+			-- IFObj_fnSetVis(Dest.icon2,nil)
+		-- end
 	end
 
 	-- Turn on/off depending on whether data's there or not
@@ -617,16 +622,34 @@ function ifs_missionselect_pcMulti_fnSetMapPreview(this)
 --	print("ifs_missionselect_pcMulti_fnSetMapPreview")
 	local movieName = nil
 	local movieFile = nil
-	local num = pc_missionselect_name_listboxL_layout.SelectedIdx or 1
+	local idx = nil
+	
+	for i = 1, table.getn(missionselect_listbox_contents), 1 do
+		if missionselect_listbox_contents[i].bSelected then
+			idx = i
+		end
+	end
+	
+	--lbl 16
+	if idx == nil then
+		idx = 1
+		print("ifs_missionselect_pcMulti_fnSetMapPreview(): Defaulting index to 1")
+	end
+	local r4 = missionselect_listbox_contents[idx]
+	movieName, movieFile = missionlist_fnGetMovieName(r4)
+	
+	--local num = pc_missionselect_name_listboxL_layout.SelectedIdx or 1
 
-	local Selection = missionselect_listbox_contents[num]
-	movieName, movieFile = missionlist_fnGetMovieName(Selection)
+	--local Selection = missionselect_listbox_contents[num]
+	--movieName, movieFile = missionlist_fnGetMovieName(Selection)
 
 	if (movieName) then
 		--ifelem_shellscreen_fnStartMovie(movieName.."fly", nil, this.movieX,this.movieY,this.movieW,this.movieH)
 		this.movieName = movieName
 		this.movieTime = 0.5
 		this.movieFile = movieFile
+		
+		print("ifs_missionselect_pcMulti_fnSetMapPreview(): Stored movie name, file: ", movieName, movieFile)
 	else
 		ifelem_shellscreen_fnStopMovie()		
 	end
@@ -683,23 +706,29 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		this.listboxL.bHidden = 1
 --		this.listboxR.bHidden = 1
 		this.OrderButton.bHidden = 1
---		this.LaunchButton.bHidden = 1
---		this.LanButton.bHidden = 1
---		this.EditGameName.bHidden = 1
---		this.EditPass.bHidden = 1
-		this.EditContainer.bHidden = 1
-		this.EditPwdContainer.bHidden = 1
---		this.OptionButton.bHidden = 1
+
+		if( this ~= ifs_missionselect  ) then 
+	--		this.LaunchButton.bHidden = 1
+	--		this.LanButton.bHidden = 1
+	--		this.EditGameName.bHidden = 1
+	--		this.EditPass.bHidden = 1
+			this.EditContainer.bHidden = 1
+			this.EditPwdContainer.bHidden = 1
+	--		this.OptionButton.bHidden = 1
+		end 
+		
 		AnimationMgr_AddAnimation(this.Map, { fStartAlpha = 1, fEndAlpha = 0.5,})
 		AnimationMgr_AddAnimation(this.OrderButton, { fStartAlpha = 1, fEndAlpha = 0,})
+		
 --		AnimationMgr_AddAnimation(this.LaunchButton, { fStartAlpha = 1, fEndAlpha = 0,})
 --		AnimationMgr_AddAnimation(this.LanButton, { fStartAlpha = 1, fEndAlpha = 0,})
 --		AnimationMgr_AddAnimation(this.EditGameName, { fStartAlpha = 1, fEndAlpha = 0,})
 --		AnimationMgr_AddAnimation(this.EditPass, { fStartAlpha = 1, fEndAlpha = 0,})
-		AnimationMgr_AddAnimation(this.EditContainer, { fStartAlpha = 1, fEndAlpha = 0,})
-		AnimationMgr_AddAnimation(this.EditPwdContainer, { fStartAlpha = 1, fEndAlpha = 0,})
---		AnimationMgr_AddAnimation(this.OptionButton, { fStartAlpha = 1, fEndAlpha = 0,})
-		
+		if ( this ~= ifs_missionselect ) then 
+			AnimationMgr_AddAnimation(this.EditContainer, { fStartAlpha = 1, fEndAlpha = 0,})
+			AnimationMgr_AddAnimation(this.EditPwdContainer, { fStartAlpha = 1, fEndAlpha = 0,})
+	--		AnimationMgr_AddAnimation(this.OptionButton, { fStartAlpha = 1, fEndAlpha = 0,})
+		end 
 		this.AddDelContainer.add.bHidden = 1
 		this.AddDelContainer.del.bHidden = 1
 		AnimationMgr_AddAnimation(this.AddDelContainer, { fStartAlpha = 1, fEndAlpha = 0,})
@@ -737,8 +766,10 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		AnimationMgr_AddAnimation(this.LanButton, { fStartAlpha = 0, fEndAlpha = 1,})
 --		AnimationMgr_AddAnimation(this.EditGameName, { fStartAlpha = 0, fEndAlpha = 1,})
 --		AnimationMgr_AddAnimation(this.EditPass, { fStartAlpha = 0, fEndAlpha = 1,})
-		AnimationMgr_AddAnimation(this.EditContainer, { fStartAlpha = 0, fEndAlpha = 1,})
-		AnimationMgr_AddAnimation(this.EditPwdContainer, { fStartAlpha = 0, fEndAlpha = 1,})		
+		if ( this ~= ifs_missionselect ) then 
+			AnimationMgr_AddAnimation(this.EditContainer, { fStartAlpha = 0, fEndAlpha = 1,})
+			AnimationMgr_AddAnimation(this.EditPwdContainer, { fStartAlpha = 0, fEndAlpha = 1,})		
+		end 
 --		AnimationMgr_AddAnimation(this.OptionButton, { fStartAlpha = 0, fEndAlpha = 1,})
 		-- Also, update title
 --		AnimationMgr_AddAnimation(this.titleL, { fStartAlpha = 0, fEndAlpha = 1,})
@@ -748,9 +779,12 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		this.LanButton.bHidden = 1
 --		this.EditGameName.bHidden = nil
 --		this.EditPass.bHidden = nil
-		this.EditContainer.bHidden = nil
-		this.EditPwdContainer.bHidden = nil
---		this.OptionButton.bHidden = nil
+		
+		if ( this ~= ifs_missionselect ) then 
+			this.EditContainer.bHidden = nil
+			this.EditPwdContainer.bHidden = nil
+	--		this.OptionButton.bHidden = nil
+		end 
 
 		this.AddDelContainer.add.bHidden = nil
 		this.AddDelContainer.del.bHidden = nil
@@ -777,9 +811,12 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		this.LanButton.bHidden = 1
 --		this.EditGameName.bHidden = 1
 --		this.EditPass.bHidden = 1
-		this.EditContainer.bHidden = 1
-		this.EditPwdContainer.bHidden = 1		
---		this.OptionButton.bHidden = 1
+		
+		if ( this ~= ifs_missionselect ) then 
+			this.EditContainer.bHidden = 1
+			this.EditPwdContainer.bHidden = 1		
+	--		this.OptionButton.bHidden = 1
+		end
 
 		SetCurButton("c")
 
@@ -796,16 +833,27 @@ function ifs_missionselect_pcMulti_fnSetPage(this,iNewPage)
 --		this.LanButton.bHidden = 1
 --		this.EditGameName.bHidden = 1
 --		this.EditPass.bHidden = 1
-		this.EditContainer.bHidden = 1
-		this.EditPwdContainer.bHidden = 1		
---		this.OptionButton.bHidden = 1
+		if ( this ~= ifs_missionselect ) then 
+			this.EditContainer.bHidden = 1
+			this.EditPwdContainer.bHidden = 1		
+	--		this.OptionButton.bHidden = 1
+		end 
 	end
 
-	ifs_missionselect_pcMulti_fnUpdateDelButton(this)
+	if ( this ~= ifs_missionselect ) then 
+		ifs_missionselect_pcMulti_fnUpdateDelButton(this)
+	else 
+		ifs_missionselect_fnUpdateDelButton(this)
+	end 
 end
 
 -- Adds the currently selected map to the maplist.
 function ifs_missionselect_pcMulti_fnAddMap(this)
+	print("Zerted: ifs_missionselect_pcMulti_fnAddMap(): IS THIS EVEN EVER CALLED?")
+	print("Zerted: ifs_missionselect_pcMulti_fnAddMap(): CRASHING THE GAME SO WE KNOW WE GOT HERE!")
+	print(nil)
+	
+	--[[
 	local Selection = missionselect_listbox_contents[pc_missionselect_name_listboxL_layout.SelectedIdx]
 	local Team1Name
 	local Team2Name
@@ -826,7 +874,8 @@ function ifs_missionselect_pcMulti_fnAddMap(this)
 	this.Team2Name = ScriptCB_getlocalizestr(Team2Name)
 
 	ifs_missionselect_pcMulti_fnSetPage(this,0)
-
+	]]
+	
 end
 
 -- Utility function - based on the .hidden flag in buttons (already
@@ -883,7 +932,12 @@ end
 -- the maps that only have one side, and you have to go back around
 -- and handle them as special cases. 
 function ifs_missionselect_pcMulti_fnSetMapAndTeam(this,Selection,Team1Str,Team2Str)
-	local SelectedMap = string.format(Selection.mapluafile, this.SideChar, "con")
+
+	print("Zerted: ifs_missionselect_pcMulti_fnSetMapAndTeam(): IS THIS EVEN EVER CALLED?")
+	print("Zerted: ifs_missionselect_pcMulti_fnSetMapAndTeam(): CRASHING THE GAME SO WE KNOW WE GOT HERE!")
+	print(nil)
+	
+	--[[local SelectedMap = string.format(Selection.mapluafile, this.SideChar, "con")
 	local Side = 1 -- 1 or 2
 
 	local Idx = table.getn(gPickedMapList) + 1
@@ -904,6 +958,7 @@ function ifs_missionselect_pcMulti_fnSetMapAndTeam(this,Selection,Team1Str,Team2
 --	ListManager_fnFillContents(this.listboxR,gPickedMapList,pc_missionselect_name_listboxR_layout)
 	-- Hack - refresh the left column next to get the cursor back.
 --	ListManager_fnFillContents(this.listboxL,missionselect_listbox_contents,pc_missionselect_name_listboxL_layout)
+]]
 end
 
 function ifs_missionselect_pcMulti_fnFlipLeftRight(this)
@@ -929,7 +984,10 @@ end
 -- Helper function - returns a bool as to whether the selection has
 -- multiple sides, and also the char of the last (only?) side noticed.
 function ifs_missionselect_pcMulti_fnGetSides(Selection)
-	local bMultipleSides
+
+	print("Zerted: ifs_missionselect_pcMulti_fnGetSides(): IS THIS EVEN EVER CALLED?")
+	return custom_GetSides(Selection)
+	--[[local bMultipleSides
 	local LastSideChar = nil
 	
 	if(Selection.era_g) then
@@ -941,7 +999,7 @@ function ifs_missionselect_pcMulti_fnGetSides(Selection)
 		LastSideChar = "c"
 	end
 
-	return bMultipleSides,LastSideChar
+	return bMultipleSides,LastSideChar]]
 end
 
 function ifs_missionselect_pcMulti_fnLaunch(this)
@@ -987,38 +1045,62 @@ end
 
 -- pass the name of the downloadable content movie file to open it, or nil to open
 -- the normal DVD flythrough movie file.
-function ifs_missionselect_pcMulti_ChangeMovieFile(movieFile)
+function ifs_missionselect_pcMulti_ChangeMovieFile(movieFile, isMissionselect)
 --	print("ifs_missionselect_pcMulti_ChangeMovieFile(",movieFile,")")
-	local this = ifs_missionselect_pcMulti
+
+	if(not movieFile ) then 
+		print("ifs_missionselect_pcMulti_ChangeMovieFile(): MovieFile is nil")
+	else 
+		print("ifs_missionselect_pcMulti_ChangeMovieFile(): MovieFile:", file) -- looks like defect. -BAD_AL 
+	end 
+	
+	local this = nil
+	if isMissionselect then
+		this = ifs_missionselect
+	else
+		this = ifs_missionselect_pcMulti
+	end
 	
 	-- don't change anything if its the same file
 	if(movieFile == this.lastMovieFile) then
+		print("ifs_missionselect_pcMulti_ChangeMovieFile(): Same as last movie")
 		return
 	end
 	-- remember this for next time
 	this.lastMovieFile = movieFile
+	print("ifs_missionselect_pcMulti_ChangeMovieFile(): Closed any open movie")
 	
 	-- close the last one
 	ScriptCB_CloseMovie()
 	
 	-- set the DC directory, so we can find the correct movie file
-	ScriptCB_SetDCMap(movieFile)
+	--ScriptCB_SetDCMap(movieFile)
+	
+	if not movieFile then
+		return
+	end
+	
 	
 	-- open the new one
-	local dcPrefix = "dc:"
-	local pal = ""
-	if(not movieFile) then
-		dcPrefix = ""
-		movieFile = "fly"
-	end
+	-- local dcPrefix = "dc:"
+	 local pal = ""
+	-- if(not movieFile) then
+		-- dcPrefix = ""
+		-- movieFile = "fly"
+	-- end
 	if (ScriptCB_IsPAL() == 1) then
 		pal = "pal"
 	end	
 	-- downloadable pal looks like:     "dc:movies\\RHN3pal.mvs"
 	-- downloadable content looks like: "dc:movies\\RHN3.mvs"
 	-- normal pal looks like this:      "movies\\flypal.mvs"
-	-- normal looks like this:          "movies\\fly.mvs"	
-	ScriptCB_OpenMovie(dcPrefix .. "movies\\" .. movieFile .. pal .. ".mvs", "")
+	-- normal looks like this:          "movies\\fly.mvs"
+	local fullpath = movieFile .. pal .. ".mvs"
+	print("ifs_missionselect_pcMulti_ChangeMovieFile(): Opening movie:", fullpath)
+	
+	ScriptCB_OpenMovie(fullpath, "")
+	
+	print("ifs_missionselect_pcMulti_ChangeMovieFile(): Finished opening movie")
 	
 end
 
@@ -1054,103 +1136,114 @@ function ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this )
 end
 
 function ifs_missionselect_pcMulti_fnShowHideGameModesMulti( this )
-	local i, j
-	for i = 1, table.getn(missionselect_listbox_contents) do
-		if( missionselect_listbox_contents[i].bSelected ) then
-			local MapSelection = missionselect_listbox_contents[i]
-			local MissionselectModes = missionlist_ExpandModelist(MapSelection.mapluafile)
-			for j = 1, table.getn(MissionselectModes) do
-				for k = 1, table.getn(this.mode_checkbox) do
-					if( ( this.mode_checkbox[k].key == MissionselectModes[j].key ) or 
-						( (this.mode_checkbox[k].key == "mode_assault") and (MissionselectModes[j].key == "mode_eli") ) )then
-						IFObj_fnSetVis(this.mode_checkbox[k], 1)
-					end
-				end
-			end
-		end
-	end
+
+	custom_ShowHideGameModesMulti(this)
+	
+	-- local i, j
+	-- for i = 1, table.getn(missionselect_listbox_contents) do
+		-- if( missionselect_listbox_contents[i].bSelected ) then
+			-- local MapSelection = missionselect_listbox_contents[i]
+			-- local MissionselectModes = missionlist_ExpandModelist(MapSelection.mapluafile)
+			-- for j = 1, table.getn(MissionselectModes) do
+				-- for k = 1, table.getn(this.mode_checkbox) do
+					-- if( ( this.mode_checkbox[k].key == MissionselectModes[j].key ) or 
+						-- ( (this.mode_checkbox[k].key == "mode_assault") and (MissionselectModes[j].key == "mode_eli") ) )then
+						-- IFObj_fnSetVis(this.mode_checkbox[k], 1)
+					-- end
+				-- end
+			-- end
+		-- end
+	-- end
 end
 
 function ifs_missionselect_pcMulti_fnShowHideGameModes( this )
-	local i, j
-	local number = ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this )
-	if( number > 1 ) then
-		ifs_missionselect_pcMulti_fnShowHideGameModesMulti( this )
-	else
-		for i = 1, table.getn(this.mode_checkbox) do
-			IFObj_fnSetVis(this.mode_checkbox[i], nil)
-			for j = 1, table.getn(gMissionselectModes) do
-				if( ( this.mode_checkbox[i].key == gMissionselectModes[j].key ) or 
-					( (this.mode_checkbox[i].key == "mode_assault") and (gMissionselectModes[j].key == "mode_eli") ) )then
-					-- make "mode_eli" equal to "mode_assault" for mos eisley
-					--print(" missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx].mapluafile = ", missionlist_GetLocalizedMapName( missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx].mapluafile ) )
-					IFObj_fnSetVis(this.mode_checkbox[i], 1)
-				end
-			end
-		end
-	end
 	
-	-- reset position
-	number = 0
-	for i = 1, table.getn(this.mode_checkbox) do
-		if( IFObj_fnGetVis(this.mode_checkbox[i] ) ) then
-			-- reset position
-			IFObj_fnSetPos(this.mode_checkbox[i], this.mode_checkbox[i].x, this.mode_checkbox[1].y + 25 * number )			
-			number = number + 1
-		end
-	end	
+	custom_ShowHideGameModes(this)
+	
+	-- local i, j
+	-- local number = ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this )
+	-- if( number > 1 ) then
+		-- ifs_missionselect_pcMulti_fnShowHideGameModesMulti( this )
+	-- else
+		-- for i = 1, table.getn(this.mode_checkbox) do
+			-- IFObj_fnSetVis(this.mode_checkbox[i], nil)
+			-- for j = 1, table.getn(gMissionselectModes) do
+				-- if( ( this.mode_checkbox[i].key == gMissionselectModes[j].key ) or 
+					-- ( (this.mode_checkbox[i].key == "mode_assault") and (gMissionselectModes[j].key == "mode_eli") ) )then
+					-- -- make "mode_eli" equal to "mode_assault" for mos eisley
+					-- --print(" missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx].mapluafile = ", missionlist_GetLocalizedMapName( missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx].mapluafile ) )
+					-- IFObj_fnSetVis(this.mode_checkbox[i], 1)
+				-- end
+			-- end
+		-- end
+	-- end
+	
+	-- -- reset position
+	-- number = 0
+	-- for i = 1, table.getn(this.mode_checkbox) do
+		-- if( IFObj_fnGetVis(this.mode_checkbox[i] ) ) then
+			-- -- reset position
+			-- IFObj_fnSetPos(this.mode_checkbox[i], this.mode_checkbox[i].x, this.mode_checkbox[1].y + 25 * number )			
+			-- number = number + 1
+		-- end
+	-- end	
 end
 
 function ifs_missionselect_pcMulti_fnShowHideEra( this )
-	if( ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this ) > 1 ) then
-		IFObj_fnSetVis(this.Era_C_box,1)
-		IFObj_fnSetVis(this.Era_G_box,1)
-	else
-		IFObj_fnSetVis(this.Era_C_box,nil)
-		IFObj_fnSetVis(this.Era_G_box,nil)
-		for i = 1,table.getn(gMissionselectEras) do
-			local EraSelection = gMissionselectEras[i]
-			if(not EraSelection.bIsWildcard) then
-				local DisplayUStr = ScriptCB_getlocalizestr(EraSelection.showstr)
-				print( "EraSelection.subst = ", EraSelection.subst, EraSelection.key )
-				--if( ( EraSelection.subst == "c" ) or ( EraSelection.subst == "C" ) ) then
-				if( ( EraSelection.key == "era_c" ) ) then
-					--print( "it's true! EraSelection.key = ", EraSelection.key )
-					IFObj_fnSetVis(this.Era_C_box,1)
-				else
-					IFObj_fnSetVis(this.Era_G_box,1)
-				end
-			end
-		end	
-	end
+
+	custom_ShowHideEra(this)
 	
-	-- reset position
-	if( IFObj_fnGetVis(this.Era_C_box) ) then
-		IFObj_fnSetPos(this.Era_G_box, this.Era_G_box.x, this.Era_C_box.y + 15)
-	else
-		IFObj_fnSetPos(this.Era_G_box, this.Era_G_box.x, this.Era_C_box.y - 22)
-	end
+	-- if( ifs_missionselect_pcMulti_fnGetNumSelectedMaps( this ) > 1 ) then
+		-- IFObj_fnSetVis(this.Era_C_box,1)
+		-- IFObj_fnSetVis(this.Era_G_box,1)
+	-- else
+		-- IFObj_fnSetVis(this.Era_C_box,nil)
+		-- IFObj_fnSetVis(this.Era_G_box,nil)
+		-- for i = 1,table.getn(gMissionselectEras) do
+			-- local EraSelection = gMissionselectEras[i]
+			-- if(not EraSelection.bIsWildcard) then
+				-- local DisplayUStr = ScriptCB_getlocalizestr(EraSelection.showstr)
+				-- print( "EraSelection.subst = ", EraSelection.subst, EraSelection.key )
+				-- --if( ( EraSelection.subst == "c" ) or ( EraSelection.subst == "C" ) ) then
+				-- if( ( EraSelection.key == "era_c" ) ) then
+					-- --print( "it's true! EraSelection.key = ", EraSelection.key )
+					-- IFObj_fnSetVis(this.Era_C_box,1)
+				-- else
+					-- IFObj_fnSetVis(this.Era_G_box,1)
+				-- end
+			-- end
+		-- end	
+	-- end
+	
+	-- -- reset position
+	-- if( IFObj_fnGetVis(this.Era_C_box) ) then
+		-- IFObj_fnSetPos(this.Era_G_box, this.Era_G_box.x, this.Era_C_box.y + 15)
+	-- else
+		-- IFObj_fnSetPos(this.Era_G_box, this.Era_G_box.x, this.Era_C_box.y - 22)
+	-- end
 end
 
 function ifs_missionselect_pcMulti_fnInitModeEra( this )
+	
+	custom_InitModeEra(this)
 	-- only first one is checked
 	-- init gamemode
-	local i
-	for i = 1, table.getn( this.mode_checkbox ) do
-		if( i == 1 ) then
-			this.mode_checkbox[i].bChecked = 1
-			IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_yes")		
-		else
-			this.mode_checkbox[i].bChecked = nil
-			IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_no")
-		end
-	end
+	-- local i
+	-- for i = 1, table.getn( this.mode_checkbox ) do
+		-- if( i == 1 ) then
+			-- this.mode_checkbox[i].bChecked = 1
+			-- IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_yes")		
+		-- else
+			-- this.mode_checkbox[i].bChecked = nil
+			-- IFImage_fnSetTexture(this.mode_checkbox[i].checkbox,"check_no")
+		-- end
+	-- end
 	
-	-- init era
-	this.bEra_CloneWar = 1
-	IFImage_fnSetTexture(this.Era_C_box.Check_Era,"check_yes")
-	this.bEra_Galactic = nil
-	IFImage_fnSetTexture(this.Era_G_box.Check_Era,"check_no")
+	-- -- init era
+	-- this.bEra_CloneWar = 1
+	-- IFImage_fnSetTexture(this.Era_C_box.Check_Era,"check_yes")
+	-- this.bEra_Galactic = nil
+	-- IFImage_fnSetTexture(this.Era_G_box.Check_Era,"check_no")
 end
 
 function ifs_missionselect_pcMulti_fnUpdateLists( this )
@@ -1158,8 +1251,8 @@ function ifs_missionselect_pcMulti_fnUpdateLists( this )
 	-- get modelist 
 	if( not( this.iMap == ifs_mspc_MapList_layout.SelectedIdx ) ) then
 		this.iMap = ifs_mspc_MapList_layout.SelectedIdx
-		
-		print( "+++mission modes changed! ifs_mspc_MapList_layout.SelectedIdx =", ifs_mspc_MapList_layout.SelectedIdx )
+				
+		--print( "+++mission modes changed! ifs_mspc_MapList_layout.SelectedIdx =", ifs_mspc_MapList_layout.SelectedIdx )
 		local MapSelection = missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx]
 		gMissionselectModes = missionlist_ExpandModelist(MapSelection.mapluafile)
 		local NumModes = table.getn(gMissionselectModes)
@@ -1181,7 +1274,7 @@ function ifs_missionselect_pcMulti_fnUpdateLists( this )
 	if( this.bDoubleClicked ) then
 		this.bDoubleClicked = nil
 		this.iLastClickTime = nil
-		print( "+++ DoubleClicked " )
+		print("DoubleClicked ")
 		if( gMouseListBox == this.MapListbox  ) then
 			-- if double click on a item, add to playlist
 			ifs_missionselect_pcMulti_fnAddMapNew( this )
@@ -1277,14 +1370,21 @@ function ifs_missionselect_pcMulti_fnUpdateLists( this )
 			if( ifs_mspc_PlayList_layout.CursorIdx ) then
 				local MapSelection = gPickedMapList[ifs_mspc_PlayList_layout.CursorIdx]
 				local DisplayUStr,iSource = missionlist_GetLocalizedMapName(MapSelection.Map)
+				local EraSelection, MapMode, r7 = custom_getCustomEraAndModeNames(MapSelection)
 				IFText_fnSetUString(this.InfoboxBot.Text1, DisplayUStr)
-				local MapMode = missionlist_GetMapMode(MapSelection.Map)
+				
+				--local MapMode = missionlist_GetMapMode(MapSelection.Map)
 				if( MapMode ) then
-					IFText_fnSetUString(this.InfoboxBot.Text2, ScriptCB_getlocalizestr(MapMode.showstr))
+				
+					if r7 == true then
+						IFText_fnSetUString(this.InfoboxBot.Text2, MapMode)
+					else
+						IFText_fnSetString(this.InfoboxBot.Text2, MapMode)
+					end
 				end
-				local EraSelection = missionlist_GetMapEra(MapSelection.Map)
+				--local EraSelection = missionlist_GetMapEra(MapSelection.Map)
 				if( EraSelection ) then
-					IFText_fnSetString(this.InfoboxBot.Text3, EraSelection.showstr)
+					IFText_fnSetString(this.InfoboxBot.Text3, EraSelection)
 				end				
 			else
 				IFText_fnSetString(this.InfoboxBot.Text1, "")
@@ -1308,7 +1408,11 @@ function ifs_missionselect_pcMulti_fnUpdateLists( this )
 	if( gMouseOverImage ) then
 		for i = 1, table.getn( this.mode_checkbox ) do
 			if( gMouseOverImage.tag == "check_mode"..i ) then
-				IFText_fnSetString(this.InfoboxBot.Text1, mode_list[i].descstr)
+			
+				local r5 = missionselect_listbox_contents[ifs_mspc_MapList_layout.SelectedIdx]
+				local r6 = custom_GetGameModeDescription(r5, mode_list[i])
+				
+				IFText_fnSetString(this.InfoboxBot.Text1, r6)
 				IFText_fnSetString(this.InfoboxBot.Text2, "")
 				IFText_fnSetString(this.InfoboxBot.Text3, "")			
 			end
@@ -1361,6 +1465,7 @@ function ifs_missionselect_pcMulti_fnAddMap4(this, MapSelection, ModeSelection, 
 		SideChar = EraSelection.tag,
 		Team1 = EraSelection.Team1Name,
 		Team2 = EraSelection.Team2Name,
+		change = MapSelection.change,
 	}
 
 	-- Auto-scroll playlist cursor to last item.
@@ -1400,11 +1505,11 @@ function ifs_missionselect_pcMulti_fnGetEraSubst( Era )
 	local i
 	
 	for i = 1,table.getn(gMapEras) do
-		--print( "gMapEras[i].key =", gMapEras[i].key, " Era =", Era )
-		if( gMapEras[i].key == Era ) then
-			--print( "subst =", gMapEras[i].subst )
+		
+		if gMapEras[i].key == Era then 
+			print( "gMapEras[i].key =", gMapEras[i].key, " Era =", Era, " subst =", gMapEras[i].subst)
 			subst = gMapEras[i].subst
-			break;
+			break
 		end
 	end
 	
@@ -1493,32 +1598,34 @@ function ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, 
 end
 
 function ifs_missionselect_pcMulti_fnAddMapNew(this)
-	local i
-	for i = 1, table.getn(missionselect_listbox_contents) do
-		if( missionselect_listbox_contents[i].bSelected ) then
-			local MapSelection = missionselect_listbox_contents[i]
-			local ModeSelection = gMissionselectModes[ifs_mspc_ModeList_layout.SelectedIdx]
-
-			-- Call helper functions to expand things as necessary
-			print( "bEra_CloneWar = ", this.bEra_CloneWar, " bEra_Galactic = ", this.bEra_Galactic )
-			local clonewar_visable = IFObj_fnGetVis( this.Era_C_box )
-			local galactic_visable = IFObj_fnGetVis( this.Era_G_box )
-			print( "clonewar_visable = ", clonewar_visable, " galactic_visable = ", galactic_visable )
-			
-			if( ( this.bEra_CloneWar and clonewar_visable ) and 
-				( this.bEra_Galactic and galactic_visable ) ) then
-				-- add all eras
-				ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, "era_c")
-				ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, "era_g")
-			elseif( this.bEra_CloneWar and clonewar_visable ) then
-				ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, "era_c")
-			elseif( this.bEra_Galactic and galactic_visable ) then
-				ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, "era_g")
-			end
-		end
-	end
+	custom_AddMapNew(this)
 	
-	ListManager_fnFillContents(this.PlayListbox,gPickedMapList,ifs_mspc_PlayList_layout)
+	-- local i
+	-- for i = 1, table.getn(missionselect_listbox_contents) do
+		-- if( missionselect_listbox_contents[i].bSelected ) then
+			-- local MapSelection = missionselect_listbox_contents[i]
+			-- local ModeSelection = gMissionselectModes[ifs_mspc_ModeList_layout.SelectedIdx]
+
+			-- -- Call helper functions to expand things as necessary
+			-- print( "bEra_CloneWar = ", this.bEra_CloneWar, " bEra_Galactic = ", this.bEra_Galactic )
+			-- local clonewar_visable = IFObj_fnGetVis( this.Era_C_box )
+			-- local galactic_visable = IFObj_fnGetVis( this.Era_G_box )
+			-- print( "clonewar_visable = ", clonewar_visable, " galactic_visable = ", galactic_visable )
+			
+			-- if( ( this.bEra_CloneWar and clonewar_visable ) and 
+				-- ( this.bEra_Galactic and galactic_visable ) ) then
+				-- -- add all eras
+				-- ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, "era_c")
+				-- ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, "era_g")
+			-- elseif( this.bEra_CloneWar and clonewar_visable ) then
+				-- ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, "era_c")
+			-- elseif( this.bEra_Galactic and galactic_visable ) then
+				-- ifs_missionselect_pcMulti_fnAddMap1(this, MapSelection, ModeSelection, "era_g")
+			-- end
+		-- end
+	-- end
+	
+	-- ListManager_fnFillContents(this.PlayListbox,gPickedMapList,ifs_mspc_PlayList_layout)
 end
 
 function ifs_missionselect_pcMulti_fnDeleteMapNew( this, delete_all )
@@ -1736,93 +1843,93 @@ function ifs_missionselect_pcMulti_fnChangeHostOptions( this, mode )
 		return
 	end
 	
-	if ( gMouseListBox == this.HostOptionListbox ) then
-		local idx = ifs_mspc_HostOptionList_layout.SelectedIdx
-		if( idx ) then
-			local Selection = gHostOptionList[idx]
-			if( Selection.tag == "dedicated" ) then
-				ifs_mp_gameopts.bDedicated = not ifs_mp_gameopts.bDedicated
-				if(ifs_mp_gameopts.bDedicated) then
-					ifs_mp_gameopts.Prefs.iNumPlayers = math.min(ifs_mp_gameopts.Prefs.iNumPlayers,ifs_mp_gameopts.Prefs.iMaxDedicatedPlayers)
-					ifs_mp_gameopts.Prefs.iNumBots = math.min(ifs_mp_gameopts.Prefs.iNumBots,ifs_mp_gameopts.Prefs.iMaxDedicatedBots)
-				else
-					ifs_mp_gameopts.Prefs.iNumPlayers = math.min(ifs_mp_gameopts.Prefs.iNumPlayers,ifs_mp_gameopts.Prefs.iMaxPlayers)
-					ifs_mp_gameopts.Prefs.iNumBots = math.min(ifs_mp_gameopts.Prefs.iNumBots,ifs_mp_gameopts.Prefs.iMaxBots)
-				end
-			elseif( Selection.tag == "players" ) then
-				if( mode == nil ) then
-					ifs_mp_gameopts.Prefs.iNumPlayers = ifs_mp_gameopts.Prefs.iNumPlayers + 1
-				elseif( mode == 1 ) then
-					ifs_mp_gameopts.Prefs.iNumPlayers = ifs_mp_gameopts.Prefs.iNumPlayers - 1
-				end
-				local player_max = 0
-				local player_min = math.max(2, ScriptCB_GetNumCameras())
-				if( ifs_mp_gameopts.bDedicated ) then
-					player_max = ifs_mp_gameopts.Prefs.iMaxDedicatedPlayers
-				else
-					player_max = ifs_mp_gameopts.Prefs.iMaxPlayers
-				end
-				if( ifs_mp_gameopts.Prefs.iNumPlayers > player_max ) then
-					ifs_mp_gameopts.Prefs.iNumPlayers = player_min
-				elseif( ifs_mp_gameopts.Prefs.iNumPlayers < player_min ) then
-					ifs_mp_gameopts.Prefs.iNumPlayers = player_max
-				end				
-			elseif( Selection.tag == "autoassign" ) then
-				ifs_mp_gameopts.Prefs.bAutoAssignTeams = not ifs_mp_gameopts.Prefs.bAutoAssignTeams
-			elseif( Selection.tag == "tracking" ) then
-				ifs_mp_gameopts.Prefs.iAutoAim = 100 - ifs_mp_gameopts.Prefs.iAutoAim
-			elseif( Selection.tag == "shownames" ) then
-				ifs_mp_gameopts.Prefs.bShowNames = not ifs_mp_gameopts.Prefs.bShowNames
-			elseif( Selection.tag == "warmup" ) then
-				if( mode == nil ) then
-					ifs_mp_gameopts.Prefs.iWarmUp = ifs_mp_gameopts.Prefs.iWarmUp + 10
-				else
-					ifs_mp_gameopts.Prefs.iWarmUp = ifs_mp_gameopts.Prefs.iWarmUp - 10
-				end
-				if(ifs_mp_gameopts.Prefs.iWarmUp < ifs_mp_gameopts.Prefs.iWarmUpMin) then
-					ifs_mp_gameopts.Prefs.iWarmUp = ifs_mp_gameopts.Prefs.iWarmUpMax
-				elseif(ifs_mp_gameopts.Prefs.iWarmUp > ifs_mp_gameopts.Prefs.iWarmUpMax) then
-					ifs_mp_gameopts.Prefs.iWarmUp = ifs_mp_gameopts.Prefs.iWarmUpMin
-				end
-			elseif( Selection.tag == "vote" ) then
-				if( mode == nil ) then
-					ifs_mp_gameopts.Prefs.iVote = ifs_mp_gameopts.Prefs.iVote + 25
-				else
-					ifs_mp_gameopts.Prefs.iVote = ifs_mp_gameopts.Prefs.iVote - 25
-				end
-				if( ifs_mp_gameopts.Prefs.iVote > ifs_mp_gameopts.Prefs.iVoteMax ) then
-					ifs_mp_gameopts.Prefs.iVote = ifs_mp_gameopts.Prefs.iVoteMin
-				elseif( ifs_mp_gameopts.Prefs.iVote < ifs_mp_gameopts.Prefs.iVoteMin ) then
-					ifs_mp_gameopts.Prefs.iVote = ifs_mp_gameopts.Prefs.iVoteMax
-				end			
-			elseif( Selection.tag == "startcnt" ) then
-				if( mode == nil ) then
-					ifs_mp_gameopts.Prefs.iStartCnt = ifs_mp_gameopts.Prefs.iStartCnt + 1
-				else
-					ifs_mp_gameopts.Prefs.iStartCnt = ifs_mp_gameopts.Prefs.iStartCnt - 1
-				end
-				if( ifs_mp_gameopts.Prefs.iStartCnt > ifs_mp_gameopts.Prefs.iNumPlayers ) then
-					ifs_mp_gameopts.Prefs.iStartCnt = 0
-				elseif( ifs_mp_gameopts.Prefs.iStartCnt < 0 ) then
-					ifs_mp_gameopts.Prefs.iStartCnt = ifs_mp_gameopts.Prefs.iNumPlayers
-				end				
-			elseif( Selection.tag == "teamdmg" ) then
-				ifs_mp_gameopts.Prefs.iTeamDmg = 100 - ifs_mp_gameopts.Prefs.iTeamDmg
-			elseif( Selection.tag == "voicemode" ) then
-				if( mode == nil ) then
-					ifs_mp_gameopts.Prefs.iVoiceMode = ifs_mp_gameopts.Prefs.iVoiceMode + 1
-				else
-					ifs_mp_gameopts.Prefs.iVoiceMode = ifs_mp_gameopts.Prefs.iVoiceMode - 1
-				end
-				if (ifs_mp_gameopts.Prefs.iVoiceMode < ifs_mp_gameopts.Prefs.iVoiceModeMin) then
-					ifs_mp_gameopts.Prefs.iVoiceMode = ifs_mp_gameopts.Prefs.iVoiceModeMax
-				elseif (ifs_mp_gameopts.Prefs.iVoiceMode > ifs_mp_gameopts.Prefs.iVoiceModeMax) then
-					ifs_mp_gameopts.Prefs.iVoiceMode = ifs_mp_gameopts.Prefs.iVoiceModeMin
-				end				
-			end			
-			ifs_mspc_HostOptionList_PopulateItem( this.HostOptionListbox[idx], gHostOptionList[idx] )
-		end		
-	end
+	-- if ( gMouseListBox == this.HostOptionListbox ) then
+		-- local idx = ifs_mspc_HostOptionList_layout.SelectedIdx
+		-- if( idx ) then
+			-- local Selection = gHostOptionList[idx]
+			-- if( Selection.tag == "dedicated" ) then
+				-- ifs_mp_gameopts.bDedicated = not ifs_mp_gameopts.bDedicated
+				-- if(ifs_mp_gameopts.bDedicated) then
+					-- ifs_mp_gameopts.Prefs.iNumPlayers = math.min(ifs_mp_gameopts.Prefs.iNumPlayers,ifs_mp_gameopts.Prefs.iMaxDedicatedPlayers)
+					-- ifs_mp_gameopts.Prefs.iNumBots = math.min(ifs_mp_gameopts.Prefs.iNumBots,ifs_mp_gameopts.Prefs.iMaxDedicatedBots)
+				-- else
+					-- ifs_mp_gameopts.Prefs.iNumPlayers = math.min(ifs_mp_gameopts.Prefs.iNumPlayers,ifs_mp_gameopts.Prefs.iMaxPlayers)
+					-- ifs_mp_gameopts.Prefs.iNumBots = math.min(ifs_mp_gameopts.Prefs.iNumBots,ifs_mp_gameopts.Prefs.iMaxBots)
+				-- end
+			-- elseif( Selection.tag == "players" ) then
+				-- if( mode == nil ) then
+					-- ifs_mp_gameopts.Prefs.iNumPlayers = ifs_mp_gameopts.Prefs.iNumPlayers + 1
+				-- elseif( mode == 1 ) then
+					-- ifs_mp_gameopts.Prefs.iNumPlayers = ifs_mp_gameopts.Prefs.iNumPlayers - 1
+				-- end
+				-- local player_max = 0
+				-- local player_min = math.max(2, ScriptCB_GetNumCameras())
+				-- if( ifs_mp_gameopts.bDedicated ) then
+					-- player_max = ifs_mp_gameopts.Prefs.iMaxDedicatedPlayers
+				-- else
+					-- player_max = ifs_mp_gameopts.Prefs.iMaxPlayers
+				-- end
+				-- if( ifs_mp_gameopts.Prefs.iNumPlayers > player_max ) then
+					-- ifs_mp_gameopts.Prefs.iNumPlayers = player_min
+				-- elseif( ifs_mp_gameopts.Prefs.iNumPlayers < player_min ) then
+					-- ifs_mp_gameopts.Prefs.iNumPlayers = player_max
+				-- end				
+			-- elseif( Selection.tag == "autoassign" ) then
+				-- ifs_mp_gameopts.Prefs.bAutoAssignTeams = not ifs_mp_gameopts.Prefs.bAutoAssignTeams
+			-- elseif( Selection.tag == "tracking" ) then
+				-- ifs_mp_gameopts.Prefs.iAutoAim = 100 - ifs_mp_gameopts.Prefs.iAutoAim
+			-- elseif( Selection.tag == "shownames" ) then
+				-- ifs_mp_gameopts.Prefs.bShowNames = not ifs_mp_gameopts.Prefs.bShowNames
+			-- elseif( Selection.tag == "warmup" ) then
+				-- if( mode == nil ) then
+					-- ifs_mp_gameopts.Prefs.iWarmUp = ifs_mp_gameopts.Prefs.iWarmUp + 10
+				-- else
+					-- ifs_mp_gameopts.Prefs.iWarmUp = ifs_mp_gameopts.Prefs.iWarmUp - 10
+				-- end
+				-- if(ifs_mp_gameopts.Prefs.iWarmUp < ifs_mp_gameopts.Prefs.iWarmUpMin) then
+					-- ifs_mp_gameopts.Prefs.iWarmUp = ifs_mp_gameopts.Prefs.iWarmUpMax
+				-- elseif(ifs_mp_gameopts.Prefs.iWarmUp > ifs_mp_gameopts.Prefs.iWarmUpMax) then
+					-- ifs_mp_gameopts.Prefs.iWarmUp = ifs_mp_gameopts.Prefs.iWarmUpMin
+				-- end
+			-- elseif( Selection.tag == "vote" ) then
+				-- if( mode == nil ) then
+					-- ifs_mp_gameopts.Prefs.iVote = ifs_mp_gameopts.Prefs.iVote + 25
+				-- else
+					-- ifs_mp_gameopts.Prefs.iVote = ifs_mp_gameopts.Prefs.iVote - 25
+				-- end
+				-- if( ifs_mp_gameopts.Prefs.iVote > ifs_mp_gameopts.Prefs.iVoteMax ) then
+					-- ifs_mp_gameopts.Prefs.iVote = ifs_mp_gameopts.Prefs.iVoteMin
+				-- elseif( ifs_mp_gameopts.Prefs.iVote < ifs_mp_gameopts.Prefs.iVoteMin ) then
+					-- ifs_mp_gameopts.Prefs.iVote = ifs_mp_gameopts.Prefs.iVoteMax
+				-- end			
+			-- elseif( Selection.tag == "startcnt" ) then
+				-- if( mode == nil ) then
+					-- ifs_mp_gameopts.Prefs.iStartCnt = ifs_mp_gameopts.Prefs.iStartCnt + 1
+				-- else
+					-- ifs_mp_gameopts.Prefs.iStartCnt = ifs_mp_gameopts.Prefs.iStartCnt - 1
+				-- end
+				-- if( ifs_mp_gameopts.Prefs.iStartCnt > ifs_mp_gameopts.Prefs.iNumPlayers ) then
+					-- ifs_mp_gameopts.Prefs.iStartCnt = 0
+				-- elseif( ifs_mp_gameopts.Prefs.iStartCnt < 0 ) then
+					-- ifs_mp_gameopts.Prefs.iStartCnt = ifs_mp_gameopts.Prefs.iNumPlayers
+				-- end				
+			-- elseif( Selection.tag == "teamdmg" ) then
+				-- ifs_mp_gameopts.Prefs.iTeamDmg = 100 - ifs_mp_gameopts.Prefs.iTeamDmg
+			-- elseif( Selection.tag == "voicemode" ) then
+				-- if( mode == nil ) then
+					-- ifs_mp_gameopts.Prefs.iVoiceMode = ifs_mp_gameopts.Prefs.iVoiceMode + 1
+				-- else
+					-- ifs_mp_gameopts.Prefs.iVoiceMode = ifs_mp_gameopts.Prefs.iVoiceMode - 1
+				-- end
+				-- if (ifs_mp_gameopts.Prefs.iVoiceMode < ifs_mp_gameopts.Prefs.iVoiceModeMin) then
+					-- ifs_mp_gameopts.Prefs.iVoiceMode = ifs_mp_gameopts.Prefs.iVoiceModeMax
+				-- elseif (ifs_mp_gameopts.Prefs.iVoiceMode > ifs_mp_gameopts.Prefs.iVoiceModeMax) then
+					-- ifs_mp_gameopts.Prefs.iVoiceMode = ifs_mp_gameopts.Prefs.iVoiceModeMin
+				-- end				
+			-- end			
+			-- ifs_mspc_HostOptionList_PopulateItem( this.HostOptionListbox[idx], gHostOptionList[idx] )
+		-- end		
+	-- end
 end
 
 ifs_missionselect_pcMulti = NewIFShellScreen {
@@ -1926,7 +2033,9 @@ ifs_missionselect_pcMulti = NewIFShellScreen {
 		-- Determine how many missions can be queued.
 		this.playlist_count = nil
 		this.iMaxMissions = ScriptCB_GetMaxMissionQueue()
-
+		
+		print("ifs_missionselect_pcMulti: iMaxMissions:", this.iMaxMissions)
+		
 		-- Added chunk for error handling...
 		if(not bFwd) then
 			local ErrorLevel,ErrorMessage = ScriptCB_GetError()
@@ -1936,8 +2045,10 @@ ifs_missionselect_pcMulti = NewIFShellScreen {
 		end
 
 		if(bFwd) then
+			this.bForMp = true
+			
 			--gPickedMapList = {}
-			missionlist_ExpandMaplist(this.bForMP) -- TODO: filter era/mode here
+			missionlist_ExpandMaplist(true) -- TODO: filter era/mode here
 			this.movieTime = 0.5
 
 			-- set un-selected to all items in map list
@@ -1947,9 +2058,9 @@ ifs_missionselect_pcMulti = NewIFShellScreen {
 			local game_name = ScriptCB_GetCurrentProfileNetName()			
 			ScriptCB_SetGameName(ScriptCB_ununicode(game_name))
 			IFEditbox_fnSetUString(this.EditContainer.EditGameName, game_name)
---			print( "++++set default game_name:", game_name, ScriptCB_ununicode(game_name) )
+			print( "set default game_name:", game_name, ScriptCB_ununicode(game_name) )
 
-			--print("In the forward enter function of multimission select")
+			print("In the forward enter function of multimission select")
 			--ifs_mp_gameopts_fnSetupDefaults(ifs_mp_gameopts)
 			-- get default game options
 			if( not ifs_mp_gameopts.Prefs ) then
@@ -2066,17 +2177,18 @@ ifs_missionselect_pcMulti = NewIFShellScreen {
 		gIFShellScreenTemplate_fnUpdate(this, fDt)
 		
 		--time to change movies?
-		this.movieTime = this.movieTime - fDt
-		if( this.movieName and this.movieTime<=0 ) then
-			ifs_missionselect_pcMulti_ChangeMovieFile(this.movieFile)
-    		ifelem_shellscreen_fnStartMovie(this.movieName.."fly", 1, nil, nil, this.movieX,this.movieY,this.movieW,this.movieH)
-		    this.movieName = nil;
-		end
+		custom_CheckChangeMovies(this, fDt)
+		-- this.movieTime = this.movieTime - fDt
+		-- if( this.movieName and this.movieTime<=0 ) then
+			-- ifs_missionselect_pcMulti_ChangeMovieFile(this.movieFile)
+    		-- ifelem_shellscreen_fnStartMovie(this.movieName.."fly", 1, nil, nil, this.movieX,this.movieY,this.movieW,this.movieH)
+		    -- this.movieName = nil;
+		-- end
 		
 		if( ifs_mp_gameopts.bAutoLaunch ) then
 			ScriptCB_UpdateLobby(nil)
 	
---			print("Autolaunching...")
+			print("Autolaunching...")
 			ScriptCB_LaunchLobby()
 		end
 
@@ -2095,6 +2207,33 @@ ifs_missionselect_pcMulti = NewIFShellScreen {
 	
 	Input_KeyDown = function(this, iKey)
 		if(gCurEditbox) then
+			
+			if gCurEditbox == this.cheatBox then
+				if iKey == 10 or iKey == 13 then
+					local str = IFEditbox_fnGetString(gCurEditbox)
+					local r3 = nil
+					r3 = custom_ExtraCheats(str)
+					if not r3 then
+						r3 = ScriptCB_MrMrsEval(str)
+					end
+					
+					for i = 1, 200, 1 do
+						IFEditbox_fnAddChar(gCurEditbox, 8)
+					end
+					
+					if r3 ~= nil then
+						IFText_fnSetString(this.cheatOutput, r3)
+						IFObj_fnSetVis(this.cheatOutput, 1)
+					else
+						IFObj_fnSetVis(this.cheatOutput, nil)
+					end
+				else
+					IFEditbox_fnAddChar(gCurEditbox, iKey)
+					IFObj_fnSetVis(this.cheatOutput, nil)
+				end
+				return
+			end
+		
 			if(iKey == 10) then -- handle Enter different
 				-- by doing nothing
 			elseif (iKey == 9) then
@@ -2211,7 +2350,7 @@ ifs_missionselect_pcMulti = NewIFShellScreen {
 				return
 			end
 			
---			print("this.CurButton=",this.CurButton)
+			print("this.CurButton=",this.CurButton)
 			if(this.CurButton == "Option") then
 				ifs_movietrans_PushScreen(ifs_mp_gameopts)	
 			elseif (this.CurButton == "" ) then
@@ -2243,7 +2382,7 @@ ifs_missionselect_pcMulti = NewIFShellScreen {
 -----------------------			
 			elseif (((not bPC) and (this.bOnLeft)) or (bPC and (this.CurButton == "_add"))) then
 			
---				print("@@@@@@@@@@@@@   @@@@  I think your on the left and adding a map")
+				print("@@@@@@@@@@@@@   @@@@  I think your on the left and adding a map")
 				ifelm_shellscreen_fnPlaySound(this.acceptSound)
 				if(table.getn(gPickedMapList) < this.iMaxMissions) then
 					local bMultipleSides
@@ -2685,18 +2824,19 @@ function ifs_mspc_PlayList_PopulateItem(Dest, Data, bSelected)
 
 		local DisplayUStr,iSource = missionlist_GetLocalizedMapName(Data.Map)
 		IFText_fnSetUString(Dest.map,DisplayUStr)
-
-		local MapMode = missionlist_GetMapMode(Data.Map)
-		if((MapMode) and (MapMode.icon)) then
-			IFImage_fnSetTexture(Dest.icon, MapMode.icon)
+		local MapEraIcon, MapModeIcon = custom_GetCustomEraAndModeIcons(Data)
+		
+		--local MapMode = missionlist_GetMapMode(Data.Map)
+		if MapModeIcon then
+			IFImage_fnSetTexture(Dest.icon, MapModeIcon)
 		else
 			bShowIcon = nil
 		end
 
-		local MapEra = missionlist_GetMapEra(Data.Map)
-		if((MapEra) and (MapEra.icon1)) then
+		--local MapEra = missionlist_GetMapEra(Data.Map)
+		if MapEraIcon then
 			--IFImage_fnSetTexture(Dest.icon1, MapEra.icon1)
-			IFImage_fnSetTexture(Dest.icon2, MapEra.icon2)
+			IFImage_fnSetTexture(Dest.icon2, MapEraIcon)
 		else
 			bShowIcon1 = nil
 		end
@@ -3127,9 +3267,9 @@ function ifs_missionselect_pcMulti_fnAddListboxes(this)
 		ScreenRelativeX = 0, -- left side of screen
 		ScreenRelativeY = 0, -- top
 		x = 210 + new_shell_offset_x - 23,
-		y = 165 + 25,
+		y = 165 + 25 + 28,
 		width = ColumnWidthC,
-		height = ListHeightC,
+		height = ListHeightC + 60,
 		titleText = "ifs.missionselect.selectmode",
 		font = "gamefont_small"
 	}
@@ -3139,9 +3279,9 @@ function ifs_missionselect_pcMulti_fnAddListboxes(this)
 		ScreenRelativeX = 0, -- left side of screen
 		ScreenRelativeY = 0, -- top
 		x = 210 + new_shell_offset_x - 23,
-		y = 165 + 182 + 37,
+		y = 165 + 182 + 37 + 29,
 		width = ColumnWidthC,
-		height = ListHeightC - 16,
+		height = ListHeightC - 16 - 60,
 		titleText = "ifs.missionselect.selectera",
 		font = "gamefont_small"
 	}
@@ -3193,7 +3333,8 @@ function ifs_missionselect_pcMulti_fnAddListboxes(this)
 end
 
 function ifs_missionselect_pcMulti_fnAddEraBoxes(this)
-
+	custom_AddEraBoxes(this)
+	--[[
 	-- Now, do the boxes above and below the columns
 	local ColumnWidthL = 170
 	local ColumnWidthC = 200	
@@ -3324,36 +3465,37 @@ function ifs_missionselect_pcMulti_fnAddEraBoxes(this)
 --			ColorB = 32,
 			texture = "all_icon", 
 		}		
-	}
+	}--]]
 end
 
-mode_list = {
-	{
-		key = "mode_con", showstr = "modename.name.con", 
-		descstr = "modename.description.con", subst = "con",
-		icon = "mode_icon_con",
-	},
-	{
-		key = "mode_ctf", showstr = "modename.name.ctf",
-		descstr = "modename.description.ctf", subst = "ctf",
-		icon = "mode_icon_2ctf",
-	},
-	{
-		key = "mode_1flag", showstr = "modename.name.1flag",
-		descstr = "modename.description.1flag", subst = "1flag",
-		icon = "mode_icon_ctf",
-	},
-	{
-		key = "mode_assault", showstr = "modename.name.assault",
-		descstr = "modename.description.assault", subst = "ass",
-		icon = "mode_icon_ass",
-	},
-	{
-		key = "mode_hunt", showstr = "modename.name.hunt",
-		descstr = "modename.description.hunt", subst = "hunt",
-		icon = "mode_icon_hunt",
-	},		
-}
+mode_list = custom_GetGMapModes()
+-- {
+	-- {
+		-- key = "mode_con", showstr = "modename.name.con", 
+		-- descstr = "modename.description.con", subst = "con",
+		-- icon = "mode_icon_con",
+	-- },
+	-- {
+		-- key = "mode_ctf", showstr = "modename.name.ctf",
+		-- descstr = "modename.description.ctf", subst = "ctf",
+		-- icon = "mode_icon_2ctf",
+	-- },
+	-- {
+		-- key = "mode_1flag", showstr = "modename.name.1flag",
+		-- descstr = "modename.description.1flag", subst = "1flag",
+		-- icon = "mode_icon_ctf",
+	-- },
+	-- {
+		-- key = "mode_assault", showstr = "modename.name.assault",
+		-- descstr = "modename.description.assault", subst = "ass",
+		-- icon = "mode_icon_ass",
+	-- },
+	-- {
+		-- key = "mode_hunt", showstr = "modename.name.hunt",
+		-- descstr = "modename.description.hunt", subst = "hunt",
+		-- icon = "mode_icon_hunt",
+	-- },		
+-- }
 
 function ifs_missionselect_pcMulti_fnAddModeBoxes(this)
 
@@ -3379,14 +3521,14 @@ function ifs_missionselect_pcMulti_fnAddModeBoxes(this)
 	local era_check_offset_x = 10
 	local era_check_offset_y = 19
 	
-	if( this == ifs_missionselect ) then
-		mode_list[6] = 
-		{
-			key = "mode_xl", showstr = "modename.name.xl",
-			descstr = "modename.description.xl", subst = "xl",
-			icon = "mode_icon_XL",
-		}
-	end
+	-- if( this == ifs_missionselect ) then
+		-- mode_list[6] = 
+		-- {
+			-- key = "mode_xl", showstr = "modename.name.xl",
+			-- descstr = "modename.description.xl", subst = "xl",
+			-- icon = "mode_icon_XL",
+		-- }
+	-- end
 	
 	this.mode_checkbox = NewIFContainer { --container for all the backgrounds
 		ScreenRelativeX = 0, -- left side of screen
@@ -3405,13 +3547,13 @@ function ifs_missionselect_pcMulti_fnAddModeBoxes(this)
 			--x = ColumnWidthL + infobox_offset_x + new_shell_offset_x - 50,
 			y = i * 20, -- top-justify against left box
 			--ZPos = 0,
-			bChecked = 1,
+			bChecked = nil,
 			key = mode_list[i].key,
 			
 			checkbox = NewIFImage {
 				--ZPos = 0, 
 				x = era_check_offset_x, y = era_check_offset_y,
-				texture = "check_yes",
+				texture = "check_no",
 				localpos_l = 1, localpos_t = 1,
 				localpos_r = 14, localpos_b = 14,
 				AutoHotspot = 1, tag = "check_mode" .. i,
@@ -3426,18 +3568,20 @@ function ifs_missionselect_pcMulti_fnAddModeBoxes(this)
 				font = "gamefont_super_tiny", 
 				textw = ColumnWidthR - 80, texth = TopBoxHeight,
 				startdelay=math.random()*0.5, nocreatebackground=1, 
+				orgString = mode_list[i].showstr,
 				string = mode_list[i].showstr,
 			},
 			
 			icon = NewIFImage {
 				--ZPos = 240, 
-				localpos_l = icon_x,
-				localpos_r = icon_x + icon_height,
-				localpos_t = icon_y,
-				localpos_b = icon_y + icon_height,
+				localpos_l = icon_x + 2,
+				localpos_r = icon_x + icon_height - 2,
+				localpos_t = icon_y + 2,
+				localpos_b = icon_y + icon_height - 2,
 				--ColorR = 240,
 				--ColorG = 32,
 				--ColorB = 32,
+				orgTexture = mode_list[i].icon, 
 				texture = mode_list[i].icon, 
 			},			
 		}
@@ -3772,16 +3916,18 @@ function ifs_missionselect_pcMulti_fnBuildScreen(this)
 	--this.EditContainer.EditPass.x = EditBoxW * 0.25
 	
 	--size the background
-	local wScreen,hScreen,vScreen,widescreen = ScriptCB_GetScreenInfo()
--- 	this.backImg.localpos_r = wScreen*widescreen
--- 	this.backImg.localpos_b = hScreen
--- 	this.backImg.uvs_b = vScreen
-	-- calc the position of the movie preview window
-	this.movieW = 510.0
-	this.movieH = 400.0
-	this.movieX = wScreen - 600.0
-	this.movieY = hScreen - this.movieH + 100.0 
-
+	-- local wScreen,hScreen,vScreen,widescreen = ScriptCB_GetScreenInfo()
+-- -- 	this.backImg.localpos_r = wScreen*widescreen
+-- -- 	this.backImg.localpos_b = hScreen
+-- -- 	this.backImg.uvs_b = vScreen
+	-- -- calc the position of the movie preview window
+	-- this.movieW = 510.0
+	-- this.movieH = 400.0
+	-- this.movieX = wScreen - 600.0
+	-- this.movieY = hScreen - this.movieH + 100.0 
+	
+	custom_SetMovieLocation(this)
+	
 	-- Also, add buttons
 	--this.CurButton = AddVerticalButtons(this.buttons,ifs_era_vbutton_layout)
 
@@ -3836,8 +3982,10 @@ function ifs_missionselect_pcMulti_fnBuildScreen(this)
 	---------------------------------------------------
 	this.iColumn = 0
 	this.iMap = 0
-	this.bEra_CloneWar = 1
-	this.bEra_Galactic = 1
+	-- this.bEra_CloneWar = 1
+	-- this.bEra_Galactic = 1
+	
+	custom_SetEraBooleans(this, nil)
 	
 	this.iLastClickTime = nil
 	this.bDoubleClicked = nil
@@ -4067,6 +4215,8 @@ function ifs_missionselect_pcMulti_fnBuildScreen(this)
 	
 	-- add gamespy logo & login
 	ifs_mp_sessionlist_fnAddGamespyLogin( this )
+	
+	custom_AddCheatBox(this)
 end
 
 ifs_missionselect_pcMulti_fnBuildScreen(ifs_missionselect_pcMulti)

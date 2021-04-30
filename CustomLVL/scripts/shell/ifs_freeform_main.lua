@@ -1,3 +1,6 @@
+--ifs_freeform_main.lua - zerted patch 1.3
+-- verified by cbadal
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -21,13 +24,17 @@ ifs_freeform_main = NewIFShellScreen {
 	bNohelptext_backPC = 1,
 	
 	-- get current team resources
-	GetResources = function(this, team)
+    GetResources = function(this, team)
+        print("ifs_freeform_main: GetResources()")
+
 		team = team or this.playerTeam
 		return this.teamResources[team]
 	end,
 
 	-- add current team resources
-	AddResources = function(this, team, amount)
+    AddResources = function(this, team, amount)
+        print("ifs_freeform_main: AddResources()")
+
 		team = team or this.playerTeam
 		this.teamResources[team] = this.teamResources[team] + amount
 		return this.teamResources[team]
@@ -40,7 +47,9 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- try to spend amount
-	SpendResources = function(this, team, amount)
+    SpendResources = function(this, team, amount)
+        print( "ifs_freeform_main: SpendResources()")
+
 		team = team or this.playerTeam
 		if amount and this.teamResources[team] >= amount then
 			this.teamResources[team] = this.teamResources[team] - amount
@@ -50,7 +59,8 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- create a starport with the specified team on the specified planet
-	CreatePort = function(this, team, planet)
+    CreatePort = function(this, team, planet)
+        print("ifs_freeform_main: CreatePort()")
 --		if not this.planetPort[planet] then
 --			this.planetPort[planet] = team
 --		end
@@ -60,7 +70,8 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- destroy a starport with the specified team on the specified planet
-	DestroyPort = function(this, team, planet)
+    DestroyPort = function(this, team, planet)
+        print( "ifs_freeform_main: DestroyPort()")
 --		if this.planetPort[planet] == team then
 --			this.planetPort[planet] = nil
 --		end
@@ -71,7 +82,8 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- create a fleet with the specified team on the specified planet
-	CreateFleet = function(this, team, planet)
+    CreateFleet = function(this, team, planet)
+        print("ifs_freeform_main: CreateFleet()")
 		-- add the fleet to the planet
 		if not this.planetFleet[planet] then
 			this.planetFleet[planet] = team
@@ -89,7 +101,8 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- destroy a fleet with the specified team on the specified planet
-	DestroyFleet = function(this, team, planet)
+    DestroyFleet = function(this, team, planet)
+        print( "ifs_freeform_main: DestoryFleet()")
 		-- remove the fleet from the planet
 		if this.planetFleet[planet] == 0 then
 			this.planetFleet[planet] = 3 - team
@@ -103,7 +116,9 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 
 	-- move a fleet with the specified planet from the start planet to the next planet
-	MoveFleet = function(this, team, start, next)
+    MoveFleet = function(this, team, start, next)
+        print( "ifs_freeform_main: MoveFleet()")
+
 		-- save the fleet object
 		local fleetPtr = this.fleetPtr[team][start]
 		
@@ -132,7 +147,9 @@ ifs_freeform_main = NewIFShellScreen {
 	
 	-- select the specified planet
 	SelectPlanet = function(this, info, planet)
-		if this.planetSelected ~= planet then
+        if this.planetSelected ~= planet then
+            print( "ifs_freeform_main: SelectPlanet()")
+
 			-- update the selection
 			this.planetSelected = planet
 			this.planetNext = planet
@@ -175,18 +192,23 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 
 	-- set launch mission
-	SetLaunchMission = function(this, mission)
+    SetLaunchMission = function(this, mission)
+        print( "ifs_freeform_main: SetLaunhMission()")
+
 		-- set the mission to launch
 		if type(mission) == "table" then
 			this.launchMission = mission[math.random(table.getn(mission))]
 		else
-			this.launchMission = mission
-		end
+            this.launchMission = mission
+        end
+        print( "ifs_freeform_main: SetLaunhMission(): Using mission: ", this.launchMission or "[Nil]")
 		ScriptCB_SetMissionNames(this.launchMission, nil)
 	end,
 	
 	-- save mission setup
-	SaveMissionSetup = function(this)
+    SaveMissionSetup = function(this)
+        print( "ifs_freeform_main: SaveMissionSetup()")
+
 		-- create mission setup table
 		local missionSetup = {}
 		
@@ -214,7 +236,8 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 		
 	-- apply battle results for the specified planet
-	ApplyBattleResult = function(this, planet, winner)
+    ApplyBattleResult = function(this, planet, winner)
+        print("ifs_freeform_main: ApplyBattleResult()")
 		-- save which team won
 		this.winnerTeam = winner
 		
@@ -273,7 +296,9 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- set the active team
-	SetActiveTeam = function(this, team)
+    SetActiveTeam = function(this, team)
+        print( "ifs_freeform_main: SetActiveTeam()")
+
 		this.playerTeam = team
 		this.playerSide = this.teamCode[team]
 		this.otherSide = this.teamCode[3 - team]
@@ -286,7 +311,9 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- go to the next turn
-	NextTurn = function(this)
+    NextTurn = function(this)
+        print( "ifs_freeform_main: NextTurn()")
+
 		-- clear the screen stack
 		ScriptCB_PopScreen("ifs_freeform_main")
 		
@@ -460,7 +487,9 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- prompt for save
-	PromptSave = function(this, force)
+    PromptSave = function(this, force)
+        print( "ifs_freeform_main: PromptSave()")
+
 		-- if forcing a save...
 		if force then
 			-- allow force save
@@ -761,7 +790,9 @@ ifs_freeform_main = NewIFShellScreen {
 	
 	-- set victory condition: planet limit
 	-- (default to 100% captured plus no enemy fleets remaining)
-	SetVictoryPlanetLimit = function(this, limit)
+    SetVictoryPlanetLimit = function(this, limit)
+        print("ifs_freeform_main: SetVictoryPlanetLimit()")
+
 		print("SetVictoryPlanetLimit", limit)
 		this.CheckVictory = function(this)
 			print("CheckVictoryPlanetLimit", limit)
@@ -794,7 +825,9 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- setvictory condition: base capture
-	SetVictoryBaseCapture = function(this)
+    SetVictoryBaseCapture = function(this)
+        print( "ifs_freeform_main: SetVictoryBaseCapture()")
+
 		print("SetVictoryBaseCapture")
 		this.CheckVictory = function(this)
 			print("CheckVictoryBaseCapture")
@@ -810,7 +843,9 @@ ifs_freeform_main = NewIFShellScreen {
 	
 	-- set victory condition: resource limit
 	-- (default to 1000 RU)
-	SetVictoryResourceLimit = function(this, limit)
+    SetVictoryResourceLimit = function(this, limit)
+        print( "ifs_freeform_main: SetVictoryResourceLimit()")
+
 		-- backup victory condition: capture all planets
 		print("SetVictoryResourceLimit", limit)
 		this:SetVictoryPlanetLimit(nil)
@@ -866,7 +901,9 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- save metagame state
-	SaveState = function(this)
+    SaveState = function(this)
+        print( "ifs_freeform_main: SaveState()")
+
 		-- what's the current screen?
 		if ScriptCB_IsScreenInStack("ifs_freeform_summary") then
 			if ScriptCB_IsScreenInStack("ifs_freeform_result") then
@@ -934,7 +971,9 @@ ifs_freeform_main = NewIFShellScreen {
 	end,
 	
 	-- load metagame state
-	LoadState = function(this)
+    LoadState = function(this)
+        print("ifs_freeform_main: LoadState()")
+
 		local profileTeam
 		local screen
 		
@@ -1006,7 +1045,9 @@ ifs_freeform_main = NewIFShellScreen {
 		ifs_freeform_controllers(this, controllerTeam)
 	end,
 	
-	OneTimeInit = function(this, showLoadDisplay)
+    OneTimeInit = function(this, showLoadDisplay)
+        print( "ifs_freeform_main: OneTimeInit()")
+
 		-- restore any saved metagame state
 		if ScriptCB_IsMetagameStateSaved() then
 			this:LoadState()
@@ -1090,7 +1131,9 @@ ifs_freeform_main = NewIFShellScreen {
 		end
 	end,
 	
-	Enter = function(this, bFwd)
+    Enter = function(this, bFwd)
+        print("ifs_freeform_main: Enter()")
+
 		gIFShellScreenTemplate_fnEnter(this, bFwd)
 		
 		if bFwd then
@@ -1260,7 +1303,9 @@ ifs_freeform_main = NewIFShellScreen {
 		end
 	end,
 
-	Exit = function(this, bFwd)
+    Exit = function(this, bFwd)
+        print( "ifs_freeform_main: Exit()")
+
 --		gIFShellScreenTemplate_fnExit(this)
 		
 		if not bFwd then
@@ -1697,3 +1742,4 @@ function ifs_freeform_SetButtonName(this, button_name, new_name)
 end
 
 AddIFScreen(ifs_freeform_main,"ifs_freeform_main")
+

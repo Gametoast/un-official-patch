@@ -1,8 +1,70 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+-- Enter function is not binary equal, but hopefully does the same
+-- this is a steam/gog file. No changes by UOP
+------------------------------------------------------------------
+
+-- ifs_opt_mp.lua 
+-- Zerted 1.3 UOP r130
+--
+--  WIP decompile by BAD_AL 
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
 
 -- Online options
+
+----------------------------------------------------------------------------------------
+-- save the profile in slot 1
+----------------------------------------------------------------------------------------
+
+function ifs_opt_mp_StartSaveProfile()
+	print("ifs_opt_mp_StartSaveProfile")
+	
+	ifs_saveop.doOp = "SaveProfile"
+	ifs_saveop.OnSuccess = ifs_opt_mp_SaveProfileSuccess
+	ifs_saveop.OnCancel = ifs_opt_mp_SaveProfileCancel
+	local iProfileIdx = 1 + ScriptCB_GetPrimaryController()
+	ifs_saveop.saveName = ScriptCB_GetProfileName(iProfileIdx)
+	ifs_saveop.saveProfileNum = iProfileIdx
+	ifs_movietrans_PushScreen(ifs_saveop)
+end
+
+function ifs_opt_mp_SaveProfileSuccess()
+	--  print("ifs_opt_mp_SaveProfileSuccess")
+	local this = ifs_opt_mp
+	
+	-- exit ifs_saveop
+	ScriptCB_PopScreen()
+
+	-- Replace current screen with next screen from tabs
+	if(this.NextScreen ~= -1) then
+		ScriptCB_SetIFScreen(this.NextScreen)
+	else
+		this:Input_Back(1)
+	end
+	this.NextScreen = nil
+end
+
+function ifs_opt_mp_SaveProfileCancel()
+	--  print("ifs_opt_mp_SaveProfileCancel")
+	local this = ifs_opt_mp
+	
+	-- exit ifs_saveop
+	ScriptCB_PopScreen()
+
+	-- Replace current screen with next screen from tabs
+	if(this.NextScreen ~= -1) then
+		ScriptCB_SetIFScreen(this.NextScreen)
+	else
+		this:Input_Back(1)
+	end
+	this.NextScreen = nil
+end
+
+
+---------------------------
 
 -- Helper functions for determining if the Gamespy login can be set to
 -- 'always' (i.e. the info looks valid)
@@ -10,419 +72,427 @@
 -- Returns 1 if the specifed string starts with valid chars, nil if
 -- not.
 function ifs_opt_mp_fnCheckGamespyString(Str)
-    local FirstChar = string.sub(Str,1,1)
-    if((FirstChar == "@") or (FirstChar == "+") or (FirstChar == ":") or (FirstChar == "#")) then
-        return nil
-    end
+	local FirstChar = string.sub(Str,1,1)
+	if((FirstChar == "@") or (FirstChar == "+") or (FirstChar == ":") or (FirstChar == "#")) then
+		return nil
+	end
 
-    return 1
+	return 1
 end
 
 -- Returns true if the login info looks ok (to allow the 'always'
 -- login type)
 function ifs_opt_mp_fnLoginInfoLooksOk(NickStr,EmailStr,PasswordStr)
-    return ScriptCB_IsLegalGamespyString(NickStr,EmailStr,PasswordStr)
+	return ScriptCB_IsLegalGamespyString(NickStr,EmailStr,PasswordStr)
 end
-
--- Helper function. Given a layout (x,y,width, height), returns a
--- fully-built item.
-function ifs_opt_mp_CreateItem(layout)
-    -- Make a coordinate system pegged to the top-left of where the cursor would go.
-    local Temp = NewIFContainer { 
-        x = layout.x - 0.5 * layout.width, 
-        y = layout.y,
-    }
-
-    Temp.textitem = NewIFText { 
-        x = 10,
-        y = layout.height * -0.5 + 2,
-        halign = "left", valign = "vcenter",
-        font = "gamefont_small",
-        textw = layout.width - 20, texth = layout.height,
-        startdelay=math.random()*0.5, nocreatebackground=1, 
-    }
-
-    return Temp
-end
-
--- Helper function. For a destination item (previously created w/
--- CreateItem), fills it in with appropriate values given a Tag, which
--- may be nil (==blank it) Note: the Tag is an entry out of
--- the ifs_opt_general_listtags_* arrays .
-function ifs_opt_mp_PopulateItem(Dest, Tag, bSelected, iColorR, iColorG, iColorB, fAlpha)
-    -- Well, no, it's technically not. But, acting like it makes things
-    -- more consistent
-    local this = ifs_opt_mp
-
-    local ShowStr = Tag
-    local ShowUStr = nil
-    local ValUStr
-
-    -- Cache some common items
-    local OnStr = ScriptCB_getlocalizestr("common.on")
-    local OffStr = ScriptCB_getlocalizestr("common.off")
-    local YesStr = ScriptCB_getlocalizestr("common.yes")
-    local NoStr = ScriptCB_getlocalizestr("common.no")
-
-    if (Tag == "appear") then
---  { tag = "appear",    title = "ifs.onlineopt.appear", string = "ifs.onlineopt.online" },
-    if(this.OnlinePrefs.bAppearOffline) then
-            ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.offline")
-    else
-            ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.online")
-    end
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.appear2", ValUStr)
-
-    elseif (Tag == "voicemask") then
---  { tag = "voicemask", title = "ifs.onlineopt.voicemask", string = "common.no" },
-    if(this.OnlinePrefs.bVoiceMask) then
-            ValUStr = YesStr
-    else
-            ValUStr = NoStr
-    end
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.voicemask2", ValUStr)
-
-    elseif (Tag == "voicevol") then
-        --  { tag = "voicevol",  title = "ifs.onlineopt.voicetotvvolume", string = "10" },
-    if (this.OnlinePrefs.iTVVoiceVol == 0) then
-            ValUStr = OffStr
-        else
-            ValUStr = OnStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.voicetotvvolume2", ValUStr)
-
-    elseif (Tag == "prompt") then
---  { tag = "prompt",  title = "ifs.onlineopt.autologin", string = "" },
-    if(this.iPromptType == 0) then
-            ValUStr = ScriptCB_getlocalizestr("ifs.gsprofile.prompt")
-    elseif (this.iPromptType == 1) then
-            ValUStr = ScriptCB_getlocalizestr("ifs.gsprofile.always")
-    else
-            ValUStr = ScriptCB_getlocalizestr("ifs.gsprofile.never")
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.autologin2", ValUStr)
-
-    elseif (Tag == "players") then
---  { tag = "players", title = "ifs.onlineopt.hostbandwidth", string = "128k"},
-    if(gPlatformStr == "XBox") then
-            if(this.OnlinePrefs.iPlayersSupported<1) then
-                ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.bandwidth1")
-            elseif (this.OnlinePrefs.iPlayersSupported<2) then
-                ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.bandwidth2")
-            elseif (this.OnlinePrefs.iPlayersSupported<3) then
-                ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.bandwidth3")
-            elseif (this.OnlinePrefs.iPlayersSupported<4) then
-                ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.bandwidth4")
-            elseif (this.OnlinePrefs.iPlayersSupported<5) then
-                ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.bandwidth5")
-            elseif (this.OnlinePrefs.iPlayersSupported<6) then
-                ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.bandwidth6")
-            elseif (this.OnlinePrefs.iPlayersSupported<7) then
-                ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.bandwidth7")
-            else
-                ValUStr = ScriptCB_getlocalizestr("ifs.onlineopt.bandwidth8")
-            end
-    else
-            if (this.OnlinePrefs.iPlayersSupported<1) then
-                ValUStr = ScriptCB_tounicode("128k")
-            elseif (this.OnlinePrefs.iPlayersSupported<2) then
-                ValUStr = ScriptCB_tounicode("256k")
-            elseif (this.OnlinePrefs.iPlayersSupported<3) then
-                ValUStr = ScriptCB_tounicode("384k")
-            elseif (this.OnlinePrefs.iPlayersSupported<4) then
-                ValUStr = ScriptCB_tounicode("512k")
-            elseif (this.OnlinePrefs.iPlayersSupported<5) then
-                ValUStr = ScriptCB_tounicode("768k")
-            elseif (this.OnlinePrefs.iPlayersSupported<6) then
-                ValUStr = ScriptCB_tounicode("1024k")
-            elseif (this.OnlinePrefs.iPlayersSupported<7) then
-                ValUStr = ScriptCB_tounicode("1536k")
-            else
-                ValUStr = ScriptCB_tounicode("3072k")
-            end
-    end
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.hostbandwidth2", ValUStr)
-
-    elseif (Tag == "icon") then
---  { tag = "icon", title = "ifs.onlineopt.icon", string = "common.off"},   -- display network performance icon 
-    if( this.OnlinePrefs.iOnlineIcon == 1 ) then
-            ValUStr = OnStr
-    else
-            ValUStr = OffStr
-    end 
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.icon2", ValUStr)
-
-    elseif (Tag == "voicerecord") then
---  { tag = "voicerecord",   title = "ifs.onlineopt.voicerecordvol", string = "10" },
-        ValUStr = ScriptCB_tounicode(string.format("%d",this.OnlinePrefs.iVoiceRecordVol))
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.voicerecordvol2", ValUStr)
-
-    elseif (Tag == "voiceplayback") then
---  { tag = "voiceplayback", title = "ifs.onlineopt.voiceplaybackvol", string = "10" },
-        ValUStr = ScriptCB_tounicode(string.format("%d",this.OnlinePrefs.iVoicePlayVol))
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.voiceplaybackvol2", ValUStr)
-
-    elseif (Tag == "voiceenable") then
---  { tag = "voiceenable",   title = "ifs.onlineopt.voiceenable", string = "common.off" },
-    if (ScriptCB_GetVoiceEnable()) then
-            ValUStr = YesStr
-    else
-            ValUStr = NoStr
-    end
-        ShowUStr = ScriptCB_usprintf("ifs.onlineopt.voiceenable2", ValUStr)
-    end
-
-    if (ShowUStr) then
-        IFText_fnSetUString(Dest.textitem,ShowUStr)
-    elseif (ShowStr) then
-        IFText_fnSetString(Dest.textitem,ShowStr)
-    end
-
-        IFObj_fnSetColor(Dest.textitem, iColorR, iColorG, iColorB)
-        IFObj_fnSetAlpha(Dest.textitem, fAlpha)
-
-    IFObj_fnSetVis(Dest.textitem,Tag) -- hide if no tag
-end
-
-ifs_opt_mp_layout = {
-    showcount = 10,
-    --  yTop = -130 + 13, -- auto-calc'd now
-    yHeight = 20,
-    ySpacing  = 0,
-    --  width = 260,
-    x = 0,
-    slider = 1,
-    CreateFn = ifs_opt_mp_CreateItem,
-    PopulateFn = ifs_opt_mp_PopulateItem,
-}
 
 function ifs_mp_opt_fnBadHostPopupDone(bResult)
-    local this = ifs_opt_mp
-    
-    IFObj_fnSetVis(this.listbox, 1)
+	local this = ifs_opt_mp
+	
+	IFObj_fnSetVis(this.buttons, 1)
+	IFObj_fnSetVis(this.buttonlabels, 1)
 
-    if(bResult) then
-        ifs_opt_mp_SaveAndPop()
-    end
-end
-
--- Shows one of a set of listboxes depending on various heroes options
-function ifs_opt_mp_fnSetListboxContents(this)
-    local NewTags = ifs_opt_mp_listtags
-
-	if((gPlatformStr == "PS2") and (ScriptCB_GetConnectType() == "LAN")) then
-		NewTags = ifs_opt_mp_listtags_LAN
+	if(bResult) then
+		ifs_opt_mp_SaveAndPop()
 	end
-
-    this.CurTags = NewTags
-    this.OnlinePrefs = ScriptCB_GetOnlineOpts()
-    ListManager_fnFillContents(this.listbox,NewTags,ifs_opt_mp_layout)
-    ListManager_fnSetFocus(this.listbox)
 end
 
--- Adjusts one option, with its name in the Tag. iDir is +1 (right) or
--- -1 (left)
-function ifs_opt_mp_fnAdjustOption(this, Tag, iDir)
-    ifelm_shellscreen_fnPlaySound(this.acceptSound)
-
-    if (Tag == "appear") then
-        this.OnlinePrefs.bAppearOffline = not this.OnlinePrefs.bAppearOffline
-    elseif (Tag == "voicemask") then
-        this.OnlinePrefs.bVoiceMask = not this.OnlinePrefs.bVoiceMask
-    elseif (Tag == "voicevol") then
-        this.OnlinePrefs.iTVVoiceVol = 10 - this.OnlinePrefs.iTVVoiceVol
-        if (this.OnlinePrefs.iTVVoiceVol > 0) then
-            ScriptCB_VoiceEnable(1)
-        elseif (not ScriptCB_GetVoiceCaptureConnected()) then
-            ScriptCB_VoiceEnable(nil)
-        end
-    elseif (Tag == "prompt") then
-        this.iPromptType = this.iPromptType + iDir
-        if(this.iPromptType > 2) then
-            this.iPromptType = 0
-        elseif (this.iPromptType < 0) then
-            this.iPromptType = 2
-        end
-        
-        -- Only show 'always' if the parameters look valid
-        if((this.iPromptType == 1) and (not ifs_opt_mp_fnLoginInfoLooksOk(NickStr,EmailStr,PasswordStr))) then
-            if(iDir > 0) then
-                this.iPromptType = 2 -- skip to never
-            else
-                this.iPromptType = 0 -- skip to never
-            end
-        end
-    elseif (Tag == "players") then
-        this.OnlinePrefs.iPlayersSupported = math.min(8, math.max(0, this.OnlinePrefs.iPlayersSupported + iDir))
-    elseif (Tag == "icon") then
-        this.OnlinePrefs.iOnlineIcon = 1 - this.OnlinePrefs.iOnlineIcon
-    elseif (Tag == "voicerecord") then
-        this.OnlinePrefs.iVoiceRecordVol = math.min(10, math.max(0, this.OnlinePrefs.iVoiceRecordVol + iDir))
-    elseif (Tag == "voiceplayback") then
-        this.OnlinePrefs.iVoicePlayVol = math.min(10, math.max(0, this.OnlinePrefs.iVoicePlayVol + iDir))
-    elseif (Tag == "voiceenable") then
-        ScriptCB_VoiceEnable(not ScriptCB_GetVoiceEnable())
-    end
-
-    -- Punch changes thru to game
-    ScriptCB_SetGSProfileInfo(this.NickStr,this.EmailStr,this.PasswordStr,this.iSaveType,this.iPromptType)
-    ScriptCB_SetOnlineOpts(this.OnlinePrefs)
-
-    -- Repaint screen w/ latest selections
-    ifs_opt_mp_fnSetListboxContents(this)
+local image_background = nil
+if( ScriptCB_IsInShell() ) then
+	--print("set background iface_bg_1")
+	image_background = "iface_bg_1"
 end
 
+function ifs_opt_mp_fnUpdateForm( form )
+	local this = ifs_opt_mp
+	this.OnlinePrefs = ScriptCB_GetOnlineOpts()
+
+	if ( this.OnlinePrefs.bAppearOffline == true ) then
+		form.elements["appear"].selValue = 1
+	else
+		form.elements["appear"].selValue = 2
+	end
+	
+	form.elements["voicemask"].selValue = ifs_opt_general_fnBoolToSelValue(this.OnlinePrefs.bVoiceMask)
+	form.elements["allregions"].selValue = ifs_opt_general_fnBoolToSelValue(this.OnlinePrefs.bAllRegions)
+	form.elements["voiceenable"].selValue = ifs_opt_general_fnBoolToSelValue(ScriptCB_GetVoiceEnable())
+	form.elements["voicevol"].selValue = ifs_opt_general_fnBoolToSelValue(this.OnlinePrefs.iTVVoiceVol)
+	form.elements["voicerecord"].selValue = this.OnlinePrefs.iVoiceRecordVol
+	form.elements["voiceplayback"].selValue = this.OnlinePrefs.iVoicePlayVol
+	form.elements["players"].selValue = this.OnlinePrefs.iPlayersSupported + 1
+
+	if ( this.OnlinePrefs.iTurnsPerSecond == 30 ) then
+		form.elements["turns"].selValue = 3
+	elseif ( this.OnlinePrefs.iTurnsPerSecond == 15 ) then
+		form.elements["turns"].selValue = 1
+	else
+		form.elements["turns"].selValue = 2
+	end
+	
+	form.elements["icon"].selValue = this.OnlinePrefs.iOnlineIcon + 1
+
+	this.NickStr,this.EmailStr,this.PasswordStr,this.iSaveType,this.iPromptType = ScriptCB_GetGSProfileInfo()
+	if ( this.iPromptType == 0 ) then
+		form.elements["prompt"].selValue = 1
+	elseif ( this.iPromptType == 1 ) then
+		form.elements["prompt"].selValue = 2
+	else
+		form.elements["prompt"].selValue = 0
+	end
+	
+	Form_SetValues(form)
+
+	if (gPlatformStr == "PC") and this.bShellMode then
+		IFObj_fnSetVis(this.cancelbutton, ScriptCB_HasProfileChanged())
+	end
+end
 
 ifs_opt_mp = NewIFShellScreen {
 
-    nologo = 1,
-    movieIntro      = nil, -- played before the screen is displayed
-    movieBackground = nil, -- played while the screen is displayed
-    bNohelptext_backPC = 1,
-    bNohelptext_accept = 1,
-	bDimBackdrop = 1,
-    --bg_texture = "iface_bgmeta_space",
+	nologo = 1,
+	movieIntro      = nil, -- played before the screen is displayed
+	movieBackground = nil, -- played while the screen is displayed
+	bNohelptext_backPC = 1,
+	bg_texture = image_background,
+	
+	--bg_texture = "iface_bgmeta_space",
 
-    -- display network performance icon 
-    icon = 0,
-    bAllRegions = true,
-    iNumPlayers = 0,
-    iTurnsPerSecond = 20,
-    pollProfileTime = 2,
+	-- display network performance icon 
+	icon = 0,
+	bAllRegions = true,
+	iNumPlayers = 0,
+	iTurnsPerSecond = 20,
+	pollProfileTime = 2,
+	
+	--    title = NewIFText {
+	--        string = "ifs.onlineopt.title",
+	--        font = "gamefont_large",
+	--        textw = 460,
+	--        y = 0,
+	--        ScreenRelativeX = 0.5,
+	--        ScreenRelativeY = 0.0,
+	--        inert = 1,
+	--        nocreatebackground = 1,
+	--    },
 
-    -- Do any adjustments necessary on entering this screen
-    Enter = function(this, bFwd)
-        gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function
---      print("Enter Top, this.CurButton = ",this.CurButton)
+	-- Do any adjustments necessary on entering this screen
+	Enter = function(this, bFwd)
+		-- use shell mode?
+		this.bShellMode = 
+			ScriptCB_GetShellActive() and 
+			ScriptCB_GetGameRules() ~= "metagame" and 
+			ScriptCB_GetGameRules() ~= "campaign"
+			
+		-- if in the shell...
+		if(this.bShellMode) then
+			-- hide done and cancel buttons
+			IFObj_fnSetVis(this.donebutton, 1)
+			IFObj_fnSetVis(this.cancelbutton, false)
+			
+			-- if inside the multiplayer menu...
+			ifelem_tabmanager_SelectTabGroup(this, 1, not ifs_main.option_mp, ifs_main.option_mp )
+			if( ifs_main.option_mp ) then
+				-- show multiplayer and multiplayer options tabs
+				ifelem_tabmanager_SelectTabGroup(this, 1, nil, 1)
+				ifelem_tabmanager_SetSelected(this, gPCMainTabsLayout, "_tab_multi")
+				ifelem_tabmanager_SetSelected(this, gPCMultiPlayerTabsLayout, "_tab_mp_opt", 2 )
+				-- dim options that require login if not logged in
+				local loggedin = ScriptCB_IsLoggedIn()
+				ifelem_tabmanager_SetDimmed( this, gPCMultiPlayerTabsLayout, "_tab_friends", not loggedin, 2 )
+				ifelem_tabmanager_SetDimmed( this, gPCMultiPlayerTabsLayout, "_tab_leaderboard", not loggedin, 2 )
+			else
+				-- show options and multiplayer tabs
+				ifelem_tabmanager_SelectTabGroup(this, 1, 1, nil)
+				ifelem_tabmanager_SetSelected(this, gPCMainTabsLayout, "_tab_options")
+				ifelem_tabmanager_SetSelected(this, gPCOptionsTabsLayout, "_tab_mp", 1)
+			end
+			
+			-- set pc profile & title version text
+			UpdatePCTitleText(this)
+		else
+			-- show done and cancel buttons
+			IFObj_fnSetVis(this.donebutton, true)
+			IFObj_fnSetVis(this.cancelbutton, true)
+			
+			-- show multiplayer tabs
+			ifelem_tabmanager_SelectTabGroup(this, nil, 1, nil)
+			ifelem_tabmanager_SetSelected(this, gPCOptionsTabsLayout, "_tab_mp", 1)
+			
+			-- hide PC profile & title version text
+			HidePCTitleText(this)
+		end
+		
+		-- dim tabs for PC Demo
+		ifs_DimTabsPCDemo(this)            
+		
+		ScriptCB_MarkCurrentProfile()
+		if(gPlatformStr == "PC") then
+			this.bReloadProfile = 1
+		end
+		gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function
+		--      print("Enter Top, this.CurButton = ",this.CurButton)
 
-        if(this.PopOnEnter) then
-            this.PopOnEnter = nil
-            ScriptCB_PopScreen()
-        end
+		if(this.PopOnEnter) then
+			this.PopOnEnter = nil
+			print ("Pop On Enter")
+			if (gPlatformStr == "PC") and this.bShellMode then
+				-- rethink interface state, but don't leave
+				this:Exit(false)
+				this:Enter(true)
+			else
+				ScriptCB_PopScreen()
+			end
+		end
 
-        -- Added chunk for error handling...
-        if(not bFwd) then
-            local ErrorLevel,ErrorMessage = ScriptCB_GetError()
-            if(ErrorLevel >= 6) then -- session or login error, must keep going further
-                ScriptCB_PopScreen()
-            end
-        end
+		-- Added chunk for error handling...
+		if(not bFwd) then
+			local ErrorLevel,ErrorMessage = ScriptCB_GetError()
+			if(ErrorLevel >= 6) then -- session or login error, must keep going further
+				print ("Error")
+				ScriptCB_PopScreen()
+			end
+		end
 
-        -- enable local voice echo for test / auditioning
-        ScriptCB_SetVoiceLocalEchoEnable(1)
+		-- enable local voice echo for test / auditioning
+		ScriptCB_SetVoiceLocalEchoEnable(1)
 
-        this.NickStr,this.EmailStr,this.PasswordStr,this.iSaveType,this.iPromptType = ScriptCB_GetGSProfileInfo()
+		-- Disable presence button if not on XLive
+		local bIsXLive = (ScriptCB_GetConnectType() == "XLive") -- current setting
+		local bIsXbox = (gPlatformStr == "XBox")
+		local bIsPC = (gPlatformStr == "PC")
 
-        -- Repaint screen w/ latest selections
-        ifs_opt_mp_fnSetListboxContents(this)
-    end,
+		local bCouldBeXLive = (ScriptCB_GetOnlineService() == "XLive") -- binary was compiled for XLive
+		local bIsGalaxy = (ScriptCB_GetOnlineService() == "Galaxy")
+
+		local form = this.formcontainer.form
+
+		form.elements["appear"].hidden = not bCouldBeXLive or bIsGalaxy  
+		form.elements["voicemask"].hidden =  not bCouldBeXLive or bIsGalaxy 
+		form.elements["prompt"].hidden = true
+		form.elements["turns"].hidden = bIsPC
+		form.elements["allregions"].hidden = not bIsPC or bIsGalaxy
+		form.elements["voicevol"].hidden = not bIsXBox
+		form.elements["voiceplayback"].hidden = bIsPC or bIsXbox
+		form.elements["voicerecord"].hidden = bIsPC or bIsXbox
+		form.elements["voiceenable"].hidden = bIsPC
+
+		ifs_opt_mp_fnUpdateForm(form)
+		Form_SetValues(form)
+		Form_ShowHideElements(form)
+		SetCurButton(this.CurButton)
+
+		this.OnlinePrefs = ScriptCB_GetOnlineOpts()
+	end,
     
-    Exit = function(this, bFwd)
-        -- disable local voice echo 
-        ScriptCB_SetVoiceLocalEchoEnable(0)
-        print("ifs_opt_mp - Exit. Reload = ", this.bReloadProfile)
-        if(gCurHiliteButton) then
-            IFButton_fnSelect(gCurHiliteButton,nil)
-        end
-    end,
+	Exit = function(this, bFwd)
+		-- disable local voice echo 
+		ScriptCB_SetVoiceLocalEchoEnable(0)
+		print("ifs_opt_mp - Exit. Reload = ", this.bReloadProfile)
+		if( this.bReloadProfile ) then
+			ScriptCB_ReloadMarkedProfile()
+		end
+		if(gCurHiliteButton) then
+			IFButton_fnSelect(gCurHiliteButton,nil)
+		end
+	end,
+	
+	OnRadioChanged = function(buttongroup, btnNum)
+		local this = ifs_opt_mp
+		local form = this.formcontainer.form
+		this.OnlinePrefs = ScriptCB_GetOnlineOpts()
 
-    Update = function(this, fDt)
-        -- Call default base class's update function (make button bounce)
-        gIFShellScreenTemplate_fnUpdate(this,fDt)
+		if (buttongroup.tag == "appear") then
+			this.OnlinePrefs.bAppearOffline = btnNum == 2
+		elseif (buttongroup.tag == "voicemask") then
+			this.OnlinePrefs.bVoiceMask = btnNum == 2
+		elseif (buttongroup.tag == "allregions") then
+			this.OnlinePrefs.bAllRegions = btnNum == 2
+		elseif (buttongroup.tag == "voicevol") then
+			this.OnlinePrefs.iTVVoiceVol = math.min(10, this.OnlinePrefs.iTVVoiceVol + 1)
+			if (this.OnlinePrefs.iTVVoiceVol > 0) then
+				ScriptCB_VoiceEnable(true)
+			else
+				ScriptCB_VoiceEnable(false)
+			end
+			ScriptCB_SetOnlineOpts(this.OnlinePrefs) -- apply now
+		elseif (buttongroup.tag == "voicerecord") then
+			this.OnlinePrefs.iVoicePlayVol = btnNum
+		elseif (buttongroup.tag == "players") then
+			this.OnlinePrefs.iPlayersSupported = btnNum - 1
+		elseif (buttongroup.tag == "turns") then
+			if ( btnNum == 1 ) then
+				this.OnlinePrefs.iTurnsPerSecond = 15
+			elseif ( btnNum == 2 ) then
+				this.OnlinePrefs.iTurnsPerSecond = 20
+			else
+				this.OnlinePrefs.iTurnsPerSecond = 30
+			end
+		elseif (buttongroup.tag == "icon") then
+			this.OnlinePrefs.iOnlineIcon = btnNum - 1
+		elseif (buttongroup.tag == "voiceenable") then
+			ScriptCB_VoiceEnable(btn - 1)
+		elseif (buttongroup.tag == "prompt") then
+            local NickStr,EmailStr,PasswordStr,iSaveType,iPromptType = ScriptCB_GetGSProfileInfo()
+            if (btnNum == 1) then iPrompt = 2			-- never
+            elseif ( btnNum == 2 ) then iPrompt = 3		-- prompt
+            else iPrompt = 1 end						-- always
+            ScriptCB_SetGSProfileInfo(NickStr,EmailStr,PasswordStr,iSaveType,iPrompt)
+		end
+		ScriptCB_SetOnlineOpts(this.OnlinePrefs)
+		ifs_opt_mp_fnUpdateForm(this.formcontainer.form)
+	end,
+	
+	OnElementChanged = function(form, element)
+		local this = ifs_opt_mp
+		this.OnlinePrefs = ScriptCB_GetOnlineOpts()
 
-        -- Lobby might be active (if we entered thru it). Update it.
-        ScriptCB_UpdateLobby(nil)
-        
-        -- handle TV voice gain changes
-        this.pollProfileTime = this.pollProfileTime - fDt
+		if (element.tag == "players") then
+			this.OnlinePrefs.iPlayersSupported = element.selValue - 1
+			Form_UpdateElement(form, "players")
+		end
+		
+		ScriptCB_SetOnlineOpts(this.OnlinePrefs)
+		ifs_opt_mp_fnUpdateForm(this.formcontainer.form)
+	end,
 
-        if (this.pollProfileTime < 0) then
-            local voiceTVGain    = ScriptCB_GetVoiceTVGain()
-            this.pollProfileTime = 2
-                        
-            -- if the TV voice is turned off and headset is disconnected
-            if (this.OnlinePrefs.iTVVoiceVol == 0 and 
-                    voiceTVGain                  == 0 and
-                        not ScriptCB_GetVoiceCaptureConnected()) then
-                ScriptCB_VoiceEnable(nil) -- disable voice
-                ifs_opt_mp_fnSetListboxContents(this)
-            end
+	Update = function(this, fDt)
+		-- Call default base class's update function (make button bounce)
+		gIFShellScreenTemplate_fnUpdate(this,fDt)
 
-            -- if the TV gain has changed (due to headset insertion / removal) 
-            -- update profile
-            if (this.OnlinePrefs.iTVVoiceVol ~= voiceTVGain) then
-                this.OnlinePrefs.iTVVoiceVol = voiceTVGain
-                ScriptCB_SetOnlineOpts(this.OnlinePrefs)
-                ifs_opt_mp_fnSetListboxContents(this)
-            end
-        end
-    end,
+		-- Lobby might be active (if we entered thru it). Update it.
+		ScriptCB_UpdateLobby(nil)
+		
+		-- handle TV voice gain changes
+		this.pollProfileTime = this.pollProfileTime - fDt
 
-    Input_Accept = function(this)
-        -- If base class handled this work, then we're done
-        if(gShellScreen_fnDefaultInputAccept(this)) then
-            return
-        end
+		if (this.pollProfileTime < 0) then
+			local voiceTVGain    = ScriptCB_GetVoiceTVGain()
+			this.pollProfileTime = 2
+			
+			
+			-- if the TV voice is turned off and headset is disconnected
+			if (this.OnlinePrefs.iTVVoiceVol == 0 and 
+					voiceTVGain                  == 0 and
+						not ScriptCB_GetVoiceCaptureConnected()) then
+				ScriptCB_VoiceEnable(nil) -- disable voice
 
-    end,
+				ifs_opt_mp_fnUpdateForm(this.formcontainer.form)
+			end
+
+			-- if the TV gain has changed (due to headset insertion / removal) 
+			-- update profile
+			if (this.OnlinePrefs.iTVVoiceVol ~= voiceTVGain) then
+				this.OnlinePrefs.iTVVoiceVol = voiceTVGain
+				ScriptCB_SetOnlineOpts(this.OnlinePrefs)
+				ifs_opt_mp_fnUpdateForm(this.formcontainer.form)
+			end
+		end
+		
+		Form_Update(this.formcontainer.form, fDt)
+	end,
+
+	Input_Accept = function(this)
+		-- If base class handled this work, then we're done
+		if(gShellScreen_fnDefaultInputAccept(this, 1)) then
+			return
+		end
+
+		-- If the tab manager handled this event, then we're done
+		-- Check tabs to see if we have a hit
+		this.NextScreen = ifelem_tabmanager_HandleInputAccept(this, gPCMainTabsLayout, nil, 1)
+		if(not this.NextScreen) then
+			if( ifs_main and ifs_main.option_mp and this.bShellMode ) then
+				this.NextScreen = ifelem_tabmanager_HandleInputAccept(this, gPCMultiPlayerTabsLayout, 2, 1)
+			else
+				this.NextScreen = ifelem_tabmanager_HandleInputAccept(this, gPCOptionsTabsLayout, 1, 1)
+			end
+		end -- main tabs not yet hit
+		
+		-- If nextscreen was handled via a callback, we're done
+		if(this.NextScreen == -1) then
+			this.NextScreen = nil
+			return
+		end
+
+		-- If we have a destination, go there.
+		if(this.NextScreen) then
+			this.bReloadProfile = nil -- accept changes made here
+			if(ScriptCB_IsCurProfileDirty()) then
+				ifs_opt_mp_StartSaveProfile()
+				return
+			else
+				-- No need to save. Just jump there
+				ScriptCB_SetIFScreen(this.NextScreen)
+				this.NextScreen = nil
+				return
+			end
+		end -- this.Nextscreen is valid (i.e. clicked on a tab)
+		
+		if (this.CurButton == "journal") then
+			ScriptCB_EnableJournal()
+		end
+
+		if (Form_InputAccept(this.formcontainer.form) == true) then
+			return
+		end
+
+		if(this.CurButton == "_cancel") then
+			ifelm_shellscreen_fnPlaySound(this.cancelSound)
+			this.bReloadProfile = true
+			this:Input_Back(1)
+			return
+		end
+
+		if(this.CurButton == "_ok" ) then 
+			ifelm_shellscreen_fnPlaySound(this.acceptSound)
+			ScriptCB_SetOnlineOpts(this.OnlinePrefs)
+
+			if(ScriptCB_IsCurProfileDirty()) then
+				this.NextScreen = -1 -- flag special behavior
+				ifs_opt_mp_StartSaveProfile()
+			else
+				this:Input_Back(1)
+			end
+			
+			-- don't reload profile when we leave
+			this.bReloadProfile = nil
+			return
+		end
+		
+		if ( this.CurButton == "_reset" ) then
+			ScriptCB_ResetOnlineOptionsToDefault()
+
+			ifs_opt_mp_fnUpdateForm(this.formcontainer.form)
+		end
+	end,
     
-    Input_Back = function(this)
-		if (gPlatformStr == "XBox") then
-            -- don't reload profile when we leave
-            this.bReloadProfile = nil
-            if(not ScriptCB_CanSupportMaxPlayers(this.OnlinePrefs.iPlayersSupported)) then
-                IFObj_fnSetVis(this.listbox, nil)
-                
-                Popup_AB.CurButton = "no" -- default
-                Popup_AB.fnDone = ifs_mp_opt_fnBadHostPopupDone
-                Popup_AB:fnActivate(1)
-								gPopup_fnSetTitleStr(Popup_AB, "ifs.mp.badhost")
-            else
-                print("Can support the players...")
-                ifs_opt_mp_SaveAndPop()
-            end
-        else
-            -- don't reload profile when we leave
-            this.bReloadProfile = nil
-            ifs_opt_mp_SaveAndPop()
-        end
+	Input_Back = function(this)
+		if (gPlatformStr == "PC") and this.bShellMode then
+			-- rethink interface state, but don't leave
+			this:Exit(false)
+			this:Enter(true)
+		else
+			ScriptCB_PopScreen()
+		end
+	end,
+
+	Input_Start = function(this)
+		if not this.bShellMode then
+ 			this.bReloadProfile = 1
+			ScriptCB_PopScreen()
+		end
+	end,
+	
+	Input_Misc  = function(this)
+		this:Input_GeneralLeft()
+	end,
+
+	Input_GeneralLeft = function(this)
+	end,
+
+    Input_GeneralRight = function(this)     
     end,
 
-    Input_GeneralLeft = function(this)
-        local Tag = this.CurTags[ifs_opt_mp_layout.SelectedIdx]
-        ifs_opt_mp_fnAdjustOption(this, Tag, -1)
-    end,
-
-    Input_GeneralRight = function(this)
-        local Tag = this.CurTags[ifs_opt_mp_layout.SelectedIdx]
-        ifs_opt_mp_fnAdjustOption(this, Tag, 1)
-    end,
-
-    Input_GeneralUp = function(this)
-        -- If base class handled this work, then we're done
-        if(gShellScreen_fnDefaultInputUp(this)) then
-            return
-        end
-
-        local CurListbox = ListManager_fnGetFocus()
-        if(CurListbox) then
-            ListManager_fnNavUp(CurListbox)
-            ifs_opt_mp_fnSetListboxContents(this)
-        end
-    end,
-
-    Input_GeneralDown = function(this)
-        -- If base class handled this work, then we're done
-        if(gShellScreen_fnDefaultInputDown(this)) then
-            return
-        end
-
-        local CurListbox = ListManager_fnGetFocus()
-        if(CurListbox) then
-            ListManager_fnNavDown(CurListbox)
-            ifs_opt_mp_fnSetListboxContents(this)
-        end
-    end,
 }
 
 
@@ -436,7 +506,14 @@ function ifs_opt_mp_SaveAndPop()
     
     -- if we're in the game, or a subscreen of the options tree, don't try to save
     if((not ifs_saveop) or (ScriptCB_IsScreenInStack("ifs_opt_top"))) then
-        ScriptCB_PopScreen()
+		if (gPlatformStr == "PC") and this.bShellMode then
+			-- rethink interface state, but don't leave
+			this:Exit(false)
+			this:Enter(true)
+		else
+			print ("Save and Pop")
+			ScriptCB_PopScreen()
+		end
         return
     end
     
@@ -467,63 +544,124 @@ end
 -- done profile save
 ----------------------------------------------------------------------------------------
 
+ifs_opt_mp_form_layout = {
+	yTop = -50,
+	yHeight = 45,
+	xSpacing = 20,
+	ySpacing  = 0,
+	bUseYSpacing = 1,
+	width = 310,
+	bRightJustifyText = 1, -- just the text, not the buttons
+	font = "gamefont_small",
+	flashy = 0,
+	leftColumn = 0.8,
+	elements = {
+		-- Title is for the left column, string the right-hand option
+		{ tag = "appear",    title = "ifs.onlineopt.appear", fnChanged = ifs_opt_mp.OnRadioChanged, selValue = 1, control = "radio", values = {"ifs.onlineopt.offline", "ifs.onlineopt.online"}},
+		{ tag = "voicemask", title = "ifs.onlineopt.voicemask", fnChanged = ifs_opt_mp.OnRadioChanged, selValue = 1, control = "radio", values = {"common.no", "common.yes"}},
+		{ tag = "voicevol",  title = "ifs.onlineopt.voicetotvvolume", fnChanged = ifs_opt_mp.OnElementChanged, selValue = 10, control = "slider", minValue = 0.0, maxValue = 100.0,},
+		{ tag = "prompt",  title = "ifs.onlineopt.autologin", fnChanged = ifs_opt_mp.OnRadioChanged, selValue = 1, control = "radio", values = {"common.never", "ifs.gsprofile.prompt", "common.always"}},
+		{ tag = "players", title = "ifs.onlineopt.hostbandwidth", fnChanged = ifs_opt_mp.OnElementChanged, selValue = 1, control = "dropdown", values = {"128K", "256K", "384K", "512K", "768K", "1M", "1.5M", "3M", "6M"},},
+		{ tag = "turns", title = "ifs.onlineopt.tps", fnChanged = ifs_opt_mp.OnElementChanged, selValue = 1, control = "dropdown", values = {"15", "20", "30"},},
+		{ tag = "allregions", title = "ifs.onlineopt.allregions", fnChanged = ifs_opt_mp.OnRadioChanged, selValue = 1, control = "radio", values = {"common.no", "common.yes"}},
+		{ tag = "icon", title = "ifs.onlineopt.icon", fnChanged = ifs_opt_mp.OnRadioChanged, selValue = 1, control = "radio", values = {"common.no", "common.yes"}},   -- display network performance icon 
+		{ tag = "voicerecord",   title = "ifs.onlineopt.voicerecordvol", fnChanged = ifs_opt_mp.OnElementChanged, selValue = 10, control = "slider", minValue = 0.0, maxValue = 10.0,},
+		{ tag = "voiceplayback", title = "ifs.onlineopt.voiceplaybackvol", fnChanged = ifs_opt_mp.OnElementChanged, selValue = 10, control = "slider", minValue = 0.0, maxValue = 100.0,},
+		{ tag = "voiceenable",   title = "ifs.onlineopt.voiceenable", fnChanged = ifs_opt_mp.OnRadioChanged, selValue = 1, control = "radio", values = {"common.no", "common.yes"}},
+
+	},
+}
+
 
 function ifs_opt_mp_fnBuildScreen(this)
-    local w
-    local h
-    w,h = ScriptCB_GetSafeScreenInfo()
-    
-    -- Don't use all of the screen for the listbox
-    local BottomIconsHeight = 0
-    local BotBoxHeight = 0
-    local YPadding = 100 -- amount of space to reserve for titlebar, helptext, whitespace, etc
+	local w
+	local h
+	w,h = ScriptCB_GetSafeScreenInfo()
 
-    -- Get usable screen area for listbox
-    h = h - BottomIconsHeight - BotBoxHeight - YPadding
+	-- add pc profile & title version text
+	AddPCTitleText( this )
 
-    -- Calc height of listbox row, use that to figure out how many rows will fit.
-    ifs_opt_mp_layout.FontStr = gListboxItemFont
-    ifs_opt_mp_layout.iFontHeight = ScriptCB_GetFontHeight(ifs_opt_mp_layout.FontStr)
-    ifs_opt_mp_layout.yHeight = ifs_opt_mp_layout.iFontHeight + 2
-    if(1) then -- (gLangStr ~= "english") and (gLangStr ~= "uk_english")) then
-        ifs_opt_mp_layout.yHeight = 2 * ifs_opt_mp_layout.yHeight
-    else
-        ifs_opt_mp_layout.yHeight = math.floor(1.3 * ifs_opt_mp_layout.yHeight)
-    end
+	ifs_opt_mp_form_layout.width = w * 1.5
+	for i, element in ipairs(ifs_opt_mp_form_layout.elements) do
+		element.width = w * 0.15
+	end
+	this.formcontainer = NewIFContainer {
+		ScreenRelativeX = 0.7,
+		ScreenRelativeY = 0.5,
+	}
+	Form_CreateVertical(this.formcontainer, ifs_opt_mp_form_layout)
+	this.formcontainer.form.text.x = 0
+	this.formcontainer.form.text.y = -9
+	this.formcontainer.form.radiobuttons.x = ifs_opt_mp_form_layout.xSpacing
+	this.formcontainer.form.dropdowns.x = w * 0.1 + ifs_opt_mp_form_layout.xSpacing
 
-    local RowHeight = ifs_opt_mp_layout.yHeight + ifs_opt_mp_layout.ySpacing
-    ifs_opt_mp_layout.showcount = math.min(math.floor(h / RowHeight) , table.getn(ifs_opt_mp_listtags))
+	this.Background = NewIFImage 
+	{
+		ZPos = 255, 
+		x = w/2,  --centered on the x
+		y = h/2, -- inertUVs = 1,
+		alpha = 10,
+		localpos_l = -w/1.5, localpos_t = -h/1.5,
+		localpos_r = w/1.5, localpos_b =  h/1.5,
+		texture = "opaque_black",
+		ColorR = 20, ColorG = 20, ColorB = 150, -- blue
+	}
+	
+	if(gPlatformStr == "PC") then
 
-    local listWidth = w * 0.85
+		-- Add tabs to screen
+		ifelem_tabmanager_Create(this, gPCMainTabsLayout, gPCOptionsTabsLayout, gPCMultiPlayerTabsLayout)
+		
 
-		if(gPlatformStr == "PS2") then
-			if((gLangStr == "english") or (gLangStr == "uk_english")) then
-				listWidth = w * 0.9 -- fix for 6664
-			end
-		end
+		local BackButtonW = 150 -- made 130 to fix 6198 on PC - NM 8/18/04
+		local BackButtonH = 25
+		
+		this.cancelbutton = NewPCIFButton
+		{
+			ScreenRelativeX = 0.0, -- right
+			ScreenRelativeY = 1.0, -- bottom
+			y = -15, -- just above bottom
+			x = BackButtonW * 0.5,
+			btnw = BackButtonW, 
+			btnh = BackButtonH,
+			font = "gamefont_medium", 
+			bg_width = BackButtonW, 
+			noTransitionFlash = 1,
+			tag = "_cancel",
+			string = "common.cancel",
+		}
+		
+		this.resetbutton = NewPCIFButton
+		{
+			ScreenRelativeX = 0.5, -- center
+			ScreenRelativeY = 1.0, -- bottom
+			y = -15, -- just above bottom
+			btnw = BackButtonW * 1.5,
+			btnh = BackButtonH,
+			font = "gamefont_medium",
+			bg_width = BackButtonW,
+			noTransitionFlash = 1,
+			tag = "_reset",
+			string = "common.reset",
+		}
 
-    local ListboxHeight = ifs_opt_mp_layout.showcount * RowHeight + 30
-
-		local BoxRelativeX = 0.5
-		local BoxX = 0
-		if(ScriptCB_GetShellActive()) then
-			BoxRelativeX = 0
-			BoxX = listWidth * 0.5
-		end
-    this.listbox = NewButtonWindow { 
-        ZPos = 200, 
-			x = BoxX,
-			ScreenRelativeX = BoxRelativeX,
-        ScreenRelativeY = 0.5, -- center
-        y = 0, -- ListboxHeight * 0.5 + 30,
-        width = listWidth,
-        height = ListboxHeight,
-        titleText = "ifs.onlineopt.title",
-    }
-    ifs_opt_mp_layout.width = listWidth - 40
-    ifs_opt_mp_layout.x = 0
-
-    ListManager_fnInitList(this.listbox,ifs_opt_mp_layout)
+		this.donebutton = NewPCIFButton
+		{
+			ScreenRelativeX = 1.0, -- right
+			ScreenRelativeY = 1.0, -- bottom
+			y = -15, -- just above bottom
+			x = -BackButtonW * 0.5,
+			btnw = BackButtonW, 
+			btnh = BackButtonH,
+			font = "gamefont_medium", 
+			bg_width = BackButtonW, 
+			noTransitionFlash = 1,
+			tag = "_ok",
+			string = "common.accept",
+		}
+		
+	end
+	--this.Helptext_Back.helpstr.string = "common.cancel"   
 end
 
 ifs_opt_mp_fnBuildScreen(ifs_opt_mp)

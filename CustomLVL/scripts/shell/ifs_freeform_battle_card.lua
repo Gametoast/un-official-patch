@@ -1,3 +1,6 @@
+-- ifs_freeform_battle_card.lua - zerted patch 1.3
+--  verified - (BAD_AL)
+-- 
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -21,6 +24,8 @@ ifs_freeform_battle_card = NewIFShellScreen {
 	bNohelptext_backPC = 1,
 	
 	Enter = function(this, bFwd)
+		print("ifs_freeform_battle_card: Enter()")
+		
 		gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function
 	
 		this.PrevButton = nil
@@ -116,9 +121,11 @@ ifs_freeform_battle_card = NewIFShellScreen {
 		ifs_freeform_main:UpdatePlayerText(this.player)
 		
 		this:UpdateAction()
+		print("ifs_freeform_battle_card: Enter(): Finished")
 	end,
 
 	Exit = function(this, bFwd)
+		print("ifs_freeform_battle_card: Exit()")
 	end,
 	
 	SetSelected = function(this, s)
@@ -136,6 +143,8 @@ ifs_freeform_battle_card = NewIFShellScreen {
 	end,
 
 	Next = function(this)
+		print("ifs_freeform_battle_card: Next()")
+		
 		if this.defending then
 			-- switch to the attacker
 			this.defending = nil
@@ -154,7 +163,9 @@ ifs_freeform_battle_card = NewIFShellScreen {
 			if ifs_freeform_main.soakMode then
 				-- enter the selected mission as a demo
 				ScriptCB_LaunchDemo(ifs_freeform_main.launchMission)
+				
 			else
+				print("ifs_freeform_battle_card: Next(): EnteringMission...")
 				-- enter the selected mission
 				ScriptCB_EnterMission()
 			end
@@ -169,6 +180,7 @@ ifs_freeform_battle_card = NewIFShellScreen {
 	end,
 	
 	AcceptBonus = function(this)
+		print("ifs_freeform_battle_card: AcceptBonus()")
 		-- if there is a selected card...
 		local item = this.useActive[this.selected]
 		if item then
@@ -427,3 +439,5 @@ end
 
 ifs_freeform_AddCommonElements(ifs_freeform_battle_card)
 AddIFScreen(ifs_freeform_battle_card,"ifs_freeform_battle_card")
+
+

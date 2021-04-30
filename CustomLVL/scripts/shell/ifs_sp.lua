@@ -1,4 +1,7 @@
---
+-- ifs_sp.lua (Zerted1.3 patch )
+-- Decompiled by cbadal; 
+-- verified 
+
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
 
@@ -11,6 +14,9 @@ ifs_sp_vbutton_layout = {
 	font = gMenuButtonFont,
 	bLeftJustifyButtons = 1,
 	buttonlist = { 
+		--{ tag = "training", string = "ifs.sp.training", },
+		--{ tag = "spacetraining", string = "ifs.sp.spacetraining", },
+		--{ tag = "riseempire", string = "ifs.sp.riseempire", },
 		{ tag = "meta", string = "ifs.sp.meta", },
 		{ tag = "ia", string = "ifs.sp.ia", },
 	},
@@ -60,11 +66,82 @@ function ifs_sp_SaveProfileCancel()
 	end
 end
 
+--[[ 
+function ifs_sp_fnUpdateButtonVis(this)
+	local bIsSplit = ScriptCB_IsSplitscreen()
+
+	this.buttons.training.hidden = bIsSplit
+--	this.buttons.custom.hidden = not bIsSplit
+
+	local bCompletedTraining = 1 -- = ScriptCB_GetSPProgress(1) > 0
+	local bCompletedRise = 1 -- ScriptCB_GetSPProgress(2) > 0
+	
+	this.buttons.riseempire.bDimmed = not bCompletedTraining
+-- 	this.buttons["1"].bDimmed = (not bCompletedRise) and (not bIsSplit)
+-- 	this.buttons["2"].bDimmed = (not bCompletedRise) and (not bIsSplit)
+-- 	this.buttons["3"].bDimmed = (not bCompletedRise) and (not bIsSplit)
+-- 	this.buttons["4"].bDimmed = (not bCompletedRise) and (not bIsSplit)
+-- 	this.buttons.load.bDimmed = (not bCompletedTraining) and (not bIsSplit)
+	return ShowHideVerticalButtons(this.buttons,ifs_sp_vbutton_layout)
+end
+
+
+-- Callback when the "play training" dialog is done. If bResult is
+-- true, the user selected 'yes'
+function ifs_sp_fnPostAskTraining(bResult)
+	local this = ifs_sp
+
+	if(ifs_sp_campaign.bCancelAsk) then
+		ifs_sp_campaign.bCancelAsk = nil -- clear flag
+		ifs_sp_fnUpdateButtonVis(this)
+		IFObj_fnSetVis(this.buttons, 1)
+	elseif (bResult) then
+		ScriptCB_SetGameRules("campaign")
+		ScriptCB_ClearMissionSetup()
+		ScriptCB_SetInTrainingMission(1)
+		ScriptCB_SetMissionNames("geo1c_c", nil)
+		ScriptCB_EnterMission()
+	else
+		-- Skipping training. Stay on this screen, and enable Rise of the Empire
+		ScriptCB_SetSPProgress(1,2)
+		ifs_sp_fnUpdateButtonVis(this)
+		IFObj_fnSetVis(this.buttons, 1)
+
+		-- If this was on the way to some choice, execute it now
+		if(this.BackupCurButton) then
+			this.CurButton = this.BackupCurButton
+			this:Input_Accept()
+		end
+	end
+
+	this.BackupCurButton = nil
+end
+
+-- Intercepts the call to various options (ROTE, *conquest). Reads
+-- this.CurButton, and internal states. Returns true if the call is to
+-- proceed, nil if it to not proceed (or it's still asking). Will
+-- re-call Input_Accept() if the user hits 'yes' in the dialog
+function ifs_sp_fnAskTraining(this)
+	bCompletedTraining = (ScriptCB_GetSPProgress(1) > 0) or (ScriptCB_IsSplitscreen())
+	if(bCompletedTraining) then
+		return 1
+	end
+
+	-- Hasn't completed training. Store choice, in case they want to
+	-- skip out.
+	this.BackupCurButton = this.CurButton
+	IFObj_fnSetVis(this.buttons, nil)
+	Popup_Ask_Historical.CurButton = "yes" -- default
+	Popup_Ask_Historical.fnDone = ifs_sp_fnPostAskTraining
+	Popup_Ask_Historical:fnActivate(1)
+	gPopup_fnSetTitleStr(Popup_Ask_Historical, "ifs.sp.asktraining")
+end--]]
 
 ifs_sp = NewIFShellScreen {
 	movieIntro      = nil, -- WAS "ifs_sp_intro",
 	movieBackground = "shell_sub_left", -- WAS "ifs_sp",
 	music           = "shell_soundtrack",
+	--bAcceptIsSelect = 1,
 
 	buttons = NewIFContainer {
 		ScreenRelativeX = 0.5, -- center
@@ -75,6 +152,8 @@ ifs_sp = NewIFShellScreen {
 		gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function
 		gMovieDisabled = nil
 
+		--this.CurButton = ifs_sp_fnUpdateButtonVis(this)
+		--SetCurButton(this.CurButton)
 
 		if(bFwd and ScriptCB_IsCampaignStateSaved()) then
 			if(ScriptCB_IsCurProfileDirty()) then
@@ -88,6 +167,7 @@ ifs_sp = NewIFShellScreen {
 		if(bFwd and ScriptCB_GetInTrainingMission()) then
 			ScriptCB_SetSPProgress(1,1) -- note this is complete
 			ScriptCB_SetInTrainingMission(nil) -- clear flag so this doen't happen again
+			--ScriptCB_SetLastBattleVictoryValid(nil) -- don't care about victory
 		end
 
 		-- if its splitscreen, change the orange title to say "splitscreen"
@@ -138,6 +218,16 @@ ifs_sp = NewIFShellScreen {
 			else
 				ScreenToPush = ifs_instant_top
 			end
+--[[		elseif (this.CurButton == "riseempire") then
+			-- Ken, do something in ifs_freeform_rise_newload's "new" code.
+			if(ifs_sp_fnAskTraining(this)) then
+				ScreenToPush = ifs_freeform_rise_newload
+			end
+		elseif (this.CurButton == "training") then
+			-- If training has been completed, assme they want to replay it.
+			ifs_sp_fnPostAskTraining(1)
+		elseif (this.CurButton == "spacetraining" ) then
+			ScreenToPush = ifs_spacetraining--]]
 		elseif (this.CurButton == "meta") then
 			ScreenToPush = ifs_sp_campaign
 		elseif (this.CurButton == "campaign") then
@@ -155,6 +245,7 @@ ifs_sp = NewIFShellScreen {
 				ifs_movietrans_PushScreen(ScreenToPush)
 			end
 		end -- have a ScreenToPush
+		-------------------------------------------------------------
 
 	end,
 

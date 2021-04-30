@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -45,15 +50,16 @@ ifs_sp_gc_vbutton_layout = {
 	ySpacing = 5,
 	font = gMenuButtonFont,
 	bLeftJustifyButtons = 1, 
-	buttonlist = { 
-		{ tag = "1", string = "ifs.meta.Configs.1", },
-		{ tag = "2", string = "ifs.meta.Configs.2", },
-		{ tag = "3", string = "ifs.meta.Configs.3", },
-		{ tag = "4", string = "ifs.meta.Configs.4", },
-		-- no splitscreen on PC
-		--{ tag = "custom", string = "ifs.meta.Configs.custom", },
-		{ tag = "load", string = "ifs.meta.load.btnload", },
-	},
+	buttonlist = custom_GetGCButtonList(),
+	-- { 
+		-- { tag = "1", string = "ifs.meta.Configs.1", },
+		-- { tag = "2", string = "ifs.meta.Configs.2", },
+		-- { tag = "3", string = "ifs.meta.Configs.3", },
+		-- { tag = "4", string = "ifs.meta.Configs.4", },
+		-- -- no splitscreen on PC
+		-- --{ tag = "custom", string = "ifs.meta.Configs.custom", },
+		-- { tag = "load", string = "ifs.meta.load.btnload", },
+	-- },
 	--title = "ifs.meta.title",
 --	rotY = 35,
 }
@@ -156,11 +162,11 @@ function ifs_sp_campaign_fnUpdateButtonVis(this)
 	
 	-- hide campaign list button if not activated
 	if(this.buttons.campaign) then
-		if(not this.showCampaignList) then
-			this.buttons.campaign.hidden = true
-		else
-			this.buttons.campaign.hidden = false
-		end
+		this.buttons.campaign.hidden = false
+		-- if(not this.showCampaignList) then
+		-- else
+			-- this.buttons.campaign.hidden = false
+		-- end
 	end
 	
 	if(this.buttons.training) then
@@ -196,7 +202,7 @@ function ifs_sp_gc_fnUpdateButtonVis(this)
 		this.buttons["4"].bDimmed = (not bCompletedRise) and (not bIsSplit)
 	end
 	if(this.buttons.custom) then
-		this.buttons.custom.hidden = not bIsSplit
+		this.buttons.custom.bDimmed = this.buttons["1"].bDimmed
 	end
 	if(this.buttons.load) then
 		this.buttons.load.bDimmed = (not bCompletedTraining) and (not bIsSplit)
@@ -350,6 +356,9 @@ ifs_sp_campaign = NewIFShellScreen {
 	end,
 
 	Input_Accept = function(this)
+	
+		print("ifs_sp_campaign: Input_Accept(): Entered: ", this.CurButton or "[Nil]")
+		
 		this.iCheatState = 0
 		if(gPlatformStr == "PC") then
 			-- If the tab manager handled this event, then we're done
@@ -614,8 +623,11 @@ ifs_sp_gc_main = NewIFShellScreen {
 		else
 			-- always clear the quit player here
 			ScriptCB_SetQuitPlayer(1)
+			
+			ScreenToPush = ifs_freeform_main
+			if not custom_PressedGCButton(this.CurButton) then 
+			
 			--if(ifs_sp_campaign_fnAskTraining(this)) then 
-				ScreenToPush = ifs_freeform_main
 				if (this.CurButton == "1") then
 					-- rebel scenario
 					ifs_freeform_start_all(ifs_freeform_main)
@@ -628,10 +640,13 @@ ifs_sp_gc_main = NewIFShellScreen {
 				elseif (this.CurButton == "4") then
 					-- empire scenario
 					ifs_freeform_start_imp(ifs_freeform_main)
+				elseif (this.CurButton == "0") then
+					print("ifs_sp_gc_main: Input_Accept(): Button pressed: 0")
+					ifs_freeform_start_zer(ifs_freeform_main)
 				else
 					ScreenToPush = nil
 				end
-			--end
+			end
 		end
 
 		if(ScreenToPush) then

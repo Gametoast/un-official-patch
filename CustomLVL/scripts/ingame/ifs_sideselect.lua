@@ -1,6 +1,13 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
+
+__ProcessedAwardEffects__ = false
 
 ifs_sideselect_vbutton_layout = {
 	xWidth = 205,
@@ -9,6 +16,8 @@ ifs_sideselect_vbutton_layout = {
 	ySpacing = 5,
 	font = gMenuButtonFont,
 	buttonlist = { 
+		{ tag = "fakeTeam1", string = CustomEraTeam1 or "Team 1", },
+		{ tag = "fakeTeam2", string = CustomEraTeam2 or "Team 2", },
 		{ tag = "team1", string = "ifs.sideselect.spectate", },
 		{ tag = "team2", string = "ifs.sideselect.spectate", },
 		{ tag = "auto", string = "ifs.sideselect.autoassign", },
@@ -19,6 +28,8 @@ ifs_sideselect_vbutton_layout = {
 }
 
 function ifs_sideselect_fnBuildScreen(this, mode)
+	print("ifs_sideselect_fnBuildScreen()")
+	
 	local w,h = ScriptCB_GetSafeScreenInfo() -- of the usable screen
 
 --BradR 7/27/05- removing this element 
@@ -86,23 +97,35 @@ function ifs_sideselect_fnEnter(this, bFwd)
 	if(bFwd) then
 		local bteam1, bteam2, bauto, bspec = ScriptCB_GetSideSelectButtonSetting()
 		if( bteam1 == 0 ) then
+			this.buttons.fakeTeam1.hidden = 1
+			this.buttons.fakeTeam1.bDimmed = nil
 			this.buttons.team1.hidden = 1
 			this.buttons.team1.bDimmed = nil
 		elseif( bteam1 == 1 ) then
+			this.buttons.fakeTeam1.hidden = nil
+			this.buttons.fakeTeam1.bDimmed = 1
 			this.buttons.team1.hidden = nil
 			this.buttons.team1.bDimmed = 1
 		else
+			this.buttons.fakeTeam1.hidden = nil
+			this.buttons.fakeTeam1.bDimmed = nil
 			this.buttons.team1.hidden = nil
 			this.buttons.team1.bDimmed = nil
 		end
 		
 		if( bteam2 == 0 ) then
+			this.buttons.fakeTeam2.hidden = 1
+			this.buttons.fakeTeam2.bDimmed = nil
 			this.buttons.team2.hidden = 1
 			this.buttons.team2.bDimmed = nil
 		elseif( bteam2 == 1 ) then
+			this.buttons.fakeTeam2.hidden = nil
+			this.buttons.fakeTeam2.bDimmed = 1
 			this.buttons.team2.hidden = nil
 			this.buttons.team2.bDimmed = 1
 		else
+			this.buttons.fakeTeam2.hidden = nil
+			this.buttons.fakeTeam2.bDimmed = nil
 			this.buttons.team2.hidden = nil
 			this.buttons.team2.bDimmed = nil
 		end
@@ -130,12 +153,43 @@ function ifs_sideselect_fnEnter(this, bFwd)
 		end
 	end
 	
+	if SupportsCustomEraTeams then
+		print("ifs_sideselect_fnEnter(): Map supports custom era teams")
+		
+		this.buttons.team1.hidden = 1
+		this.buttons.team2.hidden = 1
+	else
+		print("ifs_sideselect_fnEnter(): Map does not support custom era teams")
+		
+		this.buttons.fakeTeam1.hidden = 1
+		this.buttons.fakeTeam2.hidden = 1
+	end
+	
 	this.CurButton = ShowHideVerticalButtons(this.buttons, ifs_sideselect_vbutton_layout)
 	if(this.Viewport) then
 		SetCurButton(this.CurButton, this)
 	else
 		SetCurButton(this.CurButton)
 	end
+	
+	if __ProcessedAwardEffects__ == false then
+		__ProcessedAwardEffects__ = true
+		
+		if ScriptCB_IsFileExist(__v13patchSettings_noAwards__) == 0 then
+			print("ifs_sideselect_fnEnter(): The award settings file does not exist")
+		else
+			print("ifs_sideselect_fnEnter(): The award settings file exists")
+			if not ff_CommandRemoveAwardEffects then
+				print("ifs_sideselect_fnEnter(): Error: Cannot remove awards effects.  The needed FakeConsole function is missing")
+			else
+				print("ifs_sideselect_fnEnter(): Starting to remove award effects...")
+				ff_CommandRemoveAwardEffects()
+				print("ifs_sideselect_fnEnter(): Finished removing award effects.")
+			end
+		end
+	end
+	
+	
 end
 
 ifs_sideselect1 = NewIFShellScreen {
@@ -160,7 +214,53 @@ ifs_sideselect1 = NewIFShellScreen {
 
 	Enter = function(this, bFwd)
 		ifs_sideselect_fnEnter(this, bFwd)
+	end,
+	
+	Input_KeyDown = function(this, iKey)
+		--local r2 = ScriptCB_GetSideSelectButtonSetting()
+		local bteam1, bteam2, bauto, bspec = ScriptCB_GetSideSelectButtonSetting()
+		
+		if iKey == 97 or iKey == 65 or iKey == 51 then
+			
+			if bauto ~= 0 and bauto ~= 1 then
+				ShowMessageText("mods.shortcuts.auto")
+				this.CurButton = "auto"
+			end
+
+		elseif iKey == 49 then
+			
+			if bteam1 ~= 0 and bteam1 ~= 1 then
+				ShowMessageText("mods.shortcuts.team1")
+				this.CurButton = "team1"
+			end
+			
+		elseif iKey == 50 then
+		
+			if bteam2 ~= 0 and bteam2 ~= 1 then
+				ShowMessageText("mods.shortcuts.team2")
+				this.CurButton = "team2"
+			end
+		
+		elseif iKey == 52 then
+			if bspec ~= 0 and bspec ~= 1 then
+				ShowMessageText("mods.shortcuts.spec")
+				this.CurButton = "spec"
+			end
+		end
+
+	end,
+	
+	Update = function(this, fDt)
+	
+		if this.CurButton == "fakeTeam1" then
+			this.CurButton = "team1"
+			SetCurButton("team1")
+		elseif this.CurButton == "fakeTeam2" then
+			this.CurButton = "team2"
+			SetCurButton("team2")
+		end
 	end
+	
 }
 
 ifs_sideselect2 = NewIFShellScreen {

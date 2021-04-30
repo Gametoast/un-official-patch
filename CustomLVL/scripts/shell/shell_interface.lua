@@ -1,3 +1,6 @@
+-- shell_interface.lua (1.3 Zerted patch ) 
+-- Decompiled by cbadal with help from SWBF2Helper
+-- verified 
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -6,10 +9,24 @@
 -- component. The game should be able to include this file and nothing
 -- else.
 
+-- added by zerted
+print("shell_interface: Entered")
+ __v13patchSettings_noColors__ = "..\\..\\addon\\AAA-v1.3patch\\settings\\noColors.txt"
+ReadDataFile("v1.3patch_strings.lvl")
+-----------
+
 -- Read in some globals for what platform, online service will be in use
 gPlatformStr = ScriptCB_GetPlatform()
 gOnlineServiceStr = ScriptCB_GetOnlineService()
 gLangStr,gLangEnum = ScriptCB_GetLanguage()
+
+---- added by zerted
+print(
+    "shell_interface: gPlatformStr, gOnlineServiceStr, gLangStr, gLangEnum: ",
+    gPlatformStr or "[Nil]" , gOnlineServiceStr or "[Nil]", gLangStr or "[Nil]",
+	gLangEnum or "[Nil]"
+)
+----------------------
 
 -- set model memory
 SetPS2ModelMemory(2000 * 1024)
@@ -18,13 +35,14 @@ SetPS2ModelMemory(2000 * 1024)
 ScriptCB_DoFile("globals")
 
 -- shell movie stream to use
-if(gPlatformStr == "PS2") then
+--[[if(gPlatformStr == "PS2") then
     if (ScriptCB_IsPAL() == 1) then
     gMovieStream = "movies\\shellpal.mvs"
     else
     gMovieStream = "movies\\shell.mvs"
     end
-elseif (gPlatformStr == "PC") then
+else--]]
+if (gPlatformStr == "PC") then
    local shellMovie = {
       english    = "movies\\shell.mvs",
       spanish    = "movies\\shellsp.mvs",
@@ -66,6 +84,24 @@ if(gPlatformStr == "PC") then
     ScriptCB_DoFile("ifelem_editbox")
 end
 
+---------- added by zerted --------------
+ScriptCB_DoFile("ifs_era_handler")
+
+local r0 = 10 
+local r1 = nil 
+for i = 0, r0, 1 do 
+	if ScriptCB_IsFileExist("custom_gc_" .. i .. ".lvl") == 0 then
+		print("shell_interface: No custom_gc_" .. i .. ".lvl")
+	else
+		print("shell_interface: Found custom_gc_" .. i .. ".lvl")
+		ReadDataFile("custom_gc_" .. i .. ".lvl")
+		ScriptCB_DoFile("custom_gc_" .. i)
+	end
+end
+
+
+-------------------------------------
+
 ScriptCB_DoFile("ifs_movietrans")
 ScriptCB_DoFile("ifs_attract")
 ScriptCB_DoFile("ifs_mp_lobby_quick")
@@ -86,21 +122,26 @@ end
 
 -- Utility stuff first.
 ScriptCB_DoFile("popups_common")
+--[[
 if(gPlatformStr == "XBox") then
     ScriptCB_DoFile("popup_ab")
     ScriptCB_DoFile("ifs_dvd_or_game")
 end
+--]]
 ScriptCB_DoFile("popup_ok")
 ScriptCB_DoFile("popup_yesno")
 ScriptCB_DoFile("popup_tutorial")
-if(gPlatformStr ~= "PC") then
+
+--[[if(gPlatformStr ~= "PC") then
     ScriptCB_DoFile("popup_loadsave")
-end
+end--]]
+
 ScriptCB_DoFile("popup_loadsave2")
 ScriptCB_DoFile("error_popup")
 ScriptCB_DoFile("popup_yesno_large")
 ScriptCB_DoFile("popup_ok_large")
 
+ScriptCB_DoFile("popup_prompt")
 ScriptCB_DoFile("ifs_vkeyboard")
 
 ScriptCB_DoFile("ifs_boot")
@@ -116,21 +157,22 @@ ScriptCB_DoFile("ifs_mp_main")
 ScriptCB_DoFile("ifs_mp_sessionlist")
 ScriptCB_DoFile("ifs_mp_lobby")
 ScriptCB_DoFile("ifs_mp_maptype")
+--[[
 if(gPlatformStr == "PS2") then
     ScriptCB_DoFile("ifs_mpps2_netconfig")
     ScriptCB_DoFile("ifs_mpps2_dnas")
     ScriptCB_DoFile("ifs_mpps2_eula")
     ScriptCB_DoFile("ifs_mpps2_patch")
     ScriptCB_DoFile("ifs_mpps2_optimatch")
-end
+end--]]
 
 if(gPlatformStr == "PC") then
 	ScriptCB_DoFile("ifs_mp_gameopts")
 	ScriptCB_DoFile("ifs_mp_heroopts")
     ScriptCB_DoFile("ifs_mpgs_pclogin")
     ScriptCB_DoFile("ifs_missionselect_pcMulti")
-else
-    ScriptCB_DoFile("ifs_mpgs_login")   
+--[[else
+    ScriptCB_DoFile("ifs_mpgs_login")   --]]
 end
 
 ScriptCB_DoFile("ifs_mp_autonet")
@@ -141,9 +183,10 @@ ScriptCB_DoFile("popup_busy")
 --ScriptCB_DoFile("ifs_split_main")
 ScriptCB_DoFile("ifs_split_map")
 ScriptCB_DoFile("ifs_split_profile")
+--[[
 if(gPlatformStr == "XBox") then
   ScriptCB_DoFile("ifs_split2_profile")
-end
+end--]]
 
 ScriptCB_DoFile("ifs_sp")
 ScriptCB_DoFile("ifs_sp_campaign")
@@ -215,11 +258,11 @@ if(gPlatformStr == "PC") then
     --ScriptCB_DoFile("ifs_opt_pckeyboard")
     ScriptCB_DoFile("ifs_opt_pccontrols")
     ScriptCB_DoFile("ifs_opt_pcvideo")
-else
+--[[else
     ScriptCB_DoFile("controller_presets")
     ScriptCB_DoFile("ifs_opt_controller_mode")
     ScriptCB_DoFile("ifs_opt_controller_common")
-    ScriptCB_DoFile("ifs_opt_controller_vehunit")
+    ScriptCB_DoFile("ifs_opt_controller_vehunit")--]]
 end
 
 -- unlockables
@@ -231,7 +274,7 @@ ScriptCB_DoFile("ifs_credits")
 ScriptCB_DoFile("ifs_careerstats")
 
 -- Pull in XBox-only pages (with mpxl in the name)
-if(gOnlineServiceStr == "XLive") then
+--[[if(gOnlineServiceStr == "XLive") then
     ScriptCB_DoFile("ifs_mpxl_login")
     ScriptCB_DoFile("ifs_mpxl_silentlogin")
     ScriptCB_DoFile("ifs_mpxl_optimatch")
@@ -240,26 +283,28 @@ if(gOnlineServiceStr == "XLive") then
     ScriptCB_DoFile("ifs_mpxl_voicemail")
     ScriptCB_DoFile("ifs_mp_leaderboard")
     ScriptCB_DoFile("ifs_mp_leaderboarddetails")
-else
+else--]]
     if(gOnlineServiceStr == "GameSpy") then
         ScriptCB_DoFile("ifs_mp_leaderboard")
-        ScriptCB_DoFile("ifs_mp_leaderboarddetails")    
+        ScriptCB_DoFile("ifs_mp_leaderboarddetails") 
+		ScriptCB_DoFile("ifs_mpgs_friends")
     end
-    ScriptCB_DoFile("ifs_mpgs_friends")
-end
+    --ScriptCB_DoFile("ifs_mpgs_friends")
+--end
 
 ScriptCB_DoFile("ifs_fonttest")
 
+
 -- Set the first screen shown on entry
-if(gXBox_DVDDemo) then
+--[[if(gXBox_DVDDemo) then
     -- DVD demo always goes to dvd-or-game screen.
     ifs_movietrans_PushScreen(ifs_dvdorgame)
 elseif (ScriptCB_ShouldShowDemoPostscreen() and (not gE3Demo)) then
     -- Demo is over. Show the "please buy our game" screen
     ifs_movietrans_PushScreen(ifs_postdemo)
-
 -- already in a campaign game?
-elseif ScriptCB_IsCampaignStateSaved() then
+elseif ScriptCB_IsCampaignStateSaved() then--]]
+if ScriptCB_IsCampaignStateSaved() then
 
 	-- remove legal textures to make room for loading
 	ifs_legal:ClearTextures()
@@ -295,6 +340,7 @@ gMusicStream     = OpenAudioStream("sound\\shell.lvl", "shell_music")
 -- open movie stream
 
 gMovieTutorialPostFix = ""
+print( "shell_interface: Opening movie:",gMovieStream)
 ScriptCB_OpenMovie(gMovieStream, "")
 ScriptCB_SetMovieAudioBus("shellmovies")
-
+print("shell_interface: Leaving")

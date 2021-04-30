@@ -1,3 +1,7 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -451,37 +455,54 @@ function ifs_login_Done()
 	end
 end
 
-function ifs_login_EnterInterface( this )
-	if( table.getn(ifs_login_listbox_contents) > 0 ) then
---		print("enter with profile")
 
-		-- set to last played profile
-		local last_profile = ifs_login_listbox_layout.SelectedIdx
-		
-		if( ScriptCB_IsPlayerLoggedIn() ) then
-			local profile_name = ScriptCB_GetCurrentProfileName()
-			local i
-			for i = 1, table.getn(ifs_login_listbox_contents) do
-				if( ifs_login_listbox_contents[i].showstr == profile_name ) then
-					last_profile = i
-					ifs_login_listbox_layout.SelectedIdx = i
-					break
+function ifs_login_EnterInterface(this)
+	local function original_ifs_login_EnterInterface( this )
+		if( table.getn(ifs_login_listbox_contents) > 0 ) then
+	--		print("enter with profile")
+
+			-- set to last played profile
+			local last_profile = ifs_login_listbox_layout.SelectedIdx
+			
+			if( ScriptCB_IsPlayerLoggedIn() ) then
+				local profile_name = ScriptCB_GetCurrentProfileName()
+				local i
+				for i = 1, table.getn(ifs_login_listbox_contents) do
+					if( ifs_login_listbox_contents[i].showstr == profile_name ) then
+						last_profile = i
+						ifs_login_listbox_layout.SelectedIdx = i
+						break
+					end
 				end
 			end
-		end
 
-		RoundIFButtonLabel_fnSetUString( this.profile_button, ifs_login_listbox_contents[last_profile].showstr )
-		IFObj_fnSetVis(this.listbox,nil)
-		IFObj_fnSetVis(this.diff_listbox,nil)
-	else
---		print("enter with no profile")
-		-- set to create mode
-		ifs_login_SetCreateVis(1)
-		-- no "cancel" button if you don't have any profiles
-		IFObj_fnSetVis(this.Helptext_Back, table.getn(ifs_login_listbox_contents) > 0)
-		-- Fix for 13324 - if no profiles in list, blank out listbox - NM 9/12/05
-		RoundIFButtonLabel_fnSetString( this.profile_button, "")
+			RoundIFButtonLabel_fnSetUString( this.profile_button, ifs_login_listbox_contents[last_profile].showstr )
+			IFObj_fnSetVis(this.listbox,nil)
+			IFObj_fnSetVis(this.diff_listbox,nil)
+		else
+	--		print("enter with no profile")
+			-- set to create mode
+			ifs_login_SetCreateVis(1)
+			-- no "cancel" button if you don't have any profiles
+			IFObj_fnSetVis(this.Helptext_Back, table.getn(ifs_login_listbox_contents) > 0)
+			-- Fix for 13324 - if no profiles in list, blank out listbox - NM 9/12/05
+			RoundIFButtonLabel_fnSetString( this.profile_button, "")
+		end
 	end
+	
+	if __ADDDOWNLOADABLECONTENT_COUNT__ >= __max_missions__ then
+		
+		Popup_Ok.fnDone = original_ifs_login_EnterInterface(this)
+		Popup_Ok:fnActivate(1)
+		
+		warn = ScriptCB_usprintf("mods.mission.warn", ScriptCB_tounicode(string.format("%d >= %d", __ADDDOWNLOADABLECONTENT_COUNT__, __max_missions__)))
+		
+		gPopup_fnSetTitleUStr(Popup_Ok, warn)
+	
+	else
+		original_ifs_login_EnterInterface(this)
+	end
+	
 end
 
 function ifs_login_fnShowProfileDropbox( this, enable )	

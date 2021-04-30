@@ -1,3 +1,8 @@
+-- ifs_mpgs_pclogin.lua
+-- Zerted 1.3 uop (r130)
+--
+-- Recovered with the help of SWBF2CodeHelper 
+-- verified decompile (BAD_AL)
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -6,6 +11,92 @@
 
 -- This is so fundamentally different from the XLive flow that the two
 -- are split off.
+if ScriptCB_GetOnlineService() == "Galaxy" then
+	--Decompiled with SWBF2CodeHelper
+	ScriptCB_DoFile("ifs_mpgs_galaxylogin")
+	ScriptCB_DoFile("ifs_mp_leaderboard")
+	ScriptCB_DoFile("ifs_mp_leaderboarddetails")
+	ScriptCB_DoFile("ifs_mpgs_friends")
+
+	sp_missionselect_listbox_contents = {
+		-- In the below list, the first '%s' will be replaced by the era,
+		-- and the second will be replaced by the multiplayer variant name
+		-- (the part after "mode_")
+	--    { mapluafile = "TEST1%s",   era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1,},
+	--    { mapluafile = "bes2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
+		{ mapluafile = "cor1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "dag1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "dea1%s_%s", era_g = 1, era_c = 1, mode_c_g   = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "end1%s_%s", era_g = 1,                            mode_con_g = 1, mode_hunt_g = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "fel1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "geo1%s_%s",            era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_ctf_c = 1, mode_hunt_c = 1, mode_xl_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "hot1%s_%s", era_g = 1,            mode_c_g   = 1, mode_con_g = 1, mode_1flag_g = 1, mode_hunt_g = 1, mode_xl_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "kam1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "kas2%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_hunt_c = 1,  mode_ctf_c = 1, mode_ctf_g = 1, mode_xl_c = 1, mode_xl_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "mus1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "myg1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "nab2%s_%s", era_g = 1, era_c = 1, mode_c_g   = 1, mode_con_c = 1, mode_con_g = 1,mode_ctf_c = 1, mode_ctf_g = 1, mode_hunt_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "pol1%s_%s", era_g = 1, era_c = 1, mode_c_g   = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+	--    { mapluafile = "rhn2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
+		{ mapluafile = "spa1%s_%s", era_g = 1,            mode_c_g   = 1, mode_assault_g = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+	    { mapluafile = "spa2%s_%s",            era_c = 1, mode_c_c =1,    movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa3%s_%s",            era_c = 1, mode_c_c =1,    mode_assault_c = 1, mode_1flag_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa4%s_%s", era_g = 1,            mode_c_g =1,    movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa6%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa7%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa8%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa9%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "tan1%s_%s", era_g = 1, era_c = 1, mode_c_g = 1,   mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "tat2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, mode_hunt_g = 1, mode_eli_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "tat3%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "uta1%s_%s", era_g = 1, era_c = 1, mode_c_c = 1,   mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "yav1%s_%s", era_g = 1, era_c = 1, mode_c_g = 1,   mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		--{ mapluafile = "kor1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
+		--{ mapluafile = "sal1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
+		--{ mapluafile = "spa3%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
+		--{ mapluafile = "spa4%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
+	}
+
+	mp_missionselect_listbox_contents = {
+		-- In the below list, the first '%s' will be replaced by the era,
+		-- and the second will be replaced by the multiplayer variant name
+		-- (the part after "mode_")
+	--    { mapluafile = "TEST1%s",   era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1,},
+	--    { mapluafile = "bes2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
+		{ mapluafile = "cor1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "dag1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "dea1%s_%s", era_g = 1, era_c = 1, mode_c_g   = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "end1%s_%s", era_g = 1,                            mode_con_g = 1, mode_hunt_g = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "fel1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "geo1%s_%s",            era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_ctf_c = 1, mode_hunt_c = 1, mode_xl_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "hot1%s_%s", era_g = 1,            mode_c_g   = 1, mode_con_g = 1, mode_1flag_g = 1, mode_hunt_g = 1, mode_xl_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "kam1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "kas2%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_hunt_c = 1,  mode_ctf_c = 1, mode_ctf_g = 1, mode_xl_c = 1, mode_xl_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "mus1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "myg1%s_%s", era_g = 1, era_c = 1, mode_c_c   = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "nab2%s_%s", era_g = 1, era_c = 1, mode_c_g   = 1, mode_con_c = 1, mode_con_g = 1,mode_ctf_c = 1, mode_ctf_g = 1, mode_hunt_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "pol1%s_%s", era_g = 1, era_c = 1, mode_c_g   = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+	--    { mapluafile = "rhn2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
+		{ mapluafile = "spa1%s_%s", era_g = 1,            mode_c_g   = 1, mode_assault_g = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+	    { mapluafile = "spa2%s_%s",            era_c = 1, mode_c_c =1,    movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa3%s_%s",            era_c = 1, mode_c_c =1,    mode_assault_c = 1, mode_1flag_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa4%s_%s", era_g = 1,            mode_c_g =1,    movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa6%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa7%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa8%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "spa9%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "tan1%s_%s", era_g = 1, era_c = 1, mode_c_g = 1,   mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "tat2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, mode_hunt_g = 1, mode_eli_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "tat3%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "uta1%s_%s", era_g = 1, era_c = 1, mode_c_c = 1,   mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		{ mapluafile = "yav1%s_%s", era_g = 1, era_c = 1, mode_c_g = 1,   mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, movieFile= "movies\\pre-movie", movieName= "preview-loop",},
+		--{ mapluafile = "kor1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
+		--{ mapluafile = "sal1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
+		--{ mapluafile = "spa3%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
+		--{ mapluafile = "spa4%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
+	}
+
+else
 
 local AutoLoginRadioButtons = nil
 
@@ -1162,4 +1253,8 @@ end
 ifs_mpgs_login_fnBuildScreen(ifs_mpgs_login)
 ifs_mpgs_login_fnBuildScreen = nil
 
+
 AddIFScreen(ifs_mpgs_login,"ifs_mpgs_login")
+
+end
+

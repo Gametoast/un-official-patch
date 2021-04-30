@@ -2,491 +2,599 @@
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
 
--- Options for when we're in the shell and the net is off
-ifs_opt_general_listtags_shell_nonet = {
-    "persp",
-    "rumble",
-    "friendlyfire",
-    "autoaim",
-    "aimassist",
-    "stickyreticule",
-    "soldierhints",
---  "hero",
-    "diff",
-    "ttstate",
-    "objectivedetails",
-    "moviesubtitles",
+ifs_opt_general_vbutton_layout = {
+--	yTop = -150,
+	yHeight = 35,
+	ySpacing = 0, 
+-- 	width = 350, -- calculated below based on screen size
+	font = "gamefont_small",
+	LeftJustify = 1,
+	RightJustifyT = 1,
+	flashy = 0,
+	buttonlist = {
+		-- Title is for the left column, string the option (filled in by code later)
+		{ tag = "persp", title = "ifs.gameopt.camera", string = "", },
+		{ tag = "rumble", title = "ifs.gameopt.rumble", string = "" },
+		{ tag = "friendlyfire", title = "ifs.gameopt.friendlyfire", string = "" },
+		{ tag = "autoaim", title = "ifs.gameopt.autoaim", string = "" },
+		{ tag = "aimassist", title = "ifs.gameopt.aimassist", string = "" },
+		{ tag = "stickyreticule", title = "ifs.gameopt.stickyreticule", string = "" },
+--		{ tag = "hero", title = "ifs.gameopt.hero", string = "" },
+		{ tag = "diff", title = "ifs.gameopt.difficulty", string = "" },
+		{ tag = "ttstate", title = "ifs.gameopt.ttstate", string = "" },
+		{ tag = "ttreset", title = "", string = "ifs.gameopt.ttreset" },
+	},
+	nocreatebackground = 1,
 }
 
--- Options for when we're in the shell and the net is on
-ifs_opt_general_listtags_shell_net = {
-    "persp",
-    "rumble",
---  "friendlyfire",
---  "autoaim",
---  "aimassist",
---  "stickyreticule",
---     "soldierhints",
---  "hero",
---  "diff",
-    "ttstate",
---  "objectivedetails",
---  "moviesubtitles",
-}
+----------------------------------------------------------------------------------------
+-- save the profile in slot 1
+----------------------------------------------------------------------------------------
 
--- Options for when we're in the game and the net is off
-ifs_opt_general_listtags_noshell_nonet = {
-    "persp",
-    "rumble",
---  "friendlyfire",
-    "autoaim",
-    "aimassist",
-    "stickyreticule",
-    "soldierhints",
---  "hero",
-    "diff",
-    "ttstate",
-    "objectivedetails",
-    "moviesubtitles",
-}
-
--- Options for when we're in the game and the net is on
-ifs_opt_general_listtags_noshell_net = {
-    "persp",
-    "rumble",
---  "friendlyfire",
---  "autoaim",
---  "aimassist",
---  "stickyreticule",
---     "soldierhints",
---  "hero",
---  "diff",
-    "ttstate",
---  "objectivedetails",
---  "moviesubtitles",
-}
-
--- Helper function. Given a layout (x,y,width, height), returns a
--- fully-built item.
-function ifs_opt_general_CreateItem(layout)
-    -- Make a coordinate system pegged to the top-left of where the cursor would go.
-    local Temp = NewIFContainer { 
-        x = layout.x - 0.5 * layout.width, 
-        y = layout.y,
-    }
-
-    Temp.textitem = NewIFText { 
-        x = 10,
-        y = layout.height * -0.5 + 2,
-        halign = "left", valign = "vcenter",
-        font = ifs_opt_general_layout.FontStr,
-        textw = layout.width - 20, texth = layout.height,
-        startdelay=math.random()*0.5, nocreatebackground=1, 
-    }
-
-    return Temp
+function ifs_opt_general_StartSaveProfile()
+	--print("ifs_opt_general_StartSaveProfile")
+	
+	ifs_saveop.doOp = "SaveProfile"
+	ifs_saveop.OnSuccess = ifs_opt_general_SaveProfileSuccess
+	ifs_saveop.OnCancel = ifs_opt_general_SaveProfileCancel
+	local iProfileIdx = 1 + ScriptCB_GetPrimaryController()
+	ifs_saveop.saveName = ScriptCB_GetProfileName(iProfileIdx)
+	ifs_saveop.saveProfileNum = iProfileIdx
+	ifs_movietrans_PushScreen(ifs_saveop)
 end
 
--- Helper function. For a destination item (previously created w/
--- CreateItem), fills it in with appropriate values given a Tag, which
--- may be nil (==blank it) Note: the Tag is an entry out of
--- the ifs_opt_general_listtags_* arrays .
-function ifs_opt_general_PopulateItem(Dest, Tag, bSelected, iColorR, iColorG, iColorB, fAlpha)
-    -- Well, no, it's technically not. But, acting like it makes things
-    -- more consistent
-    local this = ifs_opt_general
+function ifs_opt_general_SaveProfileSuccess()
+	--print("ifs_opt_general_SaveProfileSuccess")
+	local this = ifs_opt_general
+	
+	-- exit ifs_saveop
+	ScriptCB_PopScreen()
 
-    local ShowStr = Tag
-    local ShowUStr = nil
-    local ValUStr
+	-- Replace current screen with next screen from tabs
+	if(this.NextScreen ~= -1) then
+		ScriptCB_SetIFScreen(this.NextScreen)
+	else
+		this:Input_Back(1)
+	end
+	this.NextScreen = nil
+end
 
-    -- Cache some common items
-    local OnStr = ScriptCB_getlocalizestr("common.on")
-    local OffStr = ScriptCB_getlocalizestr("common.off")
+function ifs_opt_general_SaveProfileCancel()
+	local this = ifs_opt_general
+	
+	-- exit ifs_saveop
+	ScriptCB_PopScreen()
 
-    if (Tag == "persp") then
-        if(this.GeneralOpts.bFirstPerson) then
-            ValUStr = ScriptCB_getlocalizestr("ifs.GameOpt.cam_cockpit")
-        else
-            ValUStr = ScriptCB_getlocalizestr("ifs.GameOpt.cam_forward")
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.camera2", ValUStr)
-    elseif (Tag == "rumble") then
-        if(this.GeneralOpts.bRumble) then
-            ValUStr = ScriptCB_getlocalizestr("common.yes")
-        else
-            ValUStr = ScriptCB_getlocalizestr("common.no")
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.rumble2", ValUStr)
-    elseif (Tag == "friendlyfire") then
-        local ff = this.GeneralOpts.iFriendlyFire
-        if(ff<1) then
-            ValUStr = OffStr
-        else
-            ValUStr = OnStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.friendlyfire2", ValUStr)
-    elseif (Tag == "autoaim") then
-        if(this.GeneralOpts.bAutoAim) then
-            ValUStr = OnStr
-        else
-            ValUStr = OffStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.autoaim2", ValUStr)
-    elseif (Tag == "aimassist") then
-        if(this.GeneralOpts.bAimAssist) then
-            ValUStr = OnStr
-        else
-            ValUStr = OffStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.aimassist2", ValUStr)
-    elseif (Tag == "stickyreticule") then
-        if(this.GeneralOpts.bStickyReticule) then
-            ValUStr = OnStr
-        else
-            ValUStr = OffStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.stickyreticule2", ValUStr)
-    elseif (Tag == "hero") then
-        if(this.GeneralOpts.bHeroes) then
-            ValUStr = OnStr
-        else
-            ValUStr = OffStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.hero2", ValUStr)
-    elseif (Tag == "diff") then
-        local CurDiff = this.GeneralOpts.iDifficulty
-        if(CurDiff == 1) then
-            ValUStr = ScriptCB_getlocalizestr("ifs.difficulty.easy")
-            elseif(CurDiff == 2) then
-            ValUStr = ScriptCB_getlocalizestr("ifs.difficulty.medium")
-        else
-            ValUStr = ScriptCB_getlocalizestr("ifs.difficulty.hard")
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.difficulty2", ValUStr)
-    elseif (Tag == "ttstate") then
-        if(this.GeneralOpts.bToolTips) then
-            ValUStr = ScriptCB_getlocalizestr("ifs.GameOpt.tt_on");
-        elseif (this.GeneralOpts.bToolTipAuto) then
-            ValUStr = ScriptCB_getlocalizestr("ifs.GameOpt.tt_auto");
-        else
-            ValUStr = ScriptCB_getlocalizestr("ifs.GameOpt.tt_off");
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.ttstate2", ValUStr)        
-    elseif (Tag == "objectivedetails") then
-        if(this.GeneralOpts.bObjectiveDetails) then
-            ValUStr = OnStr
-        else
-            ValUStr = OffStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.objectivedetails", ValUStr)   
-    elseif (Tag == "moviesubtitles") then
-        if (this.GeneralOpts.bMovieSubtitles) then
-            ValUStr = OnStr
-        else
-            ValUStr = OffStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.moviesubtitles", ValUStr)
-    elseif (Tag == "soldierhints") then
-        if (this.GeneralOpts.bSoldierHints) then
-            ValUStr = OnStr
-        else
-            ValUStr = OffStr
-        end
-        ShowUStr = ScriptCB_usprintf("ifs.gameopt.soldierhint", ValUStr)
-    end
+	-- Replace current screen with next screen from tabs
+	if(this.NextScreen ~= -1) then
+		ScriptCB_SetIFScreen(this.NextScreen)
+	else
+		this:Input_Back(1)
+	end
+	this.NextScreen = nil
+end
 
-    if (ShowUStr) then
-        IFText_fnSetUString(Dest.textitem,ShowUStr)
-    elseif (ShowStr) then
-        IFText_fnSetString(Dest.textitem,ShowStr)
-    end
+-- Helper function, sets text of all the strings
+function ifs_opt_general_fnUpdateStrings(this)
+	this.GeneralOpts = ScriptCB_GetGeneralOptions()
 
-    if(Tag) then
-        IFObj_fnSetColor(Dest.textitem, iColorR, iColorG, iColorB)
-        IFObj_fnSetAlpha(Dest.textitem, fAlpha)
-    end
+	if(this.Helptext_Accept) then
+		if(this.CurButton == "ttreset") then
+			IFText_fnSetString(this.Helptext_Accept.helpstr,"common.select")
+		else
+			IFText_fnSetString(this.Helptext_Accept.helpstr,"common.change")
+		end
+		gHelptext_fnMoveIcon(this.Helptext_Accept)
+	end
+	
+	if(gPlatformStr == "PC") and this.bShellMode then
+		IFObj_fnSetVis(this.cancelbutton, ScriptCB_HasProfileChanged())
+	end
+end
 
-    IFObj_fnSetVis(Dest.textitem,Tag) -- hide if no tag
-end 
+function ifs_opt_general_ShowHideButtons( this )
+	ShowHideVerticalText(this.buttonlabels,ifs_opt_general_vbutton_layout)
+	ShowHideVerticalButtons(this.buttons,ifs_opt_general_vbutton_layout)
+end
 
-ifs_opt_general_layout = {
-    showcount = 10,
---  yTop = -130 + 13, -- auto-calc'd now
-    yHeight = 20,
-    ySpacing  = 0,
---  width = 260,
-    x = 0,
-    slider = 1,
-    CreateFn = ifs_opt_general_CreateItem,
-    PopulateFn = ifs_opt_general_PopulateItem,
-}
+local image_background = nil
+if( 1 ) then
+--if( gPCBetaBuild ) then
+	if( ScriptCB_GetShellActive() ) then
+		--print("set background iface_bg_1")
+		image_background = "iface_bg_1"
+	end
+end
 
--- Shows one of a set of listboxes depending on various heroes options
-function ifs_opt_general_fnSetListboxContents(this)
-    local NewTags
+function ifs_opt_general_fnBoolToSelValue(bValue)
+	if ( bValue == true ) then
+		return 2
+	else
+		return 1
+	end
+end
 
-    local bInShell = ScriptCB_GetShellActive()
-    local bInNetwork = ScriptCB_IsNetworkOn()
-    
-    if ((bInShell) and (bInNetwork)) then
-        NewTags =   ifs_opt_general_listtags_shell_net
-    elseif ((bInShell) and (not bInNetwork)) then
-        NewTags =   ifs_opt_general_listtags_shell_nonet
-    elseif ((not bInShell) and (bInNetwork)) then
-        NewTags =   ifs_opt_general_listtags_noshell_net
-    elseif ((not bInShell) and (not bInNetwork)) then
-        NewTags =   ifs_opt_general_listtags_noshell_nonet
-    end
+function ifs_opt_general_fnApplySettings(this)
+	local generalForm = this.formcontainergeneral.form
+	this.GeneralOpts = ScriptCB_GetGeneralOptions()
+	
+	this.GeneralOpts = ScriptCB_GetGeneralOptions()
 
-    this.CurTags = NewTags
-    this.GeneralOpts = ScriptCB_GetGeneralOptions()
-    ListManager_fnFillContents(this.listbox,NewTags,ifs_opt_general_layout)
-    ListManager_fnSetFocus(this.listbox)
+	local ff = 2
+	if ( this.GeneralOpts.iFriendlyFire < 1 ) then
+		ff = 1
+	end
+	local tt = 1
+	if ( this.GeneralOpts.bToolTips ) then
+		tt = 3
+	elseif ( this.GeneralOpts.bToolTipAuto ) then
+		tt = 2
+	end
 
-		-- 'Fix' for 9503 - can't reset tooltips anymore
-    IFObj_fnSetVis(this.Helptext_Reset, nil) -- this.GeneralOpts.bToolTipAuto)
+	generalForm.elements["diff"].selValue = this.GeneralOpts.iDifficulty - 1
+	generalForm.elements["persp"].selValue = ifs_opt_general_fnBoolToSelValue(not this.GeneralOpts.bFirstPerson)
+	generalForm.elements["rumble"].selValue = ifs_opt_general_fnBoolToSelValue(this.GeneralOpts.bRumble)
+	generalForm.elements["friendlyfire"].selValue = ff
+	generalForm.elements["autoaim"].selValue = ifs_opt_general_fnBoolToSelValue(this.GeneralOpts.bAutoAim)
+	generalForm.elements["aimassist"].selValue = ifs_opt_general_fnBoolToSelValue(this.GeneralOpts.bAimAssist)
+	generalForm.elements["stickyreticule"].selValue = ifs_opt_general_fnBoolToSelValue(this.GeneralOpts.bStickyReticule)
+	generalForm.elements["soldierhints"].selValue = ifs_opt_general_fnBoolToSelValue(this.GeneralOpts.bSoldierHints)
+	generalForm.elements["reticulealpha"].selValue = 1 - this.GeneralOpts.iReticuleAlpha
+	generalForm.elements["subtitles"].selValue = ifs_opt_general_fnBoolToSelValue(this.GeneralOpts.bMovieSubtitles)
+	--generalForm.elements["hero"].selValue = ifs_opt_general_fnBoolToSelValue(this.GeneralOpts.bHeroes)
+	generalForm.elements["ttstate"].selValue = tt
+	--generalForm.elements["ttreset"].selValue = 1
 end
 
 ifs_opt_general = NewIFShellScreen {
-    nologo = 1,
+	nologo = 1,
     movieIntro      = nil, -- played before the screen is displayed
     movieBackground = nil, -- played while the screen is displayed
-    bNohelptext_backPC = 1,
-    bNohelptext_accept = 1,
-	bDimBackdrop = 1,
+	bNohelptext_backPC = 1,
+	bg_texture = image_background,
+	
+--	title = NewIFText {
+--		string = "ifs.GameOpt.title",
+--		font = "gamefont_large",
+--		y = 5,
+--		textw = 460, -- center on screen. Fixme: do real centering!
+--		ScreenRelativeX = 0.5, -- center
+--		ScreenRelativeY = 0, -- top
+--		inert = 1, -- delete out of Lua mem when pushed to C
+--		nocreatebackground = 1,
+--	},
 
-    Helptext_Reset = NewHelptext {
-        ScreenRelativeX = 0.0, -- Left of center, but not in the normal 'back' position
-        ScreenRelativeY = 1.0, -- bot
-        y = -40,
-        buttonicon = "btnmisc",
-        string = "ifs.gameopt.ttreset",
-    },
+	-- When entering this screen, check if we need to save (triggered
+	-- by a subscreen or something). If so, start that process.
+	Enter = function(this, bFwd)
+		ScriptCB_MarkCurrentProfile()
+		this.bResetProfile = nil --default to not resetting the profile
+		
+		if(gPlatformStr == "PC") then
+			-- use shell mode?
+			this.bShellMode = 
+				ScriptCB_GetShellActive() and 
+				ScriptCB_GetGameRules() ~= "metagame" and 
+				ScriptCB_GetGameRules() ~= "campaign"
+			
+			-- if in the shell...
+			if( this.bShellMode ) then
+				-- hide done and cancel buttons
+				IFObj_fnSetVis(this.donebutton, 1)
+				IFObj_fnSetVis(this.cancelbutton, false)
+				
+				-- show options and general tabs
+				ifs_main.option_mp = nil		-- set to option			
+				ifelem_tabmanager_SetSelected(this, gPCMainTabsLayout, "_tab_options")
+				ifelem_tabmanager_SetSelected(this, gPCOptionsTabsLayout, "_tab_general", 1)
+				
+				-- set pc profile & title version text
+				UpdatePCTitleText(this)
+			else
+				-- show done and cancel buttons
+				IFObj_fnSetVis(this.donebutton, true)
+				IFObj_fnSetVis(this.cancelbutton, true)
+				
+				-- show general tabs
+                ifelem_tabmanager_SelectTabGroup(this, nil, 1, nil)
+                ifelem_tabmanager_SetSelected(this, gPCOptionsTabsLayout, "_tab_general", 1)
+                
+                -- hide PC profile & title version text
+                HidePCTitleText(this)
+			end
+			
+			-- dim tabs for PC Demo
+			ifs_DimTabsPCDemo(this)
+		end
+		
+		local generalForm = this.formcontainergeneral.form
+		gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function      
+		Form_Enter(generalForm, bFwd)
 
-    -- When entering this screen, check if we need to save (triggered
-    -- by a subscreen or something). If so, start that process.
-    Enter = function(this, bFwd)
-        this.bResetProfile = nil --default to not resetting the profile
-        ScriptCB_MarkCurrentProfile()
+		--this:ApplySettings()
+		ifs_opt_general_fnApplySettings(this)
 
-        gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function
-        ifs_opt_general_fnSetListboxContents(this)
-    end, -- function Enter()
-    
-    Exit = function(this)
-        if( this.bResetProfile ) then
-            ScriptCB_ReloadMarkedProfile()
-        end
-    end,
+		generalForm.elements["persp"].hidden = true
+		generalForm.elements["rumble"].hidden = (gPlatformStr == "PC")
+		generalForm.elements["friendlyfire"].hidden = not ScriptCB_GetShellActive() or gDemoBuild
+		generalForm.elements["aimassist"].hidden = (gPlatformStr == "PC")
+		generalForm.elements["autoaim"].hidden = ScriptCB_IsNetworkOn() or (gPlatformStr == "PC")
+		generalForm.elements["stickyreticule"].hidden = (gPlatformStr == "PC")
+		--generalForm.elements["ttreset"].hidden = (gPlatformStr == "PC")
+		
+		SetCurButton(this.CurButton)
+		Form_ShowHideElements(generalForm)
 
-    Input_Accept = function(this) 
-        -- If base class handled this work, then we're done
-        --if(gShellScreen_fnDefaultInputAccept(this)) then
-        --  return
-                                     --end
-        if (this.CurButton == "_back") then
-            this.bResetProfile = 1
-            this:Input_Back(1)
-        elseif (this.CurButton == "_ok") then
-            this:Input_Back(1)
-        elseif (this.CurButton == "reset") then
-            ifelm_shellscreen_fnPlaySound(this.acceptSound)
-            ScriptCB_ResetGameOptionsToDefault()
-            ifs_opt_general_fnUpdateStrings(this)
-        end
-    end,
+		--AnimationMgr_AddAnimation(this.buttonlabels, {fStartAlpha = 0, fEndAlpha = 1,})
+		ifs_opt_general_fnUpdateStrings(this)
+		
+		Form_SetValues(generalForm)
+		
+		-- For foreign languages, 'reset tooltips' may need a switch to a
+		-- smaller font
+		--RoundIFButtonLabel_fnSetString(this.buttons.ttreset,"ifs.gameopt.ttreset")
 
-    Input_GeneralLeft = function(this)
-        local CurItem = this.CurTags[ifs_opt_general_layout.SelectedIdx]
-        if(CurItem == "persp") then
-            this.GeneralOpts.bFirstPerson = not this.GeneralOpts.bFirstPerson
-        elseif (CurItem == "rumble") then
-            this.GeneralOpts.bRumble = not this.GeneralOpts.bRumble
-        elseif (CurItem == "friendlyfire") then
-            this.GeneralOpts.iFriendlyFire = 100 - this.GeneralOpts.iFriendlyFire
-        elseif (CurItem == "autoaim") then
-            this.GeneralOpts.bAutoAim = not this.GeneralOpts.bAutoAim
-        elseif (CurItem == "aimassist") then
-            this.GeneralOpts.bAimAssist = not this.GeneralOpts.bAimAssist
-        elseif (CurItem == "stickyreticule") then
-            this.GeneralOpts.bStickyReticule = not this.GeneralOpts.bStickyReticule
-        elseif (CurItem == "hero") then
-            this.GeneralOpts.bHeroes = not this.GeneralOpts.bHeroes
-        elseif (CurItem == "diff") then
-            local CurDiff = this.GeneralOpts.iDifficulty
-            local NewDiff
-            if(CurDiff < 3) then
-                NewDiff = 3 -- hard
-            else
-                NewDiff = 2 -- medium
-            end
-            this.GeneralOpts.iDifficulty = NewDiff
-        elseif (CurItem == "ttstate") then
-            ScriptCB_PrevToolTipState();
-        elseif (CurItem == "objectivedetails") then
-            this.GeneralOpts.bObjectiveDetails = not this.GeneralOpts.bObjectiveDetails
-        elseif (CurItem == "moviesubtitles") then
-            this.GeneralOpts.bMovieSubtitles = not this.GeneralOpts.bMovieSubtitles
-        elseif (CurItem == "soldierhints") then
-            this.GeneralOpts.bSoldierHints = not this.GeneralOpts.bSoldierHints
-        end
-        ScriptCB_SetGeneralOptions(this.GeneralOpts)
-        ifs_opt_general_fnSetListboxContents(this)
-        
-        if (not (CurItem == "ttreset" or 
-                 CurItem == "back")) then
-            ifelm_shellscreen_fnPlaySound(this.acceptSound)
-        end
-    end,
+----		this.buttons.rumble.hidden = (gPlatformStr == "PC")
+----		this.buttonlabels.rumble.hidden = (gPlatformStr == "PC")
+----		this.buttons.friendlyfire.hidden = not ScriptCB_GetShellActive() or gDemoBuild	
+----		this.buttonlabels.friendlyfire.hidden = not ScriptCB_GetShellActive() or gDemoBuild
+		--this.buttonlabels.autoaim.hidden = ScriptCB_IsNetworkOn() --or (gPlatformStr == "PC")
+----		this.buttons.autoaim.hidden = ScriptCB_IsNetworkOn() --or (gPlatformStr == "PC")
 
-    Input_Back = function(this)
-		if (gPlatformStr == "PC") and ScriptCB_GetShellActive() then
+		-- removed from PC because the higher-ups said so.
+----		this.buttons.aimassist.hidden = (gPlatformStr == "PC")
+----		this.buttonlabels.aimassist.hidden = (gPlatformStr == "PC")
+----		this.buttons.stickyreticule.hidden = (gPlatformStr == "PC")
+----		this.buttonlabels.stickyreticule.hidden = (gPlatformStr == "PC")
+		
+		-- if we're in the game, hide the "hero" option, since we can't change that mid game
+-- 		this.buttons.hero.hidden = not ScriptCB_GetShellActive() or gDemoBuild
+-- 		this.buttonlabels.hero.hidden = not ScriptCB_GetShellActive() or gDemoBuild
+
+----		this.buttons.ttreset.hidden = (gPlatformStr == "PC")
+----		this.buttonlabels.ttreset.hidden = (gPlatformStr == "PC")
+--		this.buttons.ttstate.hidden = (gPlatformStr == "PC")
+--		this.buttonlabels.ttstate.hidden = (gPlatformStr == "PC")
+
+----		this.buttonlabels.rumble.hidden = (gPlatformStr == "PC")
+		--this.buttons.autoaim.hidden = (gPlatformStr == "PC")
+	end, -- function Enter()
+	
+	Exit = function(this)
+		if( this.bResetProfile ) then
+			ScriptCB_ReloadMarkedProfile()
+		end
+		if(gCurHiliteButton) then
+			IFButton_fnSelect(gCurHiliteButton,nil)
+		end
+	end,
+
+	Input_Accept = function(this) 
+		-- If base class handled this work, then we're done
+		--if(gShellScreen_fnDefaultInputAccept(this)) then
+		--	return
+		--end
+
+		-- If the tab manager handled this event, then we're done
+		if(gPlatformStr == "PC") then
+			-- Check tabs to see if we have a hit
+			this.NextScreen = ifelem_tabmanager_HandleInputAccept(this, gPCOptionsTabsLayout, 1, 1)
+			if(not this.NextScreen) then
+				this.NextScreen = ifelem_tabmanager_HandleInputAccept(this, gPCMainTabsLayout, nil, 1)
+			end
+			
+			-- If nextscreen was handled via a callback, we're done
+			if(this.NextScreen == -1) then
+				this.NextScreen = nil
+				return
+			end
+			
+			if(this.NextScreen) then
+				if(ScriptCB_IsCurProfileDirty()) then
+					ifs_opt_general_StartSaveProfile()
+					return
+				else
+					-- No need to save. Just jump there
+					ScriptCB_SetIFScreen(this.NextScreen)
+					this.NextScreen = nil
+					return
+				end
+			end -- this.Nextscreen is valid (i.e. clicked on a tab)
+		end -- cur platform == PC
+		
+		if (Form_InputAccept(this.formcontainergeneral.form) == true) then
+			return
+		end
+
+		if (this.CurButton == "_back") then
+ 			this.bResetProfile = 1
+ 			this:Input_Back(1)
+ 		elseif (this.CurButton == "_ok") then
+			ifelm_shellscreen_fnPlaySound(this.acceptSound)
+			this.bResetProfile = nil
+			if(ScriptCB_IsCurProfileDirty()) then
+				this.NextScreen = -1 -- flag special behavior
+				ifs_opt_general_StartSaveProfile()
+			else
+				this:Input_Back(1)
+			end
+		elseif (this.CurButton == "reset") then
+			ifelm_shellscreen_fnPlaySound(this.acceptSound)
+			ScriptCB_ResetGameOptionsToDefault()
+			ifs_opt_general_fnUpdateStrings(this)
+			--this:ApplySettings()
+			ifs_opt_general_fnApplySettings(this)
+			Form_SetValues(this.formcontainergeneral.form)
+		else
+			-- Act like 'right' was hit. This reduces duplicated code.
+			--this:Input_GeneralRight()
+ 		end
+	end,
+
+	ApplySettings = function(this)
+	end,
+	
+	UpdateGeneralOptionBools = function(this)
+		local opts = this.GeneralOpts
+		local generalForm = this.formcontainergeneral.form
+		opts.bFirstPerson = ( generalForm.elements["persp"].selValue == 1 )
+		opts.bRumble = generalForm.elements["rumble"].selValue == 2
+		opts.bAutoAim = generalForm.elements["autoaim"].selValue == 2
+		opts.bAimAssist = generalForm.elements["aimassist"].selValue == 2
+		opts.bStickyReticule = generalForm.elements["stickyreticule"].selValue == 2
+		opts.bSoldierHints = generalForm.elements["soldierhints"].selValue == 2
+		opts.bMovieSubtitles = generalForm.elements["subtitles"].selValue == 2
+	end,
+
+	OnRadioChanged = function(buttongroup, btnNum)
+		local this = ifs_opt_general
+		local generalForm = this.formcontainergeneral.form
+
+		if ( buttongroup.tag == "friendlyfire" ) then
+			this.GeneralOpts.iFriendlyFire = 100 - this.GeneralOpts.iFriendlyFire
+		elseif ( buttongroup.tag == "diff" ) then
+			-- 'easy' is 1, but there is no easy.
+			this.GeneralOpts.iDifficulty = btnNum + 1
+		elseif ( buttongroup.tag == "ttstate" ) then
+			ScriptCB_SetToolTipState(btnNum)
+		end
+
+		generalForm.elements[buttongroup.tag].selValue = btnNum
+		this:UpdateGeneralOptionBools()
+
+		Form_SetValues(this.formcontainergeneral.form)
+		ScriptCB_SetGeneralOptions(this.GeneralOpts)
+		ifs_opt_general_fnUpdateStrings(this)
+	end,
+
+    OnElementChanged = function(form, element)
+		local this = ifs_opt_general
+		local generalForm = this.formcontainergeneral.form
+		this.GeneralOpts = ScriptCB_GetGeneralOptions()
+		
+		if ( element.tag == "reticulealpha" ) then
+			ScriptCB_SetReticuleTransparency(1 - element.selValue)
+			this.GeneralOpts.iReticuleAlpha = 1 - element.selValue
+		end
+		
+		ScriptCB_SetGeneralOptions(this.GeneralOpts)
+		Form_SetValues(this.formcontainergeneral.form)
+		ifs_opt_general_fnUpdateStrings(this)
+	end,
+
+
+	Input_GeneralLeft = function(this)
+	end,
+
+	Input_Back = function(this)
+		if (gPlatformStr == "PC") and this.bShellMode then
 			-- rethink interface state, but don't leave
 			this:Exit(false)
 			this:Enter(true)
 		else
+				ScriptCB_PopScreen()
+		end
+	end,
+
+	Input_Start = function(this)
+		if not this.bShellMode then
+ 			this.bResetProfile = 1
 			ScriptCB_PopScreen()
 		end
-    end,
-
-    Input_GeneralRight = function(this)
-        local CurItem = this.CurTags[ifs_opt_general_layout.SelectedIdx]
-        if(CurItem == "persp") then
-            this.GeneralOpts.bFirstPerson = not this.GeneralOpts.bFirstPerson
-        elseif (CurItem == "rumble") then
-            this.GeneralOpts.bRumble = not this.GeneralOpts.bRumble
-        elseif (CurItem == "friendlyfire") then
-            this.GeneralOpts.iFriendlyFire = 100 - this.GeneralOpts.iFriendlyFire
-        elseif (CurItem == "autoaim") then
-            this.GeneralOpts.bAutoAim = not this.GeneralOpts.bAutoAim
-        elseif (CurItem == "aimassist") then
-            this.GeneralOpts.bAimAssist = not this.GeneralOpts.bAimAssist
-        elseif (CurItem == "stickyreticule") then
-            this.GeneralOpts.bStickyReticule = not this.GeneralOpts.bStickyReticule
-        elseif (CurItem == "hero") then
-            this.GeneralOpts.bHeroes = not this.GeneralOpts.bHeroes
-        elseif (CurItem == "moviesubtitles") then
-            this.GeneralOpts.bMovieSubtitles = not this.GeneralOpts.bMovieSubtitles
-        elseif (CurItem == "soldierhints") then
-            this.GeneralOpts.bSoldierHints = not this.GeneralOpts.bSoldierHints
-        elseif (CurItem == "objectivedetails") then
-            this.GeneralOpts.bObjectiveDetails = not this.GeneralOpts.bObjectiveDetails
-        elseif (CurItem == "diff") then
-            local CurDiff = this.GeneralOpts.iDifficulty
-            local NewDiff
-            if(CurDiff < 3) then
-                NewDiff = 3 -- hard
-            else
-                NewDiff = 2 -- medium
-            end
-            this.GeneralOpts.iDifficulty = NewDiff
-        elseif (CurItem == "ttstate") then
-            ScriptCB_NextToolTipState();
-        end
-        ScriptCB_SetGeneralOptions(this.GeneralOpts)
-        ifs_opt_general_fnSetListboxContents(this)
-        
-        if (not (CurItem == "ttreset" or 
-                 CurItem == "back")) then
-            ifelm_shellscreen_fnPlaySound(this.acceptSound)
-        end
-    end,
-
-    Input_GeneralUp = function(this)
-        -- If base class handled this work, then we're done
-        if(gShellScreen_fnDefaultInputUp(this)) then
-            return
-        end
-
-        local CurListbox = ListManager_fnGetFocus()
-        if(CurListbox) then
-            ListManager_fnNavUp(CurListbox)
-            ifs_opt_general_fnSetListboxContents(this)
-        end
-    end,
-
-    Input_GeneralDown = function(this)
-        -- If base class handled this work, then we're done
-        if(gShellScreen_fnDefaultInputDown(this)) then
-            return
-        end
-
-        local CurListbox = ListManager_fnGetFocus()
-        if(CurListbox) then
-            ListManager_fnNavDown(CurListbox)
-            ifs_opt_general_fnSetListboxContents(this)
-        end
-    end,
-
-		-- 'Fix' for 9503 - can't reset tooltips anymore
---     Input_Misc = function(this)
---         -- Can only reset tooltips when it's in auto mode
---         if(this.GeneralOpts.bToolTipAuto) then
---             ifelm_shellscreen_fnPlaySound(this.acceptSound)
---             ScriptCB_ResetToolTips()
---             ifs_opt_general_fnSetListboxContents(this)
---         end
---     end,
-}
-
-function ifs_opt_general_fnBuildScreen(this)
-    local w
-    local h
-    w,h = ScriptCB_GetSafeScreenInfo()
-
-    -- Don't use all of the screen for the listbox
-    local BottomIconsHeight = 0
-    local BotBoxHeight = 20
-    local YPadding = 120 -- amount of space to reserve for titlebar, helptext, whitespace, etc
-
-    -- Get usable screen area for listbox
-    h = h - BottomIconsHeight - BotBoxHeight - YPadding
-
-    -- Calc height of listbox row, use that to figure out how many rows will fit.
-    ifs_opt_general_layout.FontStr = gListboxItemFont
-    ifs_opt_general_layout.iFontHeight = ScriptCB_GetFontHeight(ifs_opt_general_layout.FontStr)
-    ifs_opt_general_layout.yHeight = ifs_opt_general_layout.iFontHeight + 2
-
-		-- Always double-height now to fix BF2 bug 5437 - NM 7/22/05
-    if(1) then -- (gLangStr ~= "english") and (gLangStr ~= "uk_english")) then
-        ifs_opt_general_layout.yHeight = 2 * ifs_opt_general_layout.yHeight
-    else
-        ifs_opt_general_layout.yHeight = math.floor(1.3 * ifs_opt_general_layout.yHeight)
-    end
-
-    local RowHeight = ifs_opt_general_layout.yHeight + ifs_opt_general_layout.ySpacing
-
-        local MaxOptionsShown = math.max(table.getn(ifs_opt_general_listtags_shell_nonet),
-                                                                         table.getn(ifs_opt_general_listtags_shell_net),
-                                                                         table.getn(ifs_opt_general_listtags_noshell_nonet),
-                                                                         table.getn(ifs_opt_general_listtags_noshell_net))
-
-    ifs_opt_general_layout.showcount = math.min(MaxOptionsShown, math.floor(h / RowHeight))
-
-    local listWidth = w * 0.85
-    local ListboxHeight = ifs_opt_general_layout.showcount * RowHeight + 30
+	end,
+	
+	Input_GeneralRight = function(this)
+		local button_changed = nil
+		if(this.CurButton == "persp") then
+			this.GeneralOpts.bFirstPerson = not this.GeneralOpts.bFirstPerson
+			button_changed = 1
+		elseif (this.CurButton == "rumble") then
+			this.GeneralOpts.bRumble = not this.GeneralOpts.bRumble
+			button_changed = 1
+		elseif (this.CurButton == "friendlyfire") then
+			this.GeneralOpts.iFriendlyFire = 100 - this.GeneralOpts.iFriendlyFire
+			button_changed = 1
+		elseif (this.CurButton == "autoaim") then
+			this.GeneralOpts.bAutoAim = not this.GeneralOpts.bAutoAim
+			button_changed = 1
+		elseif (this.CurButton == "aimassist") then
+			this.GeneralOpts.bAimAssist = not this.GeneralOpts.bAimAssist
+			button_changed = 1
+		elseif (this.CurButton == "stickyreticule") then
+			this.GeneralOpts.bStickyReticule = not this.GeneralOpts.bStickyReticule
+			button_changed = 1
+-- 		elseif (this.CurButton == "hero") then
+-- 			this.GeneralOpts.bHeroes = not this.GeneralOpts.bHeroes
+-- 			button_changed = 1
+		elseif (this.CurButton == "diff") then
+			local CurDiff = this.GeneralOpts.iDifficulty
+			local NewDiff
+			if(CurDiff < 3) then
+				NewDiff = 3 -- hard
+			else
+				NewDiff = 2 -- medium
+			end
+			this.GeneralOpts.iDifficulty = NewDiff
+			button_changed = 1
+		elseif (this.CurButton == "ttstate") then
+			ScriptCB_NextToolTipState();
+			button_changed = 1
+		end
+		ScriptCB_SetGeneralOptions(this.GeneralOpts)
+		ifs_opt_general_fnUpdateStrings(this)
 		
-		local BoxRelativeX = 0.5
-		local BoxX = 0
-		if(ScriptCB_GetShellActive()) then
-			BoxRelativeX = 0
-			BoxX = listWidth * 0.5
+		Form_SetValues(this.formcontainergeneral.form)
+		
+		if button_changed then
+			ifelm_shellscreen_fnPlaySound(this.acceptSound)
+		end
+	end,
+
+	Input_GeneralUp = function(this)
+		-- If base class handled this work, then we're done
+		if(gShellScreen_fnDefaultInputUp(this)) then
+			return
 		end
 
-    this.listbox = NewButtonWindow { 
-        ZPos = 200, 
-			x = BoxX,
-        ScreenRelativeX = BoxRelativeX,
-        ScreenRelativeY = 0.5, -- center
-        width = listWidth,
-        height = ListboxHeight,
-        titleText = "ifs.GameOpt.title",
-    }
-    ifs_opt_general_layout.width = listWidth - 40
-    ifs_opt_general_layout.x = 0
+		gDefault_Input_GeneralUp(this)
+	end,
 
-    ListManager_fnInitList(this.listbox,ifs_opt_general_layout)
+	Input_GeneralDown = function(this)
+		-- If base class handled this work, then we're done
+		if(gShellScreen_fnDefaultInputDown(this)) then
+			return
+		end
+
+		gDefault_Input_GeneralDown(this)
+	end,
+	
+    Update = function(this, fDt)
+        gIFShellScreenTemplate_fnUpdate(this, fDt)  -- always call base class
+        Form_Update(this.formcontainergeneral.form, fDt)
+	end
+}
+
+ifs_opt_general_layout = {
+	yTop = 25,
+	yHeight = 30,
+	ySpacing = 5,
+	bUseYSpacing = 1,
+	xSpacing = 20,
+	font = "gamefont_small",
+	flashy = 0,
+	width = 300,
+	elements = {
+		{ tag = "diff", title = "ifs.gameopt.difficulty", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"ifs.difficulty.medium", "ifs.difficulty.hard"}},
+		{ tag = "persp", title = "ifs.gameopt.camera", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"ifs.GameOpt.cam_cockpit", "ifs.GameOpt.cam_forward"}},
+		{ tag = "rumble", title = "ifs.gameopt.rumble", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"common.off", "common.on"}},
+		{ tag = "friendlyfire", title = "ifs.gameopt.friendlyfire", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"common.off", "common.on"}},
+		{ tag = "autoaim", title = "ifs.gameopt.autoaim", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"common.off", "common.on"}},
+		{ tag = "aimassist", title = "ifs.gameopt.aimassist", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"common.off", "common.on"}},
+		{ tag = "stickyreticule", title = "ifs.gameopt.stickyreticule", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"common.off", "common.on"}},
+		{ tag = "soldierhints", title = "ifs.gameopt.soldierhint", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"common.off", "common.on"}},
+--		{ tag = "hero", title = "ifs.gameopt.hero", string = "" },
+		{ tag = "ttstate", title = "ifs.gameopt.ttstate", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"ifs.GameOpt.tt_off", "ifs.GameOpt.tt_auto", "ifs.GameOpt.tt_on"}},
+        --{ tag = "lightingquality", title = "ifs.videoopt.lightingquality", selValue = 1, control = "dropdown", values = {"ifs.VideoOpt.low", "ifs.VideoOpt.med", "ifs.VideoOpt.high"} },
+        { tag = "subtitles", title = "ifs.gameopt.moviesubtitles", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"common.off", "common.on"}, },
+		--{ tag = "ttreset", title = "", fnChanged = ifs_opt_general.OnRadioChanged, selValue = 1, control = "radio", values = {"common.select", "common.change"}},
+        --{ tag = "viewdistance", title = "ifs.VideoOpt.viewdistance", selValue = 0.5, control = "slider", minValue = 0.0, maxValue = 1.0 },
+		{ tag = "reticulealpha", title = "ifs.gameopt.reticulealpha", fnChanged = ifs_opt_general.OnElementChanged, selValue = 1.0, control = "slider", minValue = 0.0, maxValue = 1.0},
+	}
+}
+
+
+function ifs_opt_general_fnBuildScreen(this)
+	local w
+	local h
+	w,h = ScriptCB_GetSafeScreenInfo()
+	
+	-- add pc profile & title version text
+	AddPCTitleText( this )
+	
+	ifs_opt_general_layout.width = w * 0.5
+	this.formcontainergeneral = NewIFContainer {
+		ScreenRelativeX = 0.5,
+		ScreenRelativeY = 0.28,
+		x = 0,
+		y = 0,
+	}
+	for i, element in ipairs(ifs_opt_general_layout.elements) do
+		if element.tag == "ttstate" then
+			element.width = w * 0.75 * 0.5
+		end
+	end
+	Form_CreateVertical(this.formcontainergeneral, ifs_opt_general_layout)
+	this.formcontainergeneral.form.radiobuttons.x = 0
+	this.formcontainergeneral.form.sliders.x = ifs_opt_general_layout.width * 0.5 
+	this.formcontainergeneral.form.buttons.x = ifs_opt_general_layout.width + 35
+
+	if( not ScriptCB_GetShellActive() ) then	
+		this.Background = NewIFImage 
+		{
+ 				ZPos = 255, 
+ 				x = w/2,  --centered on the x
+ 				y = h/2, -- inertUVs = 1,
+ 				alpha = 1,
+ 				localpos_l = -w/1.5, localpos_t = -h/1.5,
+ 				localpos_r = w/1.5, localpos_b =  h/1.5,
+				texture = "opaque_black",
+				ColorR = 0, ColorG = 0, ColorB = 0, -- black
+ 		}
+ 	end
+ 	
+	-- Accept/Cancel buttons are PC only
+	if(gPlatformStr == "PC") then
+
+		-- Add tabs to screen
+		ifelem_tabmanager_Create(this, gPCMainTabsLayout, gPCOptionsTabsLayout)
+
+		local BackButtonW = 150 -- made 130 to fix 6198 on PC - NM 8/18/04
+		local BackButtonH = 25
+		
+		this.cancelbutton =	NewPCIFButton -- NewRoundIFButton 
+		{
+			ScreenRelativeX = 0.0, -- left
+			ScreenRelativeY = 1.0, -- bottom
+			y = -15, -- just above bottom
+			x = BackButtonW * 0.5,
+			btnw = BackButtonW, 
+			btnh = BackButtonH,
+			font = "gamefont_medium", 
+			bg_width = BackButtonW, 
+			noTransitionFlash = 1,
+			tag = "_back",
+			string = "common.cancel",
+		}
+        
+		this.resetbutton = NewPCIFButton
+		{
+			ScreenRelativeX = 0.5, -- right
+			ScreenRelativeY = 1.0, -- bottom
+			x = 0,
+			y = -15, -- just above bottom						
+			btnw = BackButtonW * 1.5,
+			btnh = BackButtonH,
+			font = "gamefont_medium",
+			noTransitionFlash = 1,
+			tag = "reset",
+			string = "common.reset",
+		}
+		
+		this.donebutton = NewPCIFButton -- NewRoundIFButton 
+		{
+			ScreenRelativeX = 1.0, -- right
+			ScreenRelativeY = 1.0, -- bottom
+			y = -15, -- just above bottom
+			x = -BackButtonW * 0.5,
+			btnw = BackButtonW, 
+			btnh = BackButtonH,
+			font = "gamefont_medium", 
+			bg_width = BackButtonW, 
+			noTransitionFlash = 1,
+			tag = "_ok",
+			string = "common.accept"
+		}
+	end
 end
 
 ifs_opt_general_fnBuildScreen(ifs_opt_general)

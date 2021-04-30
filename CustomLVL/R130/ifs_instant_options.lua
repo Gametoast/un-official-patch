@@ -117,15 +117,15 @@ ifs_io_PageName = "global"
 local HEROPoints = {low = 1, high = 50, increment = 1, default = 10}
 local HEROTimer = {low = 0, high = 120, increment = 5, default = 60}
 -- mult = reinforcements
-local CONMult = {low = 10, high = 500, increment = 10} -- inc 10
+local CONMult = {low = 1, high = 1000, increment = 25} -- inc 10
 local CONTimer = {low = 0, high = 60, increment = 5} -- off, then 5 to 60
-local CTFScore = {low = 1, high = 15, increment = 1}
+local CTFScore = {low = 1, high = 100, increment = 5}
 local CTFTimer = {low = 0, high = 60, increment = 5} -- off, then 5 to 60
 --local ELIMult = {low = 50, high = 300}
 --local ELITimer = {low = 0, high = 300}
-local HUNScore = {low = 50, high = 150, increment = 5} -- inc 5
+local HUNScore = {low = 1, high = 1000, increment = 25} -- inc 5
 local HUNTimer = {low = 0, high = 60, increment = 5} -- off, then 5 to 60
-local ASSScore = {low = 150, high = 300, increment = 5}  -- inc 5
+local ASSScore = {low = 1, high = 1000, increment = 25}  -- inc 5
 
 local gOffString = ScriptCB_getlocalizestr("common.off")
 local gAlwaysString = ScriptCB_getlocalizestr("common.always")

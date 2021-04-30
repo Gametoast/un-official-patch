@@ -1,3 +1,7 @@
+-- ifs_instant_options_tags.lua UOP 1.3 r130 
+
+-- verified decompile by BAD_AL 
+
 -- default options 
 -- WARNING : this file can (and is) overridden in the platform directories
 ifs_io_listtags_global = 
@@ -17,7 +21,7 @@ ifs_io_listtags_host =
     title = "ifs.instantoptions.titles.host",
     tags  = 
     {
-		"dedicated",
+--		"dedicated",
         "players",
         "warmup",
         "vote",

@@ -96,7 +96,7 @@ ParticleEmitter("Smoke")
 			PositionScale(0.5000,0.5000);
 			VelocityScale(2.0000,7.0000);
 			InheritVelocityFactor(0.0000,0.0000);
-			Size(0, 0.0100, 0.0200);
+			Size(0, 0.01000, 0.02000);
 			Red(0, 255.0000, 255.0000);
 			Green(0, 255.0000, 255.0000);
 			Blue(0, 255.0000, 255.0000);
@@ -111,17 +111,17 @@ ParticleEmitter("Smoke")
 			Position()
 			{
 				LifeTime(0.2000)
-				Accelerate(0.0000, -3.0000, 0.0000);
+				Accelerate(0.0000, -3.0000, 0.0000)
 			}
 			Size(0)
 			{
 				LifeTime(2.0000)
-				Scale(3.0000);
+				Scale(3.0000)
 			}
 			Color(0)
 			{
 				LifeTime(0.2000)
-				Move(0.0000,0.0000,0.0000,0.0000);
+				Move(0.0000, 0.0000, 0.0000, 0.0000)
 			}
 		}
 		Geometry()
@@ -164,9 +164,9 @@ ParticleEmitter("Smoke")
 				VelocityScale(1.0000,5.0000);
 				InheritVelocityFactor(0.0000,0.0000);
 				Size(0, 0.0100, 0.0200);
-				Hue(0, 15.0000, 30.0000);
-				Saturation(0, 100.0000, 150.0000);
-				Value(0, 255.0000, 255.0000);
+				Hue(0.0000, 15.0000, 30.0000);
+				Saturation(0.0000, 100.0000, 150.0000);
+				Value(0.0000, 255.0000, 255.0000);
 				Alpha(0, 255.0000, 255.0000);
 				StartRotation(0, 0.0000, 360.0000);
 				RotationVelocity(0, -180.0000, 180.0000);

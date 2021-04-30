@@ -1,4 +1,7 @@
---
+-- ifs_mp_sessionlist.lua (Zerted UO) 1.3 r129)
+-- 
+-- verified decompile by BAD_AL 
+-- 
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
 
@@ -638,7 +641,8 @@ mpsessionlist_gamemodelist_layout = {
 	PopulateFn = MPSessionList_Gamemodelist_PopulateItem,
 }
 
-mpsessionlist_gamemodelist_contents = {
+mpsessionlist_gamemodelist_contents = custom_GetMPGameModeList()
+--[[{
 		{ string = "ifs.gsprofile.all",				subst = "ifs.gsprofile.all", icon = nil, },
 		{ string = "ifs.mp.leaderboard.conquest",	subst = "con",				 icon = "mode_icon_con", },
 		{ string = "ifs.mp.leaderboard.CTF2",		subst = "ctf",				 icon = "mode_icon_2ctf", },
@@ -647,7 +651,7 @@ mpsessionlist_gamemodelist_contents = {
 --		{ string = "ifs.mp.leaderboard.teamdm",		subst = "tdm", },
 		{ string = "modename.name.assault",			subst = "ass", 				 icon = "mode_icon_ass", },
 		{ string = "modename.name.hunt",			subst = "hunt", 			 icon = "mode_icon_hunt", },
-}
+}]]
 ----------------------------------------------------
 ----------------------------------------------------
 

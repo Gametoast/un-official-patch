@@ -1,3 +1,5 @@
+-- ifs_mp_leaderboard.lua (Zerted1.3 patch r130 ) 
+-- verified (BAD_AL)
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -12,12 +14,13 @@ function ifs_mp_leaderboard_Listbox_CreateItem(layout)
 	-- Make a coordinate system pegged to the top-left of where the cursor would go.
 	local text_width = 120
 	local Temp = NewIFContainer { x = layout.x - 0.5 * layout.width, y=layout.y}
-	local y_offset = -5
-	Temp.rankfield = NewIFText{ clip = "character", x = 10, y = y_offset, textw = text_width, halign = "left", font = "gamefont_tiny", nocreatebackground = 1,}
+	local reg3 = -5
+	
+	Temp.rankfield = NewIFText{ clip = "character", x = 10, y = reg3, textw = text_width, halign = "left", font = "gamefont_tiny", nocreatebackground = 1,}
 --	Temp.levelfield = NewIFText{ clip = "character", x = Temp.rankfield.textw, y = 0, textw = 60, halign = "left", font = "gamefont_small", nocreatebackground = 1,}
 --	Temp.titlefield = NewIFText{ clip = "character", x = Temp.levelfield.textw, y = 0, textw = 60, halign = "left", font = "gamefont_small", nocreatebackground = 1,}
-	Temp.namefield = NewIFText{ clip = "character", x = layout.width * 0.5 - 200, y = y_offset, textw = 400, halign = "hcenter", font = "gamefont_tiny", nocreatebackground = 1,}
-	Temp.ratingfield = NewIFText{ clip = "character", x = layout.width - text_width - 10, y = y_offset, textw = text_width, halign = "right", font = "gamefont_tiny", nocreatebackground = 1,}
+	Temp.namefield = NewIFText{ clip = "character", x = layout.width * 0.5 - 200, y = reg3, textw = 400, halign = "hcenter", font = "gamefont_tiny", nocreatebackground = 1,}
+	Temp.ratingfield = NewIFText{ clip = "character", x = layout.width - text_width - 10, y = reg3, textw = text_width, halign = "right", font = "gamefont_tiny", nocreatebackground = 1,}
 	return Temp
 end
 
@@ -216,9 +219,9 @@ function ifs_leaderboard_fnOnFail()
 	-- clear the leaderboard list if fail
 	local empty_table = {}
 	ListManager_fnFillContents( ifs_mp_leaderboard.listbox, empty_table, leaderboard_listbox_layout )
-
+	--added by zerted
 	ListManager_fnFillContents( ifs_mp_leaderboard.detail_listbox, empty_table, ifs_mp_leaderboard_details_listbox_layout )
-	
+	--
 	Popup_Busy:fnActivate(nil)
 	Popup_Ok.fnDone = ifs_leaderboard_fnBasicSearch
 	Popup_Ok:fnActivate(1)
@@ -232,7 +235,7 @@ function ifs_mp_leaderboard_fnExitScreen()
 	Popup_Ok:fnActivate(nil)
 	
 	if(gPlatformStr == "PC") then
---		ScriptCB_PopScreen("ifs_main")
+		--ScriptCB_PopScreen("ifs_main")
 	else
 		ScriptCB_PopScreen()
 	end
@@ -316,7 +319,7 @@ function ifs_mp_leaderboard_fnListScroll( this, direction )
 	--print( "2 get_new_data = ", get_new_data )
 	if( get_new_data ) then
 		ifs_mp_leaderboard_fnStartEnumerate( this, current_rank_id, direction )
-	end		
+	end	
 end
 
 ifs_mp_leaderboard = NewIFShellScreen {
@@ -325,7 +328,7 @@ ifs_mp_leaderboard = NewIFShellScreen {
 	bNohelptext_back = 1,
 	movieIntro      = nil,
 	movieBackground = nil,
-	bg_texture = "iface_bg_1",
+	bg_texture= "iface_bg_1",
 	bNohelptext_backPC = 1,
 
 --	bCursorOnLeft = 1,
@@ -395,9 +398,10 @@ ifs_mp_leaderboard = NewIFShellScreen {
 			this.iPlayerFilterEnable = 1
 			local empty_table = {}
 			ListManager_fnFillContents( this.listbox, empty_table, leaderboard_listbox_layout )
+			-- zerted modification\/
 			ListManager_fnFillContents( this.detail_listbox, empty_table, ifs_mp_leaderboard_details_listbox_layout )
 			ifs_mp_leaderboard_fnStartEnumerate( this, 1, 0 )
-
+			
 			if(gPlatformStr == "PC") then
 				IFObj_fnSetVis( this.Download_Text,nil )
 			end
@@ -454,13 +458,16 @@ ifs_mp_leaderboard = NewIFShellScreen {
 			end
 		
 			if(this.CurButton == "_btn_player") then
+			    --modified by zerted
 				this.iPlayerFilterEnable = 1
-				this.iPlayerFilter = 1
-				ifs_mp_leaderboard_fnStartEnumerate( this, 1, 0 )
+				this.iPlayerFilter = 1 
+				ifs_mp_leaderboard_fnStartEnumerate( this, 1, 0 )	
+				--this:Input_Misc2()
 			elseif(this.CurButton == "_btn_top") then
+				--modified by zerted
 				this.iPlayerFilterEnable = 1
-				this.iPlayerFilter = 3
-				ifs_mp_leaderboard_fnStartEnumerate( this, 1, 0 )
+				this.iPlayerFilter = 3 
+				ifs_mp_leaderboard_fnStartEnumerate( this, 1, 0 )	
 			elseif(this.CurButton == "_btn_time") then
 				this:Input_Misc()
 			elseif(this.CurButton == "_btn_mode") then
@@ -471,7 +478,7 @@ ifs_mp_leaderboard = NewIFShellScreen {
 			else
 				return
 			end
-					
+			
 			-- not go to detail screen for PC
 			return
 		end
@@ -498,7 +505,7 @@ ifs_mp_leaderboard = NewIFShellScreen {
 	-- here, or the base class will override)
 
 	Input_GeneralUp = function(this)
-		local old_idx = leaderboard_listbox_layout.SelectedIdx;
+		local reg1 = leaderboard_listbox_layout.SelectedIdx
 		-- If base class handled this work, then we're done
 		if(gShellScreen_fnDefaultInputUp(this)) then
 			--return
@@ -511,14 +518,16 @@ ifs_mp_leaderboard = NewIFShellScreen {
 		end
 
 		-- if already at the top of the list, check if there are more data
-		if( (current_idx == 1) and (old_idx == 1) ) then
+		if( current_idx == 1 ) then
+			if reg1 == 1 then
 			--print( " general up " )
 			ifs_mp_leaderboard_fnListScroll( this, -1 )	
+			end
 		end		
 	end,
 
 	Input_GeneralDown = function(this)
-		local old_idx = leaderboard_listbox_layout.SelectedIdx;
+		local reg1 = leaderboard_listbox_layout.SelectedIdx
 		-- If base class handled this work, then we're done
 		if(gShellScreen_fnDefaultInputDown(this)) then
 			--return
@@ -531,13 +540,11 @@ ifs_mp_leaderboard = NewIFShellScreen {
 		end
 
 		-- if already at the bottom of the list, check if there are more data
-		--print( "old_idx = ", old_idx )
-		--print( "current_idx = ", current_idx )
-		--print( "table.getn( leaderboard_listbox_contents ) = ", table.getn( leaderboard_listbox_contents ) )
-		if( current_idx and ( current_idx == table.getn( leaderboard_listbox_contents ) ) 
-			and ( old_idx == table.getn( leaderboard_listbox_contents ) ) ) then
+		if( current_idx and ( current_idx == table.getn( leaderboard_listbox_contents ) ) ) then
 			--print( " general down " )
-			ifs_mp_leaderboard_fnListScroll( this, 1 )		
+			if reg1 == table.getn( leaderboard_listbox_contents ) then
+				ifs_mp_leaderboard_fnListScroll( this, 1 )		
+			end
 		end
 		
 		--validate the cursor position (make sure we're not on a null entry)
@@ -632,9 +639,9 @@ ifs_mp_leaderboard = NewIFShellScreen {
 				this.RepaintListbox( this, this.bCursorOnLeft )
 			end		
 		end
-		
-		-- update detail
-		ifs_mp_leaderboard_fnUpdateDetailListbox( this )
+		-- added by zerted
+		ifs_mp_leaderboard_fnUpdateDetailListbox(this)
+		--
  	end,
 
 
@@ -792,83 +799,81 @@ function ifs_mp_leaderboard_fnClickDropDownButtons( this )
 	end
 end
 
-leaderboard_detail_listbox_contents_onecolumn = {
-	{ name = "ifs.stats.points", value = "points" }, 
-	{ name = "ifs.stats.hero_points", value = "hero_points" }, 
-	{ name = "ifs.stats.game_start", value = "game_start" }, 
-	{ name = "ifs.stats.game_finish", value = "game_finish" },
-	{ name = "ifs.stats.kills", value = "kills" }, 
-	{ name = "ifs.stats.deaths", value = "deaths" },
-	{ name = "ifs.stats.totalTimePlayed", value = "totalTimePlayed" }, 
-	{ name = "ifs.stats.lastgameplayed", value = "lastGamePlayed" },
-	{ name = "ifs.stats.livingstreak", value = "livingStreak" },
+-- added by zerted
+leaderboard_detail_listbox_contents_onecolumn = {   
+   { name = "ifs.stats.points", value = "points" },
+   { name = "ifs.stats.hero_points", value = "hero_points" },
+   { name = "ifs.stats.game_start", value = "game_start" },
+   { name = "ifs.stats.game_finish", value = "game_finish" },
+   { name = "ifs.stats.kills", value = "kills" },
+   { name = "ifs.stats.deaths", value = "deaths" },
+   { name = "ifs.stats.totalTimePlayed", value = "totalTimePlayed" },
+   { name = "ifs.stats.lastgameplayed", value = "lastGamePlayed" },
+   { name = "ifs.stats.livingstreak", value = "livingStreak" },
 }
 
-function ifs_mp_leaderboard_OneColumn_Listbox_CreateItem(layout)
-	-- Make a coordinate system pegged to the top-left of where the cursor would go.
-	local Temp = NewIFContainer { x = layout.x - 0.5 * layout.width, y=layout.y }
-
-	local listBoxWidth = layout.width
-	local sidePadding = 10 --0.1*listBoxWidth
-	local y_offset = -5
-
-	Temp.name1 = NewIFText{ nocreatebackground=1, clip = "character", x = sidePadding, y = y_offset, textw = 0.5*listBoxWidth - sidePadding, halign = "left", font = "gamefont_tiny",}
-	Temp.value1 = NewIFText{ nocreatebackground=1, clip = "character", x = listBoxWidth - 0.5*listBoxWidth, y = y_offset, textw = 0.5*listBoxWidth - sidePadding, halign = "right", font = "gamefont_tiny",ColorR= 255, ColorG = 255, ColorB = 255,}
+function ifs_mp_leaderboard_OneColumn_Listbox_CreateItem( layout )
+	local Temp = NewIFContainer { x = layout.x - 0.5 * layout.width, y=layout.y}
+	local reg2 = layout.width
+	local reg3 = 10
+	local reg4 = -5
 	
+	Temp.name1 = NewIFText{  nocreatebackground = 1, clip = "character", x = reg3, y = reg4, textw = 0.5 * reg2 -reg3 , halign = "left", font = "gamefont_tiny",}
+	Temp.value1 = NewIFText{  nocreatebackground = 1, clip = "character", x = reg2-  0.5 * reg2 , y = reg4, textw = 0.5 * reg2 -reg3 , 
+	                          halign = "right", font = "gamefont_tiny", ColorR = 255, ColorG = 255, ColorB = 255,  }
 	return Temp
 end
 
-
-function ifs_mp_leaderboard_OneColumn_Listbox_PopulateItem(Dest, Data, bSelected, iColorR, iColorG, iColorB, fAlpha)
-	if(Data) then		
-
-		IFObj_fnSetColor(Dest.name1, iColorR, iColorG, iColorB)
-		IFObj_fnSetAlpha(Dest.name1, fAlpha)
-		IFObj_fnSetColor(Dest.value1, iColorR, iColorG, iColorB)
-		IFObj_fnSetAlpha(Dest.value1, fAlpha)
-
-		IFText_fnSetString(Dest["name1"],Data.name)
-		IFObj_fnSetVis(Dest["name1"], 1)
-		IFObj_fnSetVis(Dest["value1"], 1)
-		--IFText_fnSetUString(Dest["value1"], value)
-		IFText_fnSetString(Dest["value1"], Data.value or "")
-	end
-	IFObj_fnSetVis(Dest,Data) -- Show if there are contents
+-- Added by Zerted -- needs review for param names
+function ifs_mp_leaderboard_OneColumn_Listbox_PopulateItem(param0, param1, param2, param3, param4, param5, param6)
+	if param1 then
+		IFObj_fnSetColor(param0.name1, param3, param4,param5)
+		IFObj_fnSetAlpha(param0.name1,param6)
+		IFObj_fnSetColor(param0.value1, param3,param4,param5)
+		IFObj_fnSetAlpha(param0.value1, param6)
+		IFText_fnSetString(param0.name1,param1.name)
+		IFObj_fnSetVis(param0.name1,1)
+		IFObj_fnSetVis(param0.value1,1)
+		IFText_fnSetString(param0.value1,  param1.value or "")
+	end	
+	
+	IFObj_fnSetVis(param0,param1)
+	
 end
 
-ifs_mp_leaderboard_details_listbox_layout = {
-	showcount = 6,
---	yTop = -100,
-	yHeight = 12,
-	ySpacing = 2,
-	width = 430,
-	x = 0,
-	slider = 1,
---	scrollby = 1,
-	CreateFn = ifs_mp_leaderboard_OneColumn_Listbox_CreateItem,
+ifs_mp_leaderboard_details_listbox_layout = { 
+    showcount = 6, yHeight = 12, ySpacing = 2, width = 430, x = 0, 
+	slider = 1, CreateFn = ifs_mp_leaderboard_OneColumn_Listbox_CreateItem, 
 	PopulateFn = ifs_mp_leaderboard_OneColumn_Listbox_PopulateItem,
+	
 }
 
+-- this one is tricky for me
 function ifs_mp_leaderboard_fnUpdateDetailListbox(this)
-	-- set detail data
-	--print("leaderboard_listbox_layout.SelectedIdx = ", leaderboard_listbox_layout.SelectedIdx )
-	--print("leaderboard_listbox_layout.CursorIdx = ", leaderboard_listbox_layout.CursorIdx )
-	local index = leaderboard_listbox_layout.SelectedIdx
+
+	if leaderboard_listbox_layout ~= nil and 
+	   leaderboard_detail_listbox_contents_onecolumn ~= nil and 
+	   this.detail_listbox ~= nil
+    then 
+		local index = leaderboard_listbox_layout.SelectedIdx
 	--if( index and ( this.detail_index ~= index ) and leaderboard_listbox_contents[index].ratingfield ) then
 	--	this.detail_index = index
-		leaderboard_detail_listbox_contents_onecolumn[1].value = leaderboard_listbox_contents[index].ratingfield
-		leaderboard_detail_listbox_contents_onecolumn[2].value = leaderboard_listbox_contents[index].HeroPoints
-		leaderboard_detail_listbox_contents_onecolumn[3].value = leaderboard_listbox_contents[index].Starts
-		leaderboard_detail_listbox_contents_onecolumn[4].value = leaderboard_listbox_contents[index].Finishes
-		leaderboard_detail_listbox_contents_onecolumn[5].value = leaderboard_listbox_contents[index].Kills
-		leaderboard_detail_listbox_contents_onecolumn[6].value = leaderboard_listbox_contents[index].Deaths
-		leaderboard_detail_listbox_contents_onecolumn[7].value = leaderboard_listbox_contents[index].TotalTimePlayed
-		leaderboard_detail_listbox_contents_onecolumn[8].value = leaderboard_listbox_contents[index].LastGamePlayed
-		leaderboard_detail_listbox_contents_onecolumn[9].value = leaderboard_listbox_contents[index].LongestLiving
+		if leaderboard_listbox_contents[index] ~= nil then 
+			leaderboard_detail_listbox_contents_onecolumn[1].value = leaderboard_listbox_contents[index].ratingfield
+			leaderboard_detail_listbox_contents_onecolumn[2].value = leaderboard_listbox_contents[index].HeroPoints
+			leaderboard_detail_listbox_contents_onecolumn[3].value = leaderboard_listbox_contents[index].Starts
+			leaderboard_detail_listbox_contents_onecolumn[4].value = leaderboard_listbox_contents[index].Finishes
+			leaderboard_detail_listbox_contents_onecolumn[5].value = leaderboard_listbox_contents[index].Kills
+			leaderboard_detail_listbox_contents_onecolumn[6].value = leaderboard_listbox_contents[index].Deaths
+			leaderboard_detail_listbox_contents_onecolumn[7].value = leaderboard_listbox_contents[index].TotalTimePlayed
+			leaderboard_detail_listbox_contents_onecolumn[8].value = leaderboard_listbox_contents[index].LastGamePlayed
+			leaderboard_detail_listbox_contents_onecolumn[9].value = leaderboard_listbox_contents[index].LongestLiving
 
-		ListManager_fnFillContents( this.detail_listbox, leaderboard_detail_listbox_contents_onecolumn, ifs_mp_leaderboard_details_listbox_layout )
-	--end
+			ListManager_fnFillContents( this.detail_listbox, leaderboard_detail_listbox_contents_onecolumn, ifs_mp_leaderboard_details_listbox_layout )
+		end 
+	end 
 end
+-- 
 
 -- Helper function, sets up parts of this screen that need any
 -- programmatic work (i.e. scaling to screensize)
@@ -1005,7 +1010,7 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 	end
 	
 	if(gPlatformStr == "PC") then
-		local x_offset = 80
+		local dude1 = 80
 		this.filter_buttons = NewIFContainer
 		{		
 			ScreenRelativeX = 0.5,
@@ -1013,9 +1018,9 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 			y = 500,
 			halign = "hcenter",
 							
-			player = NewPCIFButton -- NewRoundIFButton
+			player = NewPCIFButton 
 			{
-				x = x_offset,
+				x = dude1,
 				y = 40,
 				btnw = 150, -- made wider to fix 9173 - NM 8/25/04
 				btnh = 10,
@@ -1024,31 +1029,28 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 				--bg_width = BackButtonW,
 				--bg_xflipped = 1,
 				tag = "_btn_player",
-				--nocreatebackground=1,
 				string = "ifs.mp.leaderboard.me",
+				--nocreatebackground=1,
 				
 			}, -- end of btn
-
-			top = NewPCIFButton -- NewRoundIFButton
+			
+			top = NewPCIFButton
 			{
-				x = 200 + x_offset,
+				x = 200 + dude1,
 				y = 40,
 				btnw = 150, -- made wider to fix 9173 - NM 8/25/04
 				btnh = 10,
 				font = "gamefont_small",
-				--halign = "hcenter",
-				--bg_width = BackButtonW,
-				--bg_xflipped = 1,
 				tag = "_btn_top",
-				--nocreatebackground=1,
 				string = "ifs.mp.leaderboard.top",
+				
 			}, -- end of btn
-
-			time = NewClickableIFButton -- NewRoundIFButton
+			
+			time = NewClickableIFButton
 			{
 				x = 300,
 				y = 25,
-				btnw = 250, -- made wider to fix 9173 - NM 8/25/04
+				btnw = 250,
 				btnh = 10,
 				font = "gamefont_medium",
 				halign = "hcenter",
@@ -1094,7 +1096,8 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 		nocreatebackground = 1,
 	}
 
-	local offset_y = -18
+	local dude2 = -18
+	
 	this.rankTitle = NewIFText {
 		ZPos = 100,
 		string = "ifs.stats.rank",
@@ -1102,7 +1105,7 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 		halign = "left",
 		valign = "vcenter",
 		x = 65,
-		y = ColumnTitleY + offset_y,
+		y = ColumnTitleY + dude2,
 		ScreenRelativeX = 0.0, -- center
 		ScreenRelativeY = 0.0, -- top
 		ColorR= 255, ColorG = 255, ColorB = 255, -- Something that's readable!
@@ -1116,7 +1119,7 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 		halign = "hcenter",
 		valign = "vcenter",
 		x = 0,
-		y = ColumnTitleY + offset_y,
+		y = ColumnTitleY + dude2,
 		ScreenRelativeX = 0.5, -- center
 		ScreenRelativeY = 0.0, -- top
 		ColorR= 255, ColorG = 255, ColorB = 255, -- Something that's readable!
@@ -1131,7 +1134,7 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 		halign = "right",
 		valign = "vcenter",
 		x = -80,
-		y = ColumnTitleY + offset_y,
+		y = ColumnTitleY +dude2,
 		ScreenRelativeX = 1.0, -- center
 		ScreenRelativeY = 0.0, -- top
 		ColorR= 255, ColorG = 255, ColorB = 255, -- Something that's readable!
@@ -1150,20 +1153,22 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 		ScreenRelativeX = 0.5, -- center
 		ScreenRelativeY = 0.0, -- middle of screen
 		width = screenWidth,
-		height = BottomBarY - ListBoxY - 110,
+		height = BottomBarY - ListBoxY -110,
 		x = 0,
-		y = (BottomBarY - ListBoxY)*0.5 + ListBoxY - 70,
+		y = ((BottomBarY - ListBoxY)*0.5 + ListBoxY)-70,
 	}
 
 	leaderboard_listbox_layout.width = screenWidth - 35
-	leaderboard_listbox_layout.showcount = 20 --math.floor((this.listbox.height) / (leaderboard_listbox_layout.yHeight + leaderboard_listbox_layout.ySpacing)) - 1
-
+	
+	--leaderboard_listbox_layout.showcount = math.floor((this.listbox.height) / (leaderboard_listbox_layout.yHeight + leaderboard_listbox_layout.ySpacing)) - 1
+	leaderboard_listbox_layout.showcount = 20
+	
 	if(gPlatformStr == "PC") then
 		leaderboard_listbox_layout.yTop = -125
 	end
 	
 	ListManager_fnInitList(ifs_mp_leaderboard.listbox,leaderboard_listbox_layout)
-
+	
 	this.detail_listbox = NewButtonWindow { 
 		ZPos = 200,
 		ScreenRelativeX = 0.5, -- center
@@ -1172,12 +1177,13 @@ function ifs_mp_leaderboard_fnInitScreen(this)
 		height = 110,
 		x = 0,
 		y = 457,
-		font = "gamefont_small",
-		titleText = "ifs.Stats.details",
+		font= "gamefont_small",
+		titleText= "ifs.Stats.details",
 	}
+	
 	ifs_mp_leaderboard_details_listbox_layout.width = screenWidth - 35
-	ListManager_fnInitList(this.detail_listbox,ifs_mp_leaderboard_details_listbox_layout)
-	--ListManager_fnFillContents(this.detail_listbox,leaderboard_detail_listbox_contents_onecolumn,ifs_mp_leaderboard_details_listbox_layout)
+	
+	ListManager_fnInitList(this.detail_listbox, ifs_mp_leaderboard_details_listbox_layout)
 	
 	if(gPlatformStr == "PC") then
 --		print(" +++add tabs")
@@ -1195,3 +1201,4 @@ end
 ifs_mp_leaderboard_fnInitScreen(ifs_mp_leaderboard)
 ifs_mp_leaderboard_fnInitScreen = nil
 AddIFScreen(ifs_mp_leaderboard,"ifs_mp_leaderboard")
+

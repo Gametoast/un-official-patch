@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -230,7 +235,7 @@ function ifs_pausemenu_fnEnter(this, bFwd, iInstance)
 	end
 
 	this.buttons.exit.hidden = (gPlatformStr ~= "PC" or ScriptCB_InNetGame()) 
-	this.buttons.freecam.hidden = gFinalBuild
+	this.buttons.freecam.hidden = nil
 
 	local bShowFriends
 	if(gPlatformStr == "XBox") then
@@ -248,10 +253,10 @@ function ifs_pausemenu_fnEnter(this, bFwd, iInstance)
 	if(this.buttons.recent) then
 		this.buttons.recent.hidden = not ((ScriptCB_InNetGame()) and (gOnlineServiceStr == "XLive"))
 	end
-	this.buttons.console.hidden = gFinalBuild
+	this.buttons.console.hidden = nil
 
 	if(ScriptCB_IsDedicated()) then
-		this.buttons.freecam.hidden = 1
+		--this.buttons.freecam.hidden = 1
 		--			this.buttons.lobby.hidden = 1 -- Disabled NM 7/22/04 - I think we need to show this
 		this.buttons.opts.hidden = 1
 		this.buttons.suicide.hidden = 1

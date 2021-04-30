@@ -1,4 +1,6 @@
---
+-- ifs_freeform_battle_mode.lua  - zerted patch 1.3
+-- verified by BAD_AL
+-- 
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
 
@@ -11,13 +13,14 @@ ifs_freeform_battle_vbutton_layout = {
 	xSpacing = 10,
 	ySpacing = 5,
 	font = gMenuButtonFont,
-	buttonlist = { 
+	buttonlist = custom_GetFreeformBattleModeList()
+	--[[{ 
 		{ tag = "con",   string = "modename.name.con",   },
 		{ tag = "ctf",   string = "modename.name.ctf",   },
 		{ tag = "1flag", string = "modename.name.1flag", },
 		{ tag = "tdm",   string = "modename.name.tdm",   },
 		{ tag = "obj",   string = "modename.name.obj",   },
-	},
+	}]],
 	title = "ifs.missionselect.selectmode",
 }
 
@@ -115,18 +118,26 @@ ifs_freeform_battle_mode = NewIFShellScreen {
 		if(gShellScreen_fnDefaultInputAccept(this)) then
 			return
 		end
+		ifelm_shellscreen_fnPlaySound(this.acceptSound)
 
-        if(gPlatformStr == "PC" and joystick) then
+        --[[if(gPlatformStr == "PC" and joystick) then
             --print( "this.CurButton = ", this.CurButton )
             if( this.CurButton == "_accept" ) then
                 -- fall through
             else
 				return
 			end
+		end]]
+		if( this.CurButton == "_accept" ) then
+            print("ifs_freeform_battle_mode: Input_Accept(): Ignoring _accept button")
+			return
 		end
+		print("ifs_freeform_battle_mode: Input_Accept(): CurButton: ", this.CurButton or "[Nil]")
 		
- 		ifelm_shellscreen_fnPlaySound(this.acceptSound)
- 		
+		
+ 		print("ifs_freeform_battle_mode: Input_Accept(): Mission to lanuch: ",
+				this.modes [this.CurButton ] or "[Nil]" )
+				
 		-- set the mission to launch
 		ifs_freeform_main:SetLaunchMission(this.modes[this.CurButton])
 		
@@ -156,3 +167,4 @@ ifs_freeform_battle_mode = NewIFShellScreen {
 ifs_freeform_AddCommonElements(ifs_freeform_battle_mode)
 ifs_freeform_battle_mode.CurButton = AddVerticalButtons(ifs_freeform_battle_mode.buttons,ifs_freeform_battle_vbutton_layout)
 AddIFScreen(ifs_freeform_battle_mode,"ifs_freeform_battle_mode")
+

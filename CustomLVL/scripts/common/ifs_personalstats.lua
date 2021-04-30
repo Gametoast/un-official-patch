@@ -12,7 +12,7 @@ function PersonalStats_ListboxGameStats_CreateItem(layout)
 		x = layout.x - 0.5 * layout.width, y=layout.y - 10
 	}
 	Temp.labelstr = NewIFText{
-		x = -10, y = 0, textw = 0.5 * layout.width, halign = "left", font = "gamefont_tiny",
+		x = -10, y = 0, textw = 0.5 * layout.width, halign = "left", font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
@@ -20,7 +20,7 @@ function PersonalStats_ListboxGameStats_CreateItem(layout)
 	}
 	Temp.contentsstr = NewIFText{ 
 		x = 0.2 * layout.width + 10, y = 0, 
-		textw = 0.8 * layout.width, halign = "right", font = "gamefont_tiny",
+		textw = 0.8 * layout.width, halign = "right", font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
@@ -32,6 +32,7 @@ end
 -- Helper function. For a destination item (previously created w/
 -- CreateItem), fills it in with data, which may be nil (==blank it)
 function PersonalStats_ListboxGameStats_PopulateItem(Dest,Data)
+	--print ("PersonalStats_ListboxGameStats_PopulateItem begin")
 	if(Data) then
 		-- Contents to show. Do so.
 		--IFText_fnSetUString(Dest.labelstr,Data.labelustr)
@@ -47,6 +48,7 @@ function PersonalStats_ListboxGameStats_PopulateItem(Dest,Data)
 	end
 
 	IFObj_fnSetVis(Dest,Data) -- Show if there are contents
+	--print ("PersonalStats_ListboxGameStats_PopulateItem end")
 end
 
 
@@ -57,14 +59,14 @@ function PersonalStats_ListboxMedals_CreateItem(layout)
 	}
 	
 	Temp.leftStr = NewIFText{
-		x = 0, y = 0, textw = 0.4 * layout.width, halign = "left", font = "gamefont_tiny",
+		x = 0, y = 0, textw = 0.4 * layout.width, halign = "left", font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
 		startdelay = math.random() * 0.25,
 	}
 	Temp.leftStrCount = NewIFText {
-		x = 0.4 * layout.width, y = 0, textw = 0.1 * layout.width, halign = "left", font = "gamefont_tiny",
+		x = 0.4 * layout.width, y = 0, textw = 0.1 * layout.width, halign = "left", font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
@@ -73,14 +75,14 @@ function PersonalStats_ListboxMedals_CreateItem(layout)
 	
 	Temp.rightStr = NewIFText{ 
 		x = 0.5 * layout.width, y = 0, 
-		textw = 0.4 * layout.width, halign = "left", font = "gamefont_tiny",
+		textw = 0.4 * layout.width, halign = "left", font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
 		startdelay = math.random() * 0.25,
 	}
 	Temp.rightStrCount = NewIFText {
-		x = 0.9 * layout.width, y = 0, textw = 0.1 * layout.width, halign = "left", font = "gamefont_tiny",
+		x = 0.9 * layout.width, y = 0, textw = 0.1 * layout.width, halign = "left", font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
@@ -92,8 +94,10 @@ end
 -- Helper function. For a destination item (previously created w/
 -- CreateItem), fills it in with data, which may be nil (==blank it)
 function PersonalStats_ListboxMedals_PopulateItem(Dest,Data)
+	print ("PersonalStats_ListboxMedals_PopulateItem begin")
 	-- populate each column
 	if (Data) then
+		print ( "PersonalStats_ListboxMedals_PopulateItem begin")
 		IFText_fnSetUString(Dest.leftStr, Data.leftStr)
 		IFText_fnSetUString(Dest.rightStr, Data.rightStr)
 		
@@ -101,9 +105,11 @@ function PersonalStats_ListboxMedals_PopulateItem(Dest,Data)
 		IFText_fnSetString(Dest.leftStrCount, countStr)
 		countStr = " (" .. Data.rightStrCount .. ")"
 		IFText_fnSetString(Dest.rightStrCount, countStr)
+		print ("PersonalStats_ListboxMedals_PopulateItem end")
 	end
 	
 	IFObj_fnSetVis(Dest,Data) -- Show if there are contents
+	print ("PersonalStats_ListboxMedals_PopulateItem end")
 end
 
 function ifs_personalstats_fnSetUpListboxMedals(this)
@@ -115,7 +121,7 @@ function ifs_personalstats_fnSetUpListboxMedals(this)
 			y = -0.45 * this.listboxMedals.height + y_spacing * (i - 1),
 			textw = 0.5 * this.listboxMedals.width,
 			halign = "left",
-			font = "gamefont_tiny",
+			font = "gamefont_small",
 			ColorR = 255, ColorG = 255, ColorB = 255,
 			style = "normal",
 			nocreatebackground = 1,
@@ -127,7 +133,7 @@ function ifs_personalstats_fnSetUpListboxMedals(this)
 			y = -0.465 * this.listboxMedals.height + y_spacing * (i - 1),
 			textw = 0.5 * this.listboxMedals.width,
 			halign = "left",
-			font = "gamefont_tiny",
+			font = "gamefont_small",
 			ColorR = 255, ColorG = 255, ColorB = 255,
 			style = "normal",
 			nocreatebackground = 1,
@@ -183,7 +189,7 @@ end
 PersonalStats_listboxGameStats_layout = {
 	showcount = 20,
 --	yTop = -130 + 13,
-	yHeight = 11,
+	yHeight = 16,
 	ySpacing  = 5,
 	width = 430,
 	x = 0,
@@ -238,12 +244,7 @@ function ifs_personalstats_fnBlankContents(this)
 		stats_listbox_contents[i].rightStrCount = ""
 	end
 
-	ListManager_fnFillContents(this.listboxGameStats,stats_listbox_contents,PersonalStats_listboxGameStats_layout)
-	--ListManager_fnFillContents(this.listboxMedals,stats_listbox_contents,PersonalStats_listboxMedals_layout)
-	-- fix me.
-	-- omg don't squish medal_contents until we're truly quitting from the stats screens.
-	-- in fact, you know, it's just nine shorts, so i'm fine with leaving it around forever and ever. =p
-	--ifs_personalstats_fnFillInListboxMedals(this.listboxMedals, medal_contents)
+	ListManager_fnFillContents(this.listboxGameStats, stats_listbox_contents, PersonalStats_listboxGameStats_layout)
 end
 
 ifs_personalstats = NewIFShellScreen {
@@ -252,8 +253,6 @@ ifs_personalstats = NewIFShellScreen {
 	fCurIdleTime = 0,
 	movieIntro      = nil, -- played before the screen is displayed
 	movieBackground = nil, -- played while the screen is displayed
-	--bNohelptext_back = 1, -- We use PS2-Square/XBox-X to exit this screen.
-	bAcceptIsSelect = 1,
 
 	titlePersonalStats = NewIFText {
 		string = "ifs.stats.personalstatstitle",
@@ -269,6 +268,18 @@ ifs_personalstats = NewIFShellScreen {
 		bgmid = "bf2_buttons_title_center",
 		bgright = "bf2_buttons_topright",
 		bg_width = 460, 
+	},
+
+	title2 = NewIFText {
+		string = "namehere",
+		font = "gamefont_medium",
+		y = 30,
+		textw = 460,
+		ScreenRelativeX = 0.5, -- center
+		ScreenRelativeY = 0.1, -- top
+		ColorR= 255, ColorG = 255, ColorB = 255,
+		style = "normal",
+		nocreatebackground=1,
 	},
 
 	titleMedals = NewIFText {
@@ -301,11 +312,12 @@ ifs_personalstats = NewIFShellScreen {
 
 	Enter = function(this, bFwd)
 		gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function
-	
-		if(this.Helptext_Back) then
-			IFText_fnSetString(this.Helptext_Back.helpstr, "ifs.stats.back")
-			gHelptext_fnMoveIcon(this.Helptext_Back)
-		end
+
+		IFObj_fnSetVis(this.title2, nil)
+
+		--gIFShellScreenTemplate_fnMoveClickableButton(this.buttonsNextPage, this.buttonsNextPage.label, 0)
+		--local fLeft, fTop, fRight, fBot = IFText_fnGetDisplayRect(this.buttonsNextPage.label)
+		--IFObj_fnSetPos(this.buttonsNextPage, -( (fRight - fLeft) * 0.5 ), this.buttonsNextPage.y)
 
 		-- Reset listbox, show it. [Remember, Lua starts at 1!]
 		PersonalStats_listboxGameStats_layout.FirstShownIdx = 1
@@ -316,19 +328,19 @@ ifs_personalstats = NewIFShellScreen {
 		PersonalStats_listboxMedals_layout.SelectedIdx = nil -- not on anything
 		PersonalStats_listboxMedals_layout.CursorIdx = nil
 
-		-- !? temp ?! --
-		-- find the top player's team and index (top as in, if there's splitscreen, the guy's on top.
-		-- hopefully, that's the guy on top...)
+		-- find the top player's team and index (top as in, if there's splitscreen, the guy's on top.)
 		--this.fTeam = GetCharacterTeam(0)
 		--this.fIdx = -1 --ScriptCB_GetRank(this.fTeam, 0)  -- -1 : get local player
 
 		ScriptCB_GetPersonalStats(this.fTeam, this.fIdx) 
-		ListManager_fnFillContents(this.listboxGameStats,stats_listbox_contents,PersonalStats_listboxGameStats_layout)
+		ListManager_fnFillContents(this.listboxGameStats, stats_listbox_contents, PersonalStats_listboxGameStats_layout)
 		ScriptCB_GetMedalStats(ifs_personalstats.fTeam, ifs_personalstats.fIdx)
 		--ListManager_fnFillContents(this.listboxMedals,stats_listbox_contents,PersonalStats_listboxMedals_layout)
 		ifs_personalstats_fnFillInListboxMedals(this.listboxMedals, stats_listbox_contents)--medal_contents)
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-
+		
+		ListManager_fnMoveCursor(this.listboxGameStats, PersonalStats_listboxGameStats_layout)
+		
 		if((ScriptCB_InNetGame()) and (ScriptCB_GetGameRules() == "metagame") and (ScriptCB_GetAmHost())) then
 			this.fCurIdleTime = 0
 			gE3StatsTimeout = 0
@@ -336,13 +348,15 @@ ifs_personalstats = NewIFShellScreen {
 		
 		-- if this is a human player, set help buttons to indicate next screen as career screen
 		if ( ScriptCB_GetPlayerIDAtRank(this.fTeam, this.fIdx) >= 0 ) then
-			IFObj_fnSetVis(this.Helptext_Accept, 1)
-			IFObj_fnSetVis(this.Helptext_Done, nil)
+			--IFObj_fnSetVis(this.Helptext_Accept, 1)
+			--IFObj_fnSetVis(this.Helptext_Done, nil)
+			IFObj_fnSetVis(this.buttonsNextPage, 1)
 			this.bCanShowDone = nil -- Update() also modifies Helptext_Done.
 		else	-- else set next button to say square to exit
 			--IFText_fnSetString(this.Helptext_Accept, "ifs.stats.done")
-			IFObj_fnSetVis(this.Helptext_Accept, nil)
-			IFObj_fnSetVis(this.Helptext_Done, 1)
+			--IFObj_fnSetVis(this.Helptext_Accept, nil)
+			--IFObj_fnSetVis(this.Helptext_Done, 1)
+			IFObj_fnSetVis(this.buttonsNextPage, nil)
 			this.bCanShowDone = 1 -- Update() also modifies Helptext_Done.
 		end
 	end,
@@ -351,34 +365,39 @@ ifs_personalstats = NewIFShellScreen {
 		-- Reduce lua memory, glyphcache usage
 		ifs_personalstats_fnBlankContents(this)
 		teamstats_listbox_contents = nil
-	end,
-
-	-- Accept button goes to team stats screen
-	Input_Accept = function(this)
-		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		-- only go to the careerstats page if the player is a human player
-		ifs_careerstats.fTeam = this.fTeam
-		ifs_careerstats.fIdx = this.fIdx
-		if ( ScriptCB_GetPlayerIDAtRank(this.fTeam, this.fIdx) >= 0 ) then
-			ifs_movietrans_PushScreen(ifs_careerstats) 
-			ScriptCB_SndPlaySound("shell_menu_enter")
+		if(gCurHiliteButton) then
+			IFButton_fnSelect(gCurHiliteButton,nil)
 		end
 	end,
 
-	-- Misc ( == PS2-Square/XBox-X) button quits stats
-	Input_Misc = function(this)
-		if(ScriptCB_CanClientLeaveStats()) then
-			this.fCurIdleTime = this.fMAX_IDLE_TIME
-			if(not gE3StatsTimeout or gE3StatsTimeout < 0) then
-				-- now it should be safe to squish the medal_contents box
-				medal_contents = nil
-				
-				ScriptCB_QuitFromStats()
-				ScriptCB_SndPlaySound("shell_menu_exit");
+	-- Accept button goes to career stats screen
+	Input_Accept = function(this)
+		-- If base class handled this work, then we're done
+		if(gShellScreen_fnDefaultInputAccept(this)) then
+			return
+		end
+
+		this.fCurIdleTime = this.fMAX_IDLE_TIME 
+		
+		if(this.CurButton == "_back") then
+			this.fCurIdleTime = this.fMAX_IDLE_TIME 
+			ScriptCB_PopScreen()
+			ScriptCB_SndPlaySound("shell_menu_exit");
+		elseif (this.CurButton == "nextPage") then
+			-- only go to the careerstats page if the player is a human player
+			ifs_careerstats.fTeam = this.fTeam
+			ifs_careerstats.fIdx = this.fIdx
+			if ( ScriptCB_GetPlayerIDAtRank(this.fTeam, this.fIdx) >= 0 ) then
+				if ( not ifs_careerstats.ScreenName ) then
+					print ("no screenname!")
+				end
+				ifs_movietrans_PushScreen(ifs_careerstats) 
+				ScriptCB_SndPlaySound("shell_menu_enter")
 			end
 		end
 	end,
-	
+
+	-- Back button goes to team stats
 	Input_Back = function(this)
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
 		ScriptCB_PopScreen()
@@ -389,9 +408,17 @@ ifs_personalstats = NewIFShellScreen {
 	-- here, or the base class will override)
 
 	Input_GeneralUp = function(this)
+		-- If base class handled this work, then we're done
+		if(gShellScreen_fnDefaultInputUp(this)) then
+			return
+		end
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
 	end,
 	Input_GeneralDown = function(this)
+		-- If base class handled this work, then we're done
+		if(gShellScreen_fnDefaultInputUp(this)) then
+			return
+		end
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
 	end,
 	Input_GeneralLeft = function(this)
@@ -402,29 +429,26 @@ ifs_personalstats = NewIFShellScreen {
 	end,
 
 	Update = function(this, fDt)
-		-- Call default base class's update function (make button bounce)
-		gIFShellScreenTemplate_fnUpdate(this,fDt)
-
-		-- If the host is busy, then wait on this screen
-		if(fDt > 0.5) then
-			fDt = 0.5 -- clamp this to sane values
-		end
-
-		if(ScriptCB_CanClientLeaveStats()) then
-			gE3StatsTimeout = 0 -- allow quit now
-			if(this.Helptext_Done) then
-				IFObj_fnSetVis(this.Helptext_Done, this.bCanShowDone) -- show helptext depending on screen state
-			end
-		else
-			gE3StatsTimeout = 1 -- keep clients from leaving
-			if(this.Helptext_Done) then
-				IFObj_fnSetVis(this.Helptext_Done, nil) -- hide helptext
-			end
-		end
+ 		-- Call default base class's update function (make button bounce)
+ 		gIFShellScreenTemplate_fnUpdate(this,fDt)
 
 		if(gE3StatsTimeout) then
 			gE3StatsTimeout = gE3StatsTimeout - fDt
 		end
+		
+ 		-- if the models are done animating, slow down the rotations
+ 		if(this.IconModelFastMode and not this.IconModel.bAnimActive) then
+ 			this.IconModelFastMode = nil
+			IFModel_fnSetOmegaY(this.IconModel,0.3)
+		end
+
+		PersonalStats_listboxGameStats_layout.SelectedIdx = nil -- not on anything
+		PersonalStats_listboxGameStats_layout.CursorIdx = nil
+		PersonalStats_listboxMedals_layout.SelectedIdx = nil -- not on anything
+		PersonalStats_listboxMedals_layout.CursorIdx = nil
+
+ 		--ListManager_fnFillContents(this.listbox,stats_listbox_contents,PersonalStats_listbox_layout)
+		ListManager_fnMoveCursor(this.listboxGameStats, PersonalStats_listboxGameStats_layout)
 
 		-- if we've been sitting here for a while, bail to the teaser screen
 		this.fCurIdleTime = this.fCurIdleTime - fDt
@@ -433,13 +457,13 @@ ifs_personalstats = NewIFShellScreen {
 			ScriptCB_QuitFromStats()
 			ScriptCB_SndPlaySound("shell_menu_exit");
 		end
+
  	end,
 
 	-- Callback (from C++) to repaint the listbox with the current contents
 	-- in the global stats_listbox_contents
 -- 	RepaintListbox = function(this)
--- 		ListManager_fnFillContents(this.listboxGameStats,stats_listbox_contents,PersonalStats_listboxGameStats_layout)
--- 		ListManager_fnFillContents(this.listboxMedals,stats_listbox_contents,PersonalStats_listboxMedals_layout)
+-- 		ListManager_fnFillContents(this.listbox,stats_listbox_contents,PersonalStats_listbox_layout)
 --	end,
 }
 
@@ -454,25 +478,17 @@ function ifs_personalstats_fnBuildScreen(this)
 	this.bgTexture.localpos_b = b
 	this.bgTexture.uvs_b = v
 
-	if(this.Helptext_Accept) then
-		IFText_fnSetString(this.Helptext_Accept.helpstr,"ifs.stats.careerstatstitle")
-	end
+--	if(this.Helptext_Back) then
+--		IFText_fnSetString(this.Helptext_Back.helpstr,"ifs.stats.back")
+--	end
+--	if(this.Helptext_Accept) then
+--		IFText_fnSetString(this.Helptext_Accept.helpstr,"ifs.stats.awards")
+--	end
 
-	if(gPlatformStr ~= "PC") then
-		this.Helptext_Done = NewHelptext {
-			ScreenRelativeX = 1.0, -- right
-			ScreenRelativeY = 1.0, -- bottom
-			y = -15, -- just above bottom
-			x = 0,
-			bRightJustify = 1,
-			buttonicon = "btnmisc",
-			string = "ifs.stats.done",
-		}
-	end
 
 	-- Inset slightly from fulls screen size
 	local w,h = ScriptCB_GetSafeScreenInfo()
---	w = w * 0.95
+	--h = h * 0.82
 	hGameStats = h * 0.44 -- 0.82
 	hMedals = h * 0.3
 
@@ -491,12 +507,20 @@ function ifs_personalstats_fnBuildScreen(this)
 	}
 	ifs_personalstats_fnSetUpListboxMedals(this)
 
-	this.titlePersonalStats.bg_width = w * 0.945
-	this.titlePersonalStats.bgoffsetx = w * -0.009
-	this.titlePersonalStats.bgexpandy = 6
-	this.titleMedals.bg_width = w * 0.945
-	this.titleMedals.bgoffsetx = w * -0.009
-	this.titleMedals.bgexpandy = 6
+	this.IconModel = NewIFModel {
+		ScreenRelativeX = 0.75,
+		ScreenRelativeY = 0.3,
+		x=0,y=0,scale = 1,
+		OmegaY = 0.3,
+		lighting = 1,
+	}
+
+	this.titlePersonalStats.bg_width = w * 0.9665
+	this.titlePersonalStats.bgoffsetx = w * -0.0053
+	this.titlePersonalStats.bgexpandy = 4
+	this.titleMedals.bg_width = w * 0.9665
+	this.titleMedals.bgoffsetx = w * -0.0053
+	this.titleMedals.bgexpandy = 4
 
 	PersonalStats_listboxGameStats_layout.width = w - 50
 	PersonalStats_listboxGameStats_layout.showcount = math.floor(hGameStats / (PersonalStats_listboxGameStats_layout.yHeight + PersonalStats_listboxGameStats_layout.ySpacing)) - 1
@@ -505,6 +529,25 @@ function ifs_personalstats_fnBuildScreen(this)
 	PersonalStats_listboxMedals_layout.showcount = math.floor(hMedals / (PersonalStats_listboxMedals_layout.yHeight + PersonalStats_listboxMedals_layout.ySpacing)) - 1
 	ListManager_fnInitList(ifs_personalstats.listboxGameStats,PersonalStats_listboxGameStats_layout)
 --	ListManager_fnInitList(ifs_personalstats.listboxMedals,PersonalStats_listboxMedals_layout)
+
+	PersonalStats_listboxGameStats_layout.SelectedIdx = nil
+	PersonalStats_listboxGameStats_layout.CursorIdx = nil
+	PersonalStats_listboxMedals_layout.SelectedIdx = nil
+	PersonalStats_listboxMedals_layout.CursorIdx = nil
+	
+	this.buttonsNextPage = NewPCIFButton {
+		ScreenRelativeX = 1.0,
+		ScreenRelativeY = 1.0,
+		x = -90,
+		y = -15,
+		btnw = 180,
+		btnh = ScriptCB_GetFontHeight("gamefont_small"),
+		font = "gamefont_small", 
+		tag = "nextPage",
+		string = "ifs.stats.careerstatstitle",
+		noTransitionFlash = 1,
+		bg_tail = 20,
+	}
 end
 
 ifs_personalstats_fnBuildScreen(ifs_personalstats) -- programatic chunks

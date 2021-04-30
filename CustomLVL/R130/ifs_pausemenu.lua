@@ -1,3 +1,10 @@
+------------------------------------------------------------------
+-- ifs_pausemanu.lua 
+-- Zerted uop 1.3 r130 
+-- uop recovered source
+-- by Anakain & BAD_AL
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -86,6 +93,7 @@ function ifs_pausemenu_fnExitPopupDone(bResult)
 
 	if(bResult) then
 		ifelm_shellscreen_fnPlaySound(this.acceptSound)
+		ScriptCB_CloseNetShell()
 		ScriptCB_QuitToWindows()
 	else
 		ifelm_shellscreen_fnPlaySound(this.cancelSound)
@@ -229,8 +237,8 @@ function ifs_pausemenu_fnEnter(this, bFwd, iInstance)
 		this.buttons.restart.hidden = ScriptCB_InNetGame()
 	end
 
-	this.buttons.exit.hidden = (gPlatformStr ~= "PC" or ScriptCB_InNetGame()) 
-	this.buttons.freecam.hidden = gFinalBuild
+	--this.buttons.exit.hidden = (gPlatformStr ~= "PC" or ScriptCB_InNetGame()) 
+	--this.buttons.freecam.hidden = nil
 
 	local bShowFriends
 	if(gPlatformStr == "XBox") then
@@ -248,7 +256,7 @@ function ifs_pausemenu_fnEnter(this, bFwd, iInstance)
 	if(this.buttons.recent) then
 		this.buttons.recent.hidden = not ((ScriptCB_InNetGame()) and (gOnlineServiceStr == "XLive"))
 	end
-	this.buttons.console.hidden = gFinalBuild
+	--this.buttons.console.hidden = nil
 
 	if(ScriptCB_IsDedicated()) then
 		this.buttons.freecam.hidden = 1
@@ -257,7 +265,7 @@ function ifs_pausemenu_fnEnter(this, bFwd, iInstance)
 		this.buttons.suicide.hidden = 1
 	elseif (ScriptCB_IsSplitscreen()) then
 		-- this.buttons.lobby.hidden    = 1
-		this.buttons.exit.hidden     = 1
+		this.buttons.exit.hidden     = 0
 	end
 
 	-- Hide ability to go to lua screens that are deleted by PS2 when the

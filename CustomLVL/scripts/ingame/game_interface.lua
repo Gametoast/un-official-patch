@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -5,6 +10,32 @@
 -- Master include for StarWars: Frontline ingame interface, lua
 -- component. The game should be able to include this file and nothing
 -- else.
+
+print("game_interface: Entered")
+
+__v13patchSettings_noAwards__ = "..\\..\\addon\\AAA-v1.3patch\\settings\\noAwards.txt"
+
+ScriptCB_DoFile("utility_functions2")
+
+print("game_interface: Reading in custom strings")
+ReadDataFile("v1.3patch_strings.lvl")
+
+local maxScripts = 10
+local i = nil
+
+for i = 0, maxScripts, 1 do
+	
+	if ScriptCB_IsFileExist("user_script_" .. i .. ".lvl") == 0 then
+		print("game_interface: No user_script_" .. i .. ".lvl")
+	else
+		print("game_interface: Found user_script_" .. i .. ".lvl")
+		
+		ReadDataFile("user_script_" .. i .. ".lvl")
+		ScriptCB_DoFile("user_script_" .. i)
+	end
+	
+end
+
 
 gPlatformStr = ScriptCB_GetPlatform()
 
@@ -100,6 +131,9 @@ if(gPlatformStr == "PC") then
 	ScriptCB_DoFile("popup_loadsave2")
 end
 
+ScriptCB_DoFile("popup_prompt")
+ScriptCB_DoFile("fakeconsole_functions")
+
 ScriptCB_DoFile("ifs_pausemenu")
 ScriptCB_DoFile("ifs_fakeconsole")
 
@@ -121,3 +155,5 @@ if(ScriptCB_GetOnlineService() == "XLive") then
 else
 	ScriptCB_DoFile("ifs_mpgs_friends")
 end
+
+print("game_interface: Exited")

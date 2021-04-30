@@ -1,3 +1,8 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -58,6 +63,9 @@ function gPopup_Error_fnActivate(this,vis)
 		-- space is unreadable. - NM 8/19/05
 		if(Popup_Ok) then
 			IFObj_fnSetVis(Popup_Ok, nil)
+		end
+		if(Popup_Prompt) then
+			IFObj_fnSetVis(Popup_Prompt, nil)
 		end
 		if(Popup_YesNo) then
 			IFObj_fnSetVis(Popup_YesNo, nil)

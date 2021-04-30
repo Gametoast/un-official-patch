@@ -16,7 +16,7 @@ function CareerStats_Statbox_CreateItem(layout)
 	Temp.labelstr = NewIFText {
 		x = 5, y = -3,
 		textw = layout.width * 0.9, halign = "left", valign = "vcenter",
-		font = "gamefont_tiny",
+		font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
@@ -25,7 +25,7 @@ function CareerStats_Statbox_CreateItem(layout)
 	Temp.contentsstr = NewIFText {
 		x = 0.65 * layout.width - 5, y = -3, 
 		textw = layout.width * 0.35, halign = "right", valign = "vcenter",
-		font = "gamefont_tiny",
+		font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 0,
 		style = "normal",
 		nocreatebackground = 1,
@@ -41,26 +41,26 @@ function CareerStats_Medalbox_CreateItem(layout)
 	}
 
 	Temp.labelustr = NewIFText {
-		x = 7, y = -4, textw = 0.8 * layout.width, halign = "left", valign = "vcenter",
-		font = "gamefont_tiny",
+		x = 7, y = -5, textw = 0.8 * layout.width, halign = "left", valign = "vcenter",
+		font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
 		startdelay = math.random() * 0.25,
 	}
 	Temp.val1str = NewIFText {
-		x = 0.5 * layout.width, y = -4, 
+		x = 0.5 * layout.width, y = -5, 
 		textw = 0.15 * layout.width, halign = "right", valign = "vcenter",
-		font = "gamefont_tiny",
+		font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 0,
 		style = "normal",
 		nocreatebackground = 1,
 		startdelay = math.random() * 0.25,
 	}
 	Temp.val2str = NewIFText {
-		x = 0.6 * layout.width - 5, y = -4, 
+		x = 0.6 * layout.width - 5, y = -5, 
 		textw = 0.4 * layout.width, halign = "right", valign = "vcenter",
-		font = "gamefont_tiny",
+		font = "gamefont_small",
 		ColorR= 255, ColorG = 255, ColorB = 255,
 		style = "normal",
 		nocreatebackground = 1,
@@ -139,7 +139,7 @@ end
 ----------
 CareerStats_statbox_leftcolumn_layout = {
 	showcount = 4,
-	yHeight = 20,
+	yHeight = 24,
 	ySpacing  = 2,
 	width = 250,
 	x = 0,
@@ -149,7 +149,7 @@ CareerStats_statbox_leftcolumn_layout = {
 }
 CareerStats_statbox_rightcolumn_layout = {
 	showcount = 4,
-	yHeight = 20,
+	yHeight = 24,
 	ySpacing  = 2,
 	width = 250,
 	x = 0,
@@ -160,9 +160,8 @@ CareerStats_statbox_rightcolumn_layout = {
 
 CareerStats_medalbox_leftcolumn_layout = {
 	showcount = 5,
-	yHeight = 26,
-	ySpacing  = -3,
-	yTop = -48,
+	yHeight = 23,
+	ySpacing  = 3,
 	width = 250,
 	x = 0,
 	font = "gamefont_tiny",
@@ -171,9 +170,8 @@ CareerStats_medalbox_leftcolumn_layout = {
 }
 CareerStats_medalbox_rightcolumn_layout = {
 	showcount = 4,
-	yHeight = 26,
-	ySpacing  = -3,
-	yTop = -37,
+	yHeight = 23,
+	ySpacing  = 3,
 	width = 250,
 	x = 0,
 	font = "gamefont_tiny",
@@ -323,6 +321,9 @@ function ifs_careerstats_fnFlipLeftRight(this)
 	if(this.bCursorOnLeft) then
 		-- Was just on the right, now on left
 		local Pos = CareerStats_medalbox_rightcolumn_layout.SelectedIdx
+		if ( not Pos ) then
+			Pos = 1
+		end
 
 		-- make sure the position isn't off the bottom of the listbox
 		-- Pos = ScriptCB_CareerStatsValidatePos( 0, Pos );
@@ -331,23 +332,29 @@ function ifs_careerstats_fnFlipLeftRight(this)
 		CareerStats_medalbox_leftcolumn_layout.CursorIdx = Pos
 		CareerStats_medalbox_rightcolumn_layout.CursorIdx = nil
 		CareerStats_medalbox_leftcolumn_layout.SelectedIdx = Pos
-		CareerStats_medalbox_rightcolumn_layout.SelectedIdx = Pos
+		CareerStats_medalbox_rightcolumn_layout.SelectedIdx = nil
 
 		ListManager_fnFillContents(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
 		-- Just move cursor on side that's now dim
 		ListManager_fnMoveCursor(this.medalBox.rightColumn, CareerStats_medalbox_rightcolumn_layout)
 	else
 		-- Was just on the left, now on right
-		local Pos = CareerStats_medalbox_rightcolumn_layout.SelectedIdx
+		print ("now on right")
+		local Pos = CareerStats_medalbox_leftcolumn_layout.SelectedIdx
+		print ("pos:", Pos)
+		if ( not Pos ) then
+			Pos = 1
+		end
 
 		-- make sure the position isn't off the bottom of the listbox
 		--Pos = ScriptCB_TeamStatsValidatePos( 1, Pos );
 		Pos = ifs_careerstats_fnValidateMedalCursorPos(1, Pos)
+		print ("pos:", Pos)
 
 		CareerStats_medalbox_rightcolumn_layout.CursorIdx = Pos
 		CareerStats_medalbox_leftcolumn_layout.CursorIdx = nil
 		CareerStats_medalbox_rightcolumn_layout.SelectedIdx = Pos
-		CareerStats_medalbox_leftcolumn_layout.SelectedIdx = Pos
+		CareerStats_medalbox_leftcolumn_layout.SelectedIdx = nil
 
 		ListManager_fnFillContents(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
 		-- Just move cursor on side that's now dim
@@ -364,15 +371,17 @@ function ifs_careerstats_fnValidateMedalCursor(this)
 		Pos = ifs_careerstats_fnValidateMedalCursorPos( 1, CareerStats_medalbox_rightcolumn_layout.SelectedIdx );
 	end
 	
-	CareerStats_medalbox_leftcolumn_layout.SelectedIdx = Pos
-	CareerStats_medalbox_rightcolumn_layout.SelectedIdx = Pos
+	--CareerStats_medalbox_leftcolumn_layout.SelectedIdx = Pos
+	--CareerStats_medalbox_rightcolumn_layout.SelectedIdx = Pos
 
 	--set the cursor to the validated position
 	if(this.bCursorOnLeft) then		
+		CareerStats_medalbox_leftcolumn_layout.SelectedIdx = Pos
+		CareerStats_medalbox_rightcolumn_layout.SelectedIdx = nil
 		CareerStats_medalbox_leftcolumn_layout.CursorIdx = Pos
-		CareerStats_medalbox_rightcolumn_layout.CursorIdx = nil
 	else
-		CareerStats_medalbox_leftcolumn_layout.CursorIdx = nil
+		CareerStats_medalbox_leftcolumn_layout.SelectedIdx = nil
+		CareerStats_medalbox_rightcolumn_layout.SelectedIdx = Pos
 		CareerStats_medalbox_rightcolumn_layout.CursorIdx = Pos
 	end
 	ListManager_fnMoveCursor(this.medalBox.leftColumn, CareerStats_medalbox_leftcolumn_layout)
@@ -390,15 +399,23 @@ function ifs_careerstats_fnValidateMedalCursorPos(col, pos)
 	return idx
 end
 
-ifs_careerstats = NewIFShellScreen {
-	nologo = 1,
-	fMAX_IDLE_TIME = 30.0,
-	fCurIdleTime = 0,
-    movieIntro      = nil, -- played before the screen is displayed
-    movieBackground = shell_sub_left, -- played while the screen is displayed
-	bDimBackdrop = 1,
-
-	title = NewIFText {
+local dim_backdrop = 1
+local image_background = "statsscreens_bg"
+local noHelpText = nil
+local quitButton = NewPCIFButton
+	{
+		ScreenRelativeX = 1.0,
+		ScreenRelativeY = 1.0,
+		x = -90,
+		y = -15,
+		btnw = 180, 
+		btnh = 25,
+		font = "gamefont_medium", 
+		tag = "quit",
+		string = "ifs.stats.done",
+		bg_tail = 20,
+	}
+local titleButton = NewIFText {
 		string = "ifs.stats.careerstatstitle",
 		font = "gamefont_medium",
 		y = 0,
@@ -413,26 +430,68 @@ ifs_careerstats = NewIFShellScreen {
 		bgmid = "bf2_buttons_title_center",
 		bgright = "bf2_buttons_topright",
 		bg_width = 460, 
+	}
+
+if( 1 ) then
+--if( gPCBetaBuild ) then
+	if( ScriptCB_GetShellActive() ) then
+		--print("set background iface_bg_1")
+		image_background = "iface_bg_1"
+		dim_backdrop = nil
+		quitButton = nil
+		titleTextElement = nil
+		noHelpText = 1
+		titleButton = nil
+	end
+end
+
+ifs_careerstats = NewIFShellScreen {
+	nologo = 1,
+	fMAX_IDLE_TIME = 30.0,
+	fCurIdleTime = 0,
+    movieIntro      = nil, -- played before the screen is displayed
+    movieBackground = nil, --shell_sub_left, -- played while the screen is displayed
+	bDimBackdrop = dim_backdrop,
+	bNohelptext_backPC = noHelpText,
+
+	title = titleButton,
+
+	bgTexture = NewIFImage { 
+		ZPos = 250,
+		ScreenRelativeX = 0,
+		ScreenRelativeY = 0,
+		UseSafezone = 0,
+		texture = image_background, 
+		localpos_l = 0,
+		localpos_t = 0,
+		-- Size, UVs aren't fully specified here, but in NewIFShellScreen()
 	},
 
-	--bgTexture = NewIFImage { 
-	--	ZPos = 250,
-	--	ScreenRelativeX = 0,
-	--	ScreenRelativeY = 0,
-	--	UseSafezone = 0,
-	--	texture = "statsscreens_bg", 
-	--	localpos_l = 0,
-	--	localpos_t = 0,
-	--	-- Size, UVs aren't fully specified here, but in NewIFShellScreen()
-	--},
+	quit = quitButton,
 
 	Enter = function(this, bFwd)
+	
+		if( ScriptCB_GetShellActive() ) then
+			if(gPlatformStr == "PC") then
+				ifelem_tabmanager_SetSelected(this, gPCMainTabsLayout, "_tab_single")
+				ifelem_tabmanager_SetSelected(this, gPCSinglePlayerTabsLayout, "_tab_career", 1)
+			end	
+		end
+	
 		gIFShellScreenTemplate_fnEnter(this, bFwd) -- call default enter function
 		
-		if ( ScriptCB_GetShellActive() ) then
+		--if((not ScriptCB_GetShellActive()) and this.Helptext_Back) then
+		--	IFObj_fnCreateHotspot(this.Helptext_Back.label)
+		--end
+		--IFObj_fnCreateHotspot(this.quit.label)
+
+		if ( ScriptCB_GetShellActive() and this.Helptext_Accept ) then
 			IFObj_fnSetVis(this.Helptext_Accept, nil)
 		end
 	
+		--local fLeft, fTop, fRight, fBot = IFText_fnGetDisplayRect(this.quit.label)
+		--IFObj_fnSetPos(this.quit, -(fRight - fLeft), this.quit.y)
+
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
 		-- Reset listbox, show it. [Remember, Lua starts at 1!]
 		CareerStats_statbox_leftcolumn_layout.FirstShownIdx = 1
@@ -446,7 +505,7 @@ ifs_careerstats = NewIFShellScreen {
 		CareerStats_medalbox_leftcolumn_layout.SelectedIdx = 1
 		CareerStats_medalbox_leftcolumn_layout.CursorIdx = 1
 		CareerStats_medalbox_rightcolumn_layout.FirstShownIdx = 1
-		CareerStats_medalbox_rightcolumn_layout.SelectedIdx = 1
+		CareerStats_medalbox_rightcolumn_layout.SelectedIdx = nil
 		CareerStats_medalbox_rightcolumn_layout.CursorIdx = nil
 		
 		-- -1 to mean get local player
@@ -490,15 +549,61 @@ ifs_careerstats = NewIFShellScreen {
 
 	-- Accept button calls done
 	Input_Accept = function(this)
+		
+		if( ScriptCB_GetShellActive() ) then
+			if(gPlatformStr == "PC") then
+				-- If the tab manager handled this event, then we're done
+				if( ifelem_tabmanager_HandleInputAccept(this, gPCMainTabsLayout) or
+					ifelem_tabmanager_HandleInputAccept(this, gPCSinglePlayerTabsLayout, 1) ) then			
+					return
+				end
+			end
+		end
+		
+		-- If base class handled this work, then we're done
+		if(gShellScreen_fnDefaultInputAccept(this)) then
+			if( gMouseListBox ) then
+				if(ScriptCB_CheckMouseMark()) then
+					if( gMouseListBox == this.medalBox.leftColumn ) then
+						this.bCursorOnLeft = 1
+						if( CareerStats_medalbox_leftcolumn_layout.CursorIdx == CareerStats_medalbox_leftcolumn_layout.SelectedIdx ) then
+							CareerStats_medalbox_rightcolumn_layout.SelectedIdx = nil
+						end
+					elseif ( gMouseListBox == this.medalBox.rightColumn ) then
+						this.bCursorOnLeft = nil
+						if( CareerStats_medalbox_rightcolumn_layout.CursorIdx == CareerStats_medalbox_rightcolumn_layout.SelectedIdx ) then
+							CareerStats_medalbox_leftcolumn_layout.SelectedIdx = nil
+						end
+					end
+					ifs_careerstats_fnUpdateMedalSelection(this)
+					this.RepaintListbox(this)
+				end
+				ScriptCB_SetMouseMark()
+			end	
+			--print ("base class!")
+			--return
+		end
+		
 		this.fCurIdleTime = this.fMAX_IDLE_TIME
+		
 		if ( ScriptCB_GetShellActive() ) then
 			--ScriptCB_PopScreen();
 			--ScriptCB_SndPlaySound("shell_menu_exit");
-		elseif (not gE3StatsTimeout or gE3StatsTimeout < 0) then
-			if(ScriptCB_CanClientLeaveStats()) then
-				ScriptCB_QuitFromStats()
-				ScriptCB_SndPlaySound("shell_menu_enter")
-			end
+		elseif (this.CurButton == "quit") then
+			ScriptCB_QuitFromStats()
+			ScriptCB_SndPlaySound("shell_menu_exit");
+			return
+		elseif (this.CurButton == "_back") then
+			--this.fCurIdleTime = this.fMAX_IDLE_TIME 
+			--ScriptCB_PopScreen()
+			--ScriptCB_SndPlaySound("shell_menu_exit");
+		--elseif(not gE3StatsTimeout or gE3StatsTimeout < 0) then
+		--	ScriptCB_QuitFromStats();
+		--	ScriptCB_SndPlaySound("shell_menu_enter");
+		else
+			-- user clicked on one of the medal types.  update the info display, etc.
+			--print ("accept: updating medal selection!")
+			--ifs_careerstats_fnUpdateMedalSelection(this)
 		end
 	end,
 
@@ -512,16 +617,22 @@ ifs_careerstats = NewIFShellScreen {
 
 	Input_GeneralUp = function(this)
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		ListManager_fnNavUp(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
-		ListManager_fnNavUp(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
+		if ( this.bCursorOnLeft ) then
+			ListManager_fnNavUp(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
+		else
+			ListManager_fnNavUp(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
+		end
 		ifs_careerstats_fnValidateMedalCursor(this)
 		ifs_careerstats_fnUpdateMedalSelection(this)
 	end,
 
 	Input_GeneralDown = function(this)
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		ListManager_fnNavDown(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
-		ListManager_fnNavDown(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
+		if ( this.bCursorOnLeft ) then
+			ListManager_fnNavDown(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
+		else
+			ListManager_fnNavDown(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
+		end
 		--validate the cursor position (make sure we're not on a null entry)
 		ifs_careerstats_fnValidateMedalCursor(this)
 		ifs_careerstats_fnUpdateMedalSelection(this)
@@ -529,16 +640,22 @@ ifs_careerstats = NewIFShellScreen {
 
 	Input_LTrigger = function(this)
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		ListManager_fnPageUp(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
-		ListManager_fnPageUp(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
+		if ( this.bCursorOnLeft ) then
+			ListManager_fnPageUp(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
+		else
+			ListManager_fnPageUp(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
+		end
 		ifs_careerstats_fnValidateMedalCursor(this)
 		ifs_careerstats_fnUpdateMedalSelection(this)
 	end,
 
 	Input_RTrigger = function(this)
 		this.fCurIdleTime = this.fMAX_IDLE_TIME 
-		ListManager_fnPageDown(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
-		ListManager_fnPageDown(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
+		if ( this.bCursorOnLeft ) then
+			ListManager_fnPageDown(this.medalBox.leftColumn, stats_medalbox_left_contents, CareerStats_medalbox_leftcolumn_layout)
+		else
+			ListManager_fnPageDown(this.medalBox.rightColumn, stats_medalbox_right_contents, CareerStats_medalbox_rightcolumn_layout)
+		end
 		--validate the cursor position (make sure we're not on a null entry)
 		ifs_careerstats_fnValidateMedalCursor(this)
 		ifs_careerstats_fnUpdateMedalSelection(this)
@@ -568,20 +685,29 @@ ifs_careerstats = NewIFShellScreen {
 
 		if(ScriptCB_CanClientLeaveStats()) then
 			gE3StatsTimeout = 0 -- allow quit now
+			IFObj_fnSetVis(this.quit, 1)
 		else
 			gE3StatsTimeout = 1 -- keep clients from leaving
+			IFObj_fnSetVis(this.quit, nil)
 		end
 
 		if(gE3StatsTimeout) then
 			gE3StatsTimeout = gE3StatsTimeout - fDt
 		end
+		
+		CareerStats_statbox_leftcolumn_layout.SelectedIdx = nil
+		CareerStats_statbox_leftcolumn_layout.CursorIdx = nil
+		CareerStats_statbox_rightcolumn_layout.SelectedIdx = nil
+		CareerStats_statbox_rightcolumn_layout.CursorIdx = nil
+		ListManager_fnMoveCursor(this.statBox.leftColumn, CareerStats_statbox_leftcolumn_layout)
+		ListManager_fnMoveCursor(this.statBox.rightColumn, CareerStats_statbox_rightcolumn_layout)
 
 		-- if we've been sitting here for a while, bail to the teaser screen
 		this.fCurIdleTime = this.fCurIdleTime - fDt
 		if((this.fCurIdleTime < 0) and (not gE3StatsTimeout or gE3StatsTimeout < 0 or ScriptCB_GetShellActive())) then
 			this.fCurIdleTime = 100
-			ScriptCB_QuitFromStats()
-			ScriptCB_SndPlaySound("shell_menu_enter")
+			ScriptCB_QuitFromStats();
+			ScriptCB_SndPlaySound("shell_menu_enter");
 		end
  	end,
 
@@ -596,34 +722,42 @@ ifs_careerstats = NewIFShellScreen {
 -- Helper function, sets up parts of this screen that need any
 -- programmatic work (i.e. scaling to screensize)
 function ifs_careerstats_fnBuildScreen(this)
+	if( ScriptCB_GetShellActive() ) then
+		-- Add tabs to screen
+		ifelem_tabmanager_Create(this, gPCMainTabsLayout, gPCSinglePlayerTabsLayout)
+	end
+
 	-- Ask game for screen size, fill in values
 	local r,b,v,widescreen=ScriptCB_GetScreenInfo()
-	--this.bgTexture.localpos_l = 0
-	--this.bgTexture.localpos_t = 0
-	--this.bgTexture.localpos_r = r*widescreen
-	--this.bgTexture.localpos_b = b
-	--this.bgTexture.uvs_b = v
+	this.bgTexture.localpos_l = 0
+	this.bgTexture.localpos_t = 0
+	this.bgTexture.localpos_r = r*widescreen
+	this.bgTexture.localpos_b = b
+	this.bgTexture.uvs_b = v
 
 	if(this.Helptext_Back) then
 		IFText_fnSetString(this.Helptext_Back.helpstr, "ifs.stats.back")
 	end
-	if(this.Helptext_Accept) then
+	if (this.Helptext_Accept) then
 		IFText_fnSetString(this.Helptext_Accept.helpstr, "ifs.stats.done")
 	end
+
 
 	-- Inset slightly from fulls screen size
 	local w,h = ScriptCB_GetSafeScreenInfo()
 --	w = w * 0.95
 	--h = h * 0.82
 
-	this.title.bg_width = w * 0.945
-	this.title.bgoffsetx = w * -0.009
-	this.title.bgexpandy = 6
+	if(this.title ~= nil) then
+		this.title.bg_width = w * 0.9665
+		this.title.bgoffsetx = w * -0.0053
+		this.title.bgexpandy = 4
+	end
 
 	-- stat window
 	this.statBox = NewIFContainer {
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.20,
+		ScreenRelativeY = 0.195,
 		width = w,
 		height = h * 0.25,
 		zPos = 200,
@@ -648,9 +782,9 @@ function ifs_careerstats_fnBuildScreen(this)
 	-- medals window
 	this.medalBox = NewIFContainer {
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.51,
+		ScreenRelativeY = 0.5075,
 		width = w,
-		height = h * 0.39,
+		height = h * 0.384,
 		zPos = 200,
 	}
 	this.medalBox.window = NewButtonWindow { ZPos = 200,
@@ -675,7 +809,7 @@ function ifs_careerstats_fnBuildScreen(this)
 		height = this.medalBox.height,
 	}
 	this.medalBox.rightColumn = NewIFContainer {
-		x = this.medalBox.width * 0.25, y = 7,	-- raise this because there are fewer elements in this container
+		x = this.medalBox.width * 0.25, y = 5,	-- raise this because there are fewer elements in this container
 		width = this.medalBox.width * 0.45,
 		height = this.medalBox.height,
 	}
@@ -683,9 +817,9 @@ function ifs_careerstats_fnBuildScreen(this)
 	-- info window
 	this.infoBox = NewIFContainer {
 		ScreenRelativeX = 0.5,
-		ScreenRelativeY = 0.81,
+		ScreenRelativeY = 0.795,
 		width = w,
-		height = h * 0.215,
+		height = h * 0.20,
 	}
 	
 	this.infoBox.window = NewButtonWindow { ZPos = 200,
@@ -702,7 +836,7 @@ function ifs_careerstats_fnBuildScreen(this)
 		nocreatebackground = 1,
 		startdelay = math.random() * 0.25,
 	}
-
+	
 	--CareerStats_listbox_layout.width = w - 50
 	--CareerStats_listbox_layout.showcount = math.floor(h / (CareerStats_listbox_layout.yHeight + CareerStats_listbox_layout.ySpacing)) - 1
 

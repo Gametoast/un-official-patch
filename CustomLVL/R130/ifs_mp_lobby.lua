@@ -1,3 +1,5 @@
+-- ifs_mp_lobby.lua (Zerted UOP 1.3 r130) 
+-- verified decompile by BAD_AL  
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
@@ -727,7 +729,9 @@ ifs_mp_lobby = NewIFShellScreen {
 		IFText_fnSetString(this.IPAddr,"IP: " .. ScriptCB_GetIPAddr())
 		IFText_fnSetString(this.ServerName,ScriptCB_GetGameName())
 
-		IFObj_fnSetVis(this.IPAddr, (gOnlineServiceStr ~= "XLive") and (not ifs_mp_lobby.bE3Mode) and (not gFinalBuild))
+		IFObj_fnSetVis(this.IPAddr, (gOnlineServiceStr ~= "XLive") and 
+								 gOnlineServiceStr == "Galaxy" and 
+                              (not ifs_mp_lobby.bE3Mode) and (not gFinalBuild))
 
 		-- Show server name all the time, request from Brad - NM 8/24/05
 		IFObj_fnSetVis(this.ServerName, 1) -- (gOnlineServiceStr ~= "XLive") and (not ifs_mp_lobby.bE3Mode) and (not gFinalBuild))

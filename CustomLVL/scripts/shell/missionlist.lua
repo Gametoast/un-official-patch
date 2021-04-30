@@ -1,6 +1,13 @@
+------------------------------------------------------------------
+-- uop recovered source
+-- by Anakain
+------------------------------------------------------------------
+-- missionlist.lua (Zerted UOP recovery )
+-- 
 --
 -- Copyright (c) 2005 Pandemic Studios, LLC. All rights reserved.
 --
+-- WIP (BAD_AL)
 
 -- List of missions presented to the user for IA/MP/splitscreen/etc.
 -- This list is kept in alphabetical order (in English, anyhow).
@@ -26,101 +33,10 @@
 -- Below, things are in one-entry-per-line string.format to make it easier to
 -- comment in/out maps by commenting in/out a single line
 
-if(gPCBetaBuild) then
-	sp_missionselect_listbox_contents = {
-		-- In the below list, the first '%s' will be replaced by the era,
-		-- and the second will be replaced by the multiplayer variant name
-		-- (the part after "mode_")
-	}
+sp_missionselect_listbox_contents = custom_GetSPMissionList()
 
-	mp_missionselect_listbox_contents = {
-		-- In the below list, the first '%s' will be replaced by the era,
-		-- and the second will be replaced by the multiplayer variant name
-		-- (the part after "mode_")
-		{ mapluafile = "spa1%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1,},
-		{ mapluafile = "tan1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "uta1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-	}
-	
-else
-	sp_missionselect_listbox_contents = {
-		-- In the below list, the first '%s' will be replaced by the era,
-		-- and the second will be replaced by the multiplayer variant name
-		-- (the part after "mode_")
-	--    { mapluafile = "TEST1%s",   era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1,},
-	--    { mapluafile = "bes2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		{ mapluafile = "cor1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "dag1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "dea1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, },
-		{ mapluafile = "end1%s_%s", era_g = 1,                            mode_con_g = 1, mode_hunt_g = 1, mode_1flag_g = 1, },
-		{ mapluafile = "fel1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "geo1%s_%s",            era_c = 1, mode_con_c = 1, mode_ctf_c = 1, mode_hunt_c = 1, mode_xl_c = 1},
-		{ mapluafile = "hot1%s_%s", era_g = 1,            mode_con_g = 1, mode_1flag_g = 1, mode_hunt_g = 1, mode_xl_g = 1},
-		{ mapluafile = "kam1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "kas2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_hunt_c = 1,  mode_ctf_c = 1, mode_ctf_g = 1, mode_xl_c = 1, mode_xl_g = 1},
-		{ mapluafile = "mus1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "myg1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "nab2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1,mode_ctf_c = 1, mode_ctf_g = 1, mode_hunt_c = 1,},
-		{ mapluafile = "pol1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-	--    { mapluafile = "rhn2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		{ mapluafile = "spa1%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1,},
-	--    { mapluafile = "spa2%s_%s",            era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		{ mapluafile = "spa3%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1,},
-		--{ mapluafile = "spa4%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
-		{ mapluafile = "spa6%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1, },
-		{ mapluafile = "spa7%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1, },
-		{ mapluafile = "spa8%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1,},
-		{ mapluafile = "spa9%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1,},
-		{ mapluafile = "tan1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "tat2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, mode_hunt_g = 1, mode_eli_g = 1,},
-		{ mapluafile = "tat3%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "uta1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "yav1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		--{ mapluafile = "kor1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		--{ mapluafile = "sal1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		--{ mapluafile = "spa3%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
-		--{ mapluafile = "spa4%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
-	}
+mp_missionselect_listbox_contents = custom_GetMPMissionList()
 
-	mp_missionselect_listbox_contents = {
-		-- In the below list, the first '%s' will be replaced by the era,
-		-- and the second will be replaced by the multiplayer variant name
-		-- (the part after "mode_")
-	--    { mapluafile = "TEST1%s",   era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1,},
-	--    { mapluafile = "bes2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		{ mapluafile = "cor1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "dag1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "dea1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1, },
-		{ mapluafile = "end1%s_%s", era_g = 1,                            mode_con_g = 1, mode_hunt_g = 1, mode_1flag_g = 1, },
-		{ mapluafile = "fel1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "geo1%s_%s",            era_c = 1, mode_con_c = 1, mode_ctf_c = 1, mode_hunt_c = 1,},
-		{ mapluafile = "hot1%s_%s", era_g = 1,            mode_con_g = 1, mode_1flag_g = 1, mode_hunt_g = 1,},
-		{ mapluafile = "kam1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "kas2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_hunt_c = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "mus1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "myg1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-		{ mapluafile = "nab2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1,mode_ctf_c = 1, mode_ctf_g = 1, mode_hunt_c = 1,},
-		{ mapluafile = "pol1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1,},
-	--    { mapluafile = "rhn2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		{ mapluafile = "spa1%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1,},
-	--    { mapluafile = "spa2%s_%s",            era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		{ mapluafile = "spa3%s_%s",            era_c = 1, mode_assault_c = 1,  mode_1flag_c = 1,},
-		--{ mapluafile = "spa4%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
-		{ mapluafile = "spa6%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1, },
-		{ mapluafile = "spa7%s_%s",            era_c = 1, mode_assault_c = 1, mode_1flag_c = 1, },
-		{ mapluafile = "spa8%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1,},
-		{ mapluafile = "spa9%s_%s", era_g = 1,            mode_assault_g = 1, mode_1flag_g = 1,},
-		{ mapluafile = "tan1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "tat2%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_ctf_c = 1, mode_ctf_g = 1, mode_hunt_g = 1, mode_eli_g = 1,},
-		{ mapluafile = "tat3%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "uta1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		{ mapluafile = "yav1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, mode_1flag_c = 1, mode_1flag_g = 1,},
-		--{ mapluafile = "kor1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		--{ mapluafile = "sal1%s_%s", era_g = 1, era_c = 1, mode_con_c = 1, mode_con_g = 1, },
-		--{ mapluafile = "spa3%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
-		--{ mapluafile = "spa4%s_%s", era_g = 1,            mode_con_c = 1, mode_con_g = 1, },
-	}
-end
 
 -- Singleplayer campaigns. Each of these tables has a set of
 -- string.sub-tables, one string.sub-table per mission. These are run through in
@@ -344,7 +260,7 @@ attract_mode_maps = {
     "uta1c_con",
     "uta1g_con",
     "yav1c_con",
-    "yav1c_1flag",
+    "  yav1c_1flag",
     "yav1g_con",
     "yav1g_1flag",
 }
@@ -356,17 +272,19 @@ ifs_era_vbutton_layout = {
     xSpacing = 10,
     ySpacing = 5,
     font = "gamefont_medium",
-    buttonlist = { 
+    --[[buttonlist = { 
         { tag = "c", string = "common.era.cw", },
         { tag = "g", string = "common.era.gcw", },
-    },
+    },]]
+	buttonlist = custom_GetEraButtonList(),
     title = "ifs.sp.pick_era",
     -- rotY = 35,
 }
 
 -- These are a list of map mode suffixes. They're concatanated onto
 -- "mode_" when expanding, etc.
-gMapEras = {
+gMapEras = custom_GetGMapEras()
+--[[{
     { key = "era_c", showstr = "common.era.cw",  subst = "c", 
         Team1Name = "common.sides.rep.name", Team2Name = "common.sides.cis.name",
         icon1 = "cis_icon", icon2 = "rep_icon",
@@ -375,11 +293,12 @@ gMapEras = {
         Team1Name = "common.sides.all.name", Team2Name = "common.sides.imp.name",
         icon1 = "imp_icon", icon2 = "all_icon",
     },
-}
+}]]
 
 -- These are a list of map mode suffixes. They're concatanated onto
 -- "mode_" when expanding, etc.
-gMapModes = {
+gMapModes = custom_GetGMapModes()
+--[[{
 	{
 		key = "mode_con", showstr = "modename.name.con", 
 		descstr = "modename.description.con", subst = "con",
@@ -425,7 +344,7 @@ gMapModes = {
 		descstr = "modename.description.xl", subst = "xl",
 		icon = "mode_icon_XL",
 	},
-}
+}]]
 
 gAllMapsStr = "_all_maps_"
 gDelAllMapsStr = "_remove_all_"
@@ -435,8 +354,8 @@ gAllErasStr = "_all_eras_"
 function missionlist_mapsorthelper(a, b)
 	local Name1, Name2
 	Name1 = missionlist_GetLocalizedMapName(a.mapluafile)
-	Name1 = ScriptCB_ununicode(Name1)
 	Name2 = missionlist_GetLocalizedMapName(b.mapluafile)
+	Name1 = ScriptCB_ununicode(Name1)
 	Name2 = ScriptCB_ununicode(Name2)
 
 	return Name1 < Name2
@@ -446,55 +365,91 @@ end
 -- If bForMP is true, it expands the MP list. If false, it expands
 -- the SP list. 
 function missionlist_ExpandMaplist(bForMP)
+    print("missionlist_ExpandMapList()")
 
-	if(not gSortedMaplist) then
-		table.sort(sp_missionselect_listbox_contents, missionlist_mapsorthelper) 
-		table.sort(mp_missionselect_listbox_contents, missionlist_mapsorthelper) 
+    if (not gSortedMaplist) then --else 63
+        --table.sort(sp_missionselect_listbox_contents, missionlist_mapsorthelper)
+        --table.sort(mp_missionselect_listbox_contents, missionlist_mapsorthelper)
+		--[[
+		local i, j, k, v, Num
+		local SourceList
+		if (bForMP) then
+			SourceList = mp_missionselect_listbox_contents
+		else
+			SourceList = sp_missionselect_listbox_contents
+		end
+
+		-- Blank dest list for starters
+		missionselect_listbox_contents = {}
+
+		local expand_maps_for_pc = false
+		if (expand_maps_for_pc) then
+			if (gPlatformStr == "PC") then
+				local FilterList = gMapModes
+				Num = 1 -- where next entry in missionselect_listbox_contents will go
+				for i = 1, table.getn(SourceList) do
+					for j = 1, table.getn(FilterList) do
+						local Tag = FilterList[j].key
+						if (SourceList[i][Tag]) then
+							-- Start with blank row
+							missionselect_listbox_contents[Num] = {}
+							-- Copy all items in this table row
+							for k, v in SourceList[i] do
+								missionselect_listbox_contents[Num][k] = v
+								--                  print(" Copying ", k, missionselect_listbox_contents[Num][k])
+							end
+							-- But, we want to rename it in the process, adding in the mapname
+							missionselect_listbox_contents[Num].mapluafile =
+								string.format(SourceList[i].mapluafile, "%s", FilterList[j].subst)
+							--              print("Added luafile ", missionselect_listbox_contents[Num].mapluafile)
+
+							Num = Num + 1 -- move on in output list
+						end -- SourceList[i].Tag exists
+					end -- k loop over filters
+				end -- i loop over input maps
+				return
+			end
+		end]]
+		
+		if ( __mp_n_limit__ ~= nil ) then --else 29
+			local r1 =  table.getn(mp_missionselect_listbox_contents) - __mp_n_limit__ 
+			
+			while 0 < r1 do
+				local r2 = table.getn(mp_missionselect_listbox_contents) 
+				table.remove( mp_missionselect_listbox_contents, r2)
+				r1 = r1 - 1
+			end
+		end
+		--lbl 29
+		if __sp_n_limit__ ~= nil then --else 51
+			local r1 = table.getn(sp_missionselect_listbox_contents) - __sp_n_limit__
+			
+			while 0 < r1 do
+				local r2 = table.getn(sp_missionselect_listbox_contents) 
+				table.remove( sp_missionselect_listbox_contents, r2)
+				r1 = r1 - 1
+			end
+		end 
+		--lbl 51
+		table.sort(sp_missionselect_listbox_contents, missionlist_mapsorthelper)
+		table.sort(mp_missionselect_listbox_contents, missionlist_mapsorthelper)
+		
 		gSortedMaplist = 1
+	end 
+	--lbl 63
+	
+	local r1, r2, r3, r4, r5, SourceList = nil
+	
+	if bForMP == true then
+		SourceList = mp_missionselect_listbox_contents
+	else
+		SourceList = sp_missionselect_listbox_contents
 	end
-
-    local i,j,k,v,Num
-    local SourceList
-    if(bForMP) then
-        SourceList = mp_missionselect_listbox_contents
-    else
-        SourceList = sp_missionselect_listbox_contents
-    end
-
-    -- Blank dest list for starters
-    missionselect_listbox_contents = {}
-
-    local expand_maps_for_pc = false
-    if( expand_maps_for_pc ) then
-        if(gPlatformStr == "PC") then
-            local FilterList = gMapModes
-        Num = 1 -- where next entry in missionselect_listbox_contents will go
-        for i = 1,table.getn(SourceList) do
-                for j = 1,table.getn(FilterList) do
-                    local Tag = FilterList[j].key
-                    if(SourceList[i][Tag]) then
-                        -- Start with blank row
-                        missionselect_listbox_contents[Num] = {}
-                        -- Copy all items in this table row
-                        for k,v in SourceList[i] do
-                            missionselect_listbox_contents[Num][k] = v
-                            --                  print(" Copying ", k, missionselect_listbox_contents[Num][k])
-                        end
-                        -- But, we want to rename it in the process, adding in the mapname
-                        missionselect_listbox_contents[Num].mapluafile = 
-                            string.format(SourceList[i].mapluafile, "%s", FilterList[j].subst)
-                        --              print("Added luafile ", missionselect_listbox_contents[Num].mapluafile)
-
-                        Num = Num + 1 -- move on in output list
-                    end -- SourceList[i].Tag exists
-                end -- k loop over filters
-        end -- i loop over input maps
-            return
-        end
-    end
-
-    for i = 1,table.getn(SourceList) do
-        if(SourceList[i].mapluafile ~= gAllMapsStr) then
+	
+	missionselect_listbox_contents = {}
+	
+    for i = 1, table.getn(SourceList) do
+        if (SourceList[i].mapluafile ~= gAllMapsStr) then
             -- Copy row
             missionselect_listbox_contents[i] = SourceList[i]
             missionselect_listbox_contents[i].bIsWildcard = nil
@@ -502,12 +457,13 @@ function missionlist_ExpandMaplist(bForMP)
         -- for multiple selection
         missionselect_listbox_contents[i].bSelected = nil
     end -- i loop over input maps
-    --print("++++bSelected clear")
-    --remove "all maps" because we have "select all" button
-    --missionselect_listbox_contents[table.getn(SourceList) + 1] = { mapluafile = gAllMapsStr, bIsWildcard = 1,}
+    -- print("++++bSelected clear")
+    -- remove "all maps" because we have "select all" button
+    -- missionselect_listbox_contents[table.getn(SourceList) + 1] = { mapluafile = gAllMapsStr, bIsWildcard = 1,}
 
     -- TODO: alphabetize the list now?
 end
+
 
 -- From a maplist abbreviation (the mapluafile entry from one row of
 -- the missionselect_listbox_contents array), returns a table as to
@@ -808,21 +764,27 @@ function missionlist_fnGetMovieName(Selection)
     local movieFile = nil
 
     if(not Selection) then
+		print("missionlist_fnGetMovieName(): emergency bailout")
         return movieName, movieFile -- emergency bailout
     end
 
-    movieName = Selection.mapluafile
+    --movieName = movieFile.dnldable
     if(Selection.dnldable) then
+		print("missionlist_fnGetMovieName(): Downloadable Map")
         movieFile = movieName
     end
+	
 
-    -- HACK - only use first 4 chars of moviename. This may need to
-    -- change eventually. (Trim off everything after first %s, I
-    -- suspect)
-    movieName = string.sub(movieName,1,4)
-    if(movieName == "TEST") then
-        movieName = nil
-    end
+	movieName = Selection.movieName
+	if( not movieName) then 
+	else 
+	end 
+	
+	movieFile = Selection.movieFile
+	if( not movieFile) then 
+	else 
+	end 
+
 
     return movieName, movieFile
 end
@@ -943,7 +905,7 @@ function missionlist_GetLocalizedMapDescr(abbrev)
     return DisplayUStr, 2
 end
 
--- Given an row from the missionlist table, returns a string which is
+--[[ repeat function? Given an row from the missionlist table, returns a string which is
 -- the basename for the movie
 function missionlist_fnGetMovieName(Selection)
     local movieName = nil
@@ -967,7 +929,7 @@ function missionlist_fnGetMovieName(Selection)
     end
 
     return movieName, movieFile
-end
+end]] 
 
 -- Takes a map luafile (e.g. "end1g_con") and returns the row from gMapModes
 -- that's appropriate for that map. Returns nil if the mode isn't found
@@ -1017,7 +979,7 @@ function missionlist_GetMapEra(abbrev)
     return nil -- not found
 end
 
--- Fill in some items that differ per-platform
+--[[ Fill in some items that differ per-platform
 if (gPlatformStr == "PS2") then
     SPCampaign1[1].outtromovie = "tutorial01cw"
     SPCampaign1[1].outtromovie_left = 50
@@ -1046,7 +1008,7 @@ elseif (gPlatformStr == "XBox") then
     --     SPCampaign2[1].outtromovie_width = 460
     --     SPCampaign2[1].outtromovie_height = 350
     --     SPCampaign2[1].outtromovielocalized = 1
-elseif (gPlatformStr == "PC") then
+elseif (gPlatformStr == "PC") then]]
     -- Zap out all 'unlockable' flags
     local i
     for i=1,table.getn(SPCampaign1) do
@@ -1056,5 +1018,5 @@ elseif (gPlatformStr == "PC") then
     --     for i=1,table.getn(SPCampaign2) do
     --         SPCampaign2[i].unlockable = nil
     --     end
-end
+--end
 

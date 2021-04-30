@@ -8,757 +8,876 @@ Group("player1weaponinformation")
 {
     PropagateAlpha(1)
     Viewport(1)
-    Position(0.000000, 1.00000, 0.000000, "Viewport")
+    Position(0.000000, 1.000000, 0.000000, "Viewport")
     ZOrder(255)
     EventEnable("player1.weaponsEnable")
     EventDisable("player1.weaponsDisable")
-        Text("player1weapon1ammo")
-        {
-            TextBreak("Word")
-            TextFont("gamefont_large")
-            EventNumber("player1.weapon1.totalAmmoBullets")
-            InfiniteDashes(0)
-            Viewport(1)
-            Position(0.013900, -0.108491, 0.000000, "Viewport")
-            ZOrder(6)
-            Color(0, 0, 0)
-            EventEnable("player1.weapon1.totalAmmoBullets")
-            EventDisable("player1.weapon1.disable")
-        }
+    Text("player1weapon1ammo")
+    {
+        TextBreak("Word")
+        TextFont("gamefont_large")
+        EventNumber("player1.weapon1.totalAmmoBullets")
+        InfiniteDashes(0)
+        Viewport(1)
+        Position(0.013900, -0.108491, 0.000000, "Viewport")
+        ZOrder(6)
+        Color(0, 0, 0)
+        EventEnable("player1.weapon1.totalAmmoBullets")
+        EventDisable("player1.weapon1.disable")
+    }
 
-        Model3D("player1weapon1ammoInfinite")
-        {
-            Mesh("hud_infinite_ammo_icon")
-            Viewport(1)
-            Position(0.026323, -0.095274, 0.000000, "Viewport")
-            Scale(0.600000, 0.600000, 0.600000)
-            ZOrder(0)
-            EventEnable("player1.weapon1.ammoInfinite")
-            EventDisable("player1.weapon1.disable")
-        }
+    Model3D("player1weapon1ammoInfinite")
+    {
+        Mesh("hud_infinite_ammo_icon")
+        Viewport(1)
+        Position(0.026323, -0.095274, 0.000000, "Viewport")
+        Scale(0.600000, 0.600000, 0.600000)
+        ZOrder(0)
+        EventEnable("player1.weapon1.ammoInfinite")
+        EventDisable("player1.weapon1.disable")
+    }
 
-        Text("player1weapon1name")
+    Text("player1weapon1name")
+    {
+        TextBox(0.328125, 0.000000)
+        TextBreak("Word")
+        TextFont("gamefont_small")
+        TextStyle("Shadow")
+        EventText("player1.weapon1.name")
+        Viewport(1)
+        Position(0.016095, -0.238389, 0.000000, "Viewport")
+        ZOrder(5)
+        Alpha(0.750000)
+        FadeInTime(0.250000)
+        FadeHoldTime(2.500000)
+        FadeOutTime(1.000000)
+        EventEnable("player1.weapon1.change")
+        EventDisable("player1.weapon1.disable")
+    }
+
+    Text("player1weapon2ammo")
+    {
+        TextBreak("Word")
+        TextFont("gamefont_large")
+        EventNumber("player1.weapon2.totalAmmoBullets")
+        InfiniteDashes(0)
+        Viewport(1)
+        Position(0.023076, -0.177951, 0.000000, "Viewport")
+        ZOrder(5)
+        Color(0, 0, 0)
+        EventEnable("player1.weapon2.totalAmmoBullets")
+        EventDisable("player1.weapon2.disable")
+    }
+
+    Model3D("player1weapon2ammoInfinite")
+    {
+        Mesh("hud_infinite_ammo_icon")
+        Viewport(1)
+        Position(0.026323, -0.163877, 0.000000, "Viewport")
+        Scale(0.600000, 0.600000, 0.600000)
+        ZOrder(0)
+        EventEnable("player1.weapon2.ammoInfinite")
+        EventDisable("player1.weapon2.disable")
+    }
+
+    Text("player1weapon2name")
+    {
+        TextBox(0.400391, 0.000000)
+        TextBreak("Word")
+        TextFont("gamefont_small")
+        TextStyle("Shadow")
+        EventText("player1.weapon2.name")
+        Viewport(1)
+        Position(0.016095, -0.264822, 0.000000, "Viewport")
+        ZOrder(5)
+        Alpha(0.750000)
+        FadeInTime(0.250000)
+        FadeHoldTime(2.500000)
+        FadeOutTime(1.000000)
+        EventEnable("player1.weapon2.change")
+        EventDisable("player1.weapon2.disable")
+    }
+
+    Model3D("player1weapon1backdrop")
+    {
+        Mesh("hud_weapon_backdrop")
+        Viewport(1)
+        Position(0.152284, -0.098922, -0.002803, "Viewport")
+        Scale(0.200000, 0.200000, 0.200000)
+        ZOrder(8)
+        Alpha(0.980000)
+        FadeOutTime(0.250001)
+        EventEnable("player1.weapon1.mesh")
+        EventDisable("player1.weapon1.disable")
+    }
+
+    Model3D("player1weapon2backdrop")
+    {
+        Mesh("hud_weapon2_backdrop")
+        Viewport(1)
+        Position(0.152284, -0.166659, -0.025075, "Viewport")
+        Scale(0.200001, 0.200001, 0.200001)
+        ZOrder(8)
+        Alpha(0.980000)
+        FadeOutTime(0.250001)
+        EventEnable("player1.weapon2.mesh")
+        EventDisable("player1.weapon2.disable")
+    }
+
+    Group("player1weapon1group")
+    {
+        Viewport(1)
+        Position(0.346161, -0.450412, 0.000000, "Viewport")
+        EventEnable("initialize")
+        Model3D("player1weapon1mesh")
         {
-            TextBox(0.328125, 0.000000)
-            TextBreak("Word")
-            TextFont("gamefont_small")
-            TextStyle("Shadow")
-            EventText("player1.weapon1.name")
+            EventMesh("player1.weapon1.mesh")
             Viewport(1)
-            Position(0.016095, -0.238389, 0.000000, "Viewport")
             ZOrder(5)
-            Alpha(0.750000)
-            FadeInTime(0.250000)
-            FadeHoldTime(2.500000)
-            FadeOutTime(1.000000)
-            EventEnable("player1.weapon1.change")
-            EventDisable("player1.weapon1.disable")
-        }
-
-        Text("player1weapon2ammo")
-        {
-            TextBreak("Word")
-            TextFont("gamefont_large")
-            EventNumber("player1.weapon2.totalAmmoBullets")
-            InfiniteDashes(0)
-            Viewport(1)
-            Position(0.023076, -0.177951, 0.000000, "Viewport")
-            ZOrder(5)
-            Color(0, 0, 0)
-            EventEnable("player1.weapon2.totalAmmoBullets")
-            EventDisable("player1.weapon2.disable")
-        }
-
-        Model3D("player1weapon2ammoInfinite")
-        {
-            Mesh("hud_infinite_ammo_icon")
-            Viewport(1)
-            Position(0.026323, -0.163877, 0.000000, "Viewport")
-            Scale(0.600000, 0.600000, 0.600000)
-            ZOrder(0)
-            EventEnable("player1.weapon2.ammoInfinite")
-            EventDisable("player1.weapon2.disable")
-        }
-
-        Text("player1weapon2name")
-        {
-            TextBox(0.400391, 0.000000)
-            TextBreak("Word")
-            TextFont("gamefont_small")
-            TextStyle("Shadow")
-            EventText("player1.weapon2.name")
-            Viewport(1)
-            Position(0.016095, -0.264822, 0.000000, "Viewport")
-            ZOrder(5)
-            Alpha(0.750000)
-            FadeInTime(0.250000)
-            FadeHoldTime(2.500000)
-            FadeOutTime(1.000000)
-            EventEnable("player1.weapon2.change")
-            EventDisable("player1.weapon2.disable")
-        }
-
-        Model3D("player1weapon1backdrop")
-        {
-            Mesh("hud_weapon_backdrop")
-            Viewport(1)
-            Position(0.152284, -0.098922, -0.002803, "Viewport")
-            Scale(0.200000, 0.200000, 0.200000)
-            ZOrder(8)
-            Alpha(0.980000)
-            FadeOutTime(0.250001)
             EventEnable("player1.weapon1.mesh")
             EventDisable("player1.weapon1.disable")
+            MeshInfo("westar34")
+            {
+                Position(-0.252832, 0.341293, 0.014590, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("arccaster")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("imp_weap_inf_sonic_pistol")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("rep_weap_inf_dc15carbine")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("rep_weap_dc15st")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("leia")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("e11s")
+            {
+                Position(-0.206269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("rep_weap_dc15s_ex")
+            {
+                Position(-0.206269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("leia")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("kylan")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("dl19")
+            {
+                Position(-0.236269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("a295")
+            {
+                Position(-0.236269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("dh17")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("EE_3")
+            {
+                Position(-0.206269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("T_21")
+            {
+                Position(-0.236269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("flechette")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("a280")
+            {
+                Position(-0.236269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("rep_weap_inf_dc17pistol")
+            {
+                Position(-0.256269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("arcrifle")
+            {
+                Position(-0.206269, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("weap_acp")
+            {
+                Position(-0.202832, 0.341293, 0.014590, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("hud_vehicle_lasers")
+            {
+                Position(-0.185992, 0.354928, -0.000509, "Viewport")
+                Rotation(0.804269, 359.994110, 359.999695)
+                Scale(1.200000, 1.200000, 1.200000)
+            }
+
+            MeshInfo("hud_stealth")
+            {
+                Position(-0.269501, 0.352591, 1.800601, "Viewport")
+                Rotation(0.002055, 90.580322, 0.000000)
+                Scale(0.270001, 0.270001, 0.270001)
+            }
+
+            MeshInfo("hud_vehicle_beam_cannon")
+            {
+                Position(-0.217103, 0.354157, 0.006280, "Viewport")
+                Scale(1.200000, 1.200000, 1.200000)
+            }
+
+            MeshInfo("hud_vehicle_chaingun")
+            {
+                Position(-0.201828, 0.356458, 0.006280, "Viewport")
+            }
+
+            MeshInfo("hud_vehicle_guided_rocket")
+            {
+                Position(-0.228913, 0.354333, 0.006280, "Viewport")
+                Scale(1.250000, 1.250000, 1.250000)
+            }
+
+            MeshInfo("hud_geo_turret")
+            {
+                Position(-0.203592, 0.354333, 0.006280, "Viewport")
+                Scale(1.909999, 1.909999, 1.909999)
+            }
+
+            MeshInfo("hud_vehicle_stingers")
+            {
+                Position(-0.278276, 0.250243, 0.006280, "Viewport")
+            }
+
+            MeshInfo("hud_vehicle_torpedo")
+            {
+                Position(-0.278276, 0.250243, 0.006280, "Viewport")
+            }
+
+            MeshInfo("hud_vehicle_missile")
+            {
+                Position(-0.240880, 0.356816, 0.006280, "Viewport")
+            }
+
+            MeshInfo("hud_vehicle_mortar")
+            {
+                Position(-0.278276, 0.250243, 0.006280, "Viewport")
+            }
+
+            MeshInfo("hud_vehicle_recoiless")
+            {
+                Position(-0.232116, 0.355484, 0.006280, "Viewport")
+                Scale(1.280000, 1.280000, 1.280000)
+            }
+
+            MeshInfo("hud_vehicle_flak")
+            {
+                Position(-0.270610, 0.353623, 0.006280, "Viewport")
+            }
+
+            MeshInfo("hud_vehicle_bombs")
+            {
+                Position(-0.278276, 0.250243, 0.006280, "Viewport")
+            }
+
+            MeshInfo("cis_weap_inf_pistol")
+            {
+                Position(-0.260316, 0.356366, -0.002834, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.800000, 0.800000, 0.800000)
+            }
+
+            MeshInfo("cis_weap_inf_sniperrifle")
+            {
+                Position(-0.230193, 0.361898, -0.003271, "Viewport")
+                Rotation(359.802399, 90.747269, 359.999695)
+            }
+
+            MeshInfo("cis_weap_inf_rifle")
+            {
+                Position(-0.236938, 0.359879, 0.001903, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("cis_weap_inf_fusioncutter")
+            {
+                Position(-0.237654, 0.359785, -0.003261, "Viewport")
+                Rotation(355.836060, 135.827820, 69.479843)
+            }
+
+            MeshInfo("cis_weap_inf_launcher")
+            {
+                Position(-0.206654, 0.362510, 0.003622, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.660000, 0.660000, 0.660000)
+            }
+
+            MeshInfo("hud_cis_wristblaster")
+            {
+                Position(-0.264100, 0.350311, 1.022745, "Viewport")
+                Rotation(0.000000, 0.000000, 120.000000)
+                Scale(0.653289, 0.653289, 0.653289)
+            }
+
+            MeshInfo("hud_cis_trishot")
+            {
+                Position(-0.268002, 0.352302, 0.734317, "Viewport")
+                Rotation(359.967194, 359.763428, 119.966087)
+                Scale(0.653289, 0.653289, 0.653289)
+            }
+
+            MeshInfo("hud_lightsaber")
+            {
+                Position(-0.232567, 0.355873, -0.087683, "Viewport")
+                Rotation(359.967194, 359.763428, 0.003998)
+                Scale(1.170000, 1.170000, 1.170000)
+            }
+
+            MeshInfo("rep_weap_inf_pistol")
+            {
+                Position(-0.249442, 0.359076, 0.007261, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(1.140000, 1.140000, 1.140000)
+            }
+
+            MeshInfo("rep_weap_inf_fusioncutter")
+            {
+                Position(-0.247656, 0.353992, -0.002562, "Viewport")
+                Rotation(355.836060, 135.827820, 69.479843)
+            }
+
+            MeshInfo("rep_weap_inf_launcher")
+            {
+                Position(-0.207665, 0.361767, 0.007124, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.670000, 0.670000, 0.670000)
+            }
+
+            MeshInfo("rep_weap_inf_chaingun")
+            {
+                Position(-0.193610, 0.368393, 0.007124, "Viewport")
+                Rotation(354.177856, 99.922020, 359.610596)
+                Scale(0.700000, 0.700000, 0.700000)
+            }
+
+            MeshInfo("com_weap_inf_torpedo")
+            {
+                Position(-0.229334, 0.360748, 0.009504, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.810000, 0.810000, 0.810000)
+            }
+
+            MeshInfo("rep_weap_inf_sniperrifle")
+            {
+                Position(-0.228348, 0.367230, -0.007488, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.820000, 0.820000, 0.820000)
+            }
+
+            MeshInfo("rep_weap_inf_rifle")
+            {
+                Position(-0.219723, 0.364485, 0.003263, "Viewport")
+                Rotation(1.538445, 95.690582, 4.455857)
+                Scale(0.800000, 0.800000, 0.800000)
+            }
+
+            MeshInfo("hud_imp_flamethrower")
+            {
+                Position(-0.173776, 0.358333, 0.205979, "Viewport")
+                Rotation(0.013809, 0.000000, 359.991669)
+                Scale(0.250001, 0.250001, 0.250001)
+            }
+
+            MeshInfo("imp_weap_inf_rifle")
+            {
+                Position(-0.242922, 0.360546, 0.003365, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("imp_weap_inf_pistol")
+            {
+                Position(-0.264184, 0.356163, -0.003873, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(1.240000, 1.240000, 1.240000)
+            }
+
+            MeshInfo("imp_weap_inf_launcher")
+            {
+                Position(-0.206202, 0.374467, 0.011042, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.640000, 0.640000, 0.640000)
+            }
+
+            MeshInfo("imp_weap_inf_fusioncutter")
+            {
+                Position(-0.239710, 0.356673, -0.000329, "Viewport")
+                Rotation(355.836060, 135.827820, 69.479843)
+            }
+
+            MeshInfo("imp_weap_inf_sniperrifle")
+            {
+                Position(-0.211808, 0.367069, 0.001418, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.810000, 0.810000, 0.810000)
+            }
+
+            MeshInfo("all_weap_inf_pistol")
+            {
+                Position(-0.264115, 0.358155, 0.013887, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.720000, 0.720000, 0.720000)
+            }
+
+            MeshInfo("all_weap_inf_lightsabre")
+            {
+                Position(-0.399193, 0.415118, -49.262363, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("all_weap_inf_rifle")
+            {
+                Position(-0.222677, 0.361293, 0.014590, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
+
+            MeshInfo("all_weap_inf_launcher")
+            {
+                Position(-0.213354, 0.367216, 0.000847, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.560000, 0.560000, 0.560000)
+            }
+
+            MeshInfo("all_weap_inf_fusioncutter")
+            {
+                Position(-0.240446, 0.358461, 0.001095, "Viewport")
+                Rotation(355.836060, 135.827820, 69.479843)
+            }
+
+            MeshInfo("all_weap_inf_sniperrifle")
+            {
+                Position(-0.231335, 0.355448, 0.003653, "Viewport")
+                Rotation(0.804269, 90.573097, 359.999695)
+            }
+
+            MeshInfo("all_weap_inf_bowcaster")
+            {
+                Position(-0.241302, 0.357451, -0.001890, "Viewport")
+                Rotation(353.358673, 99.140221, 1.132509)
+                Scale(0.630000, 0.630000, 0.630000)
+            }
+
+            MeshInfo("all_weap_inf_seeker")
+            {
+                Position(-0.235594, 0.360432, 0.000240, "Viewport")
+                Rotation(347.354980, 117.284363, 1.132509)
+                Scale(0.950000, 0.950000, 0.950000)
+            }
+
+            MeshInfo("ewk_spear")
+            {
+                Position(-0.086126, 0.206732, 199.969666, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+                Scale(0.590000, 0.590000, 0.590000)
+            }
+
+            MeshInfo("des_weap_inf_fusioncutter")
+            {
+                Position(-0.240446, 0.358461, 0.001095, "Viewport")
+                Rotation(355.836060, 135.827820, 69.479843)
+            }
+
+            MeshInfo("tat_weap_tuskrifle")
+            {
+                Position(-0.214412, 0.355448, 0.003653, "Viewport")
+                Rotation(0.804269, 90.573097, 359.999695)
+            }
+
+            MeshInfo("wok_weap_inf_bowcaster")
+            {
+                Position(-0.197062, 0.357451, -0.001890, "Viewport")
+                Rotation(353.358673, 99.140221, 1.132509)
+                Scale(0.830000, 0.830000, 0.830000)
+            }
+
+            MeshInfo("wok_weap_inf_fusioncutter")
+            {
+                Position(-0.240446, 0.358461, 0.001095, "Viewport")
+                Rotation(355.836060, 135.827820, 69.479843)
+            }
+
+            MeshInfo("geo_weap_inf_blunderbuss")
+            {
+                Position(-0.253835, 0.363164, -0.002834, "Viewport")
+                Rotation(325.134644, 90.232857, 342.582642)
+            }
+
+            MeshInfo("gun_weap_inf_fusioncutter")
+            {
+                Position(-0.254565, 0.357203, -0.002834, "Viewport")
+                Rotation(124.471199, 68.442780, 177.787216)
+                Scale(0.872851, 0.872851, 0.872851)
+            }
+
         }
 
-        Model3D("player1weapon2backdrop")
+    }
+
+    Group("player1weapon2group")
+    {
+        Viewport(1)
+        Position(0.353928, -0.414382, 0.000000, "Viewport")
+        EventEnable("initialize")
+        Model3D("player1weapon2mesh")
         {
-            Mesh("hud_weapon2_backdrop")
+            EventMesh("player1.weapon2.mesh")
             Viewport(1)
-            Position(0.152284, -0.166659, -0.025075, "Viewport")
-            Scale(0.200001, 0.200001, 0.200001)
-            ZOrder(8)
-            Alpha(0.980000)
-            FadeOutTime(0.250001)
+            ZOrder(5)
             EventEnable("player1.weapon2.mesh")
             EventDisable("player1.weapon2.disable")
-        }
-
-        Group("player1weapon1group")
-        {
-            Viewport(1)
-            Position(0.346161, -0.450412, 0.000000, "Viewport")
-            EventEnable("initialize")
-            Model3D("player1weapon1mesh")
+            MeshInfo("hud_thermaldetonator")
             {
-                EventMesh("player1.weapon1.mesh")
-                Viewport(1)
-                ZOrder(5)
-                EventEnable("player1.weapon1.mesh")
-                EventDisable("player1.weapon1.disable")
-                MeshInfo("hud_vehicle_lasers")
-                {
-                    Position(-0.185992, 0.354928, -0.000509, "Viewport")
-                    Rotation(0.804269, 359.994110, 359.999695)
-                    Scale(1.200000, 1.200000, 1.200000)
-                }
+                Position(-0.284209, 0.250243, 0.006280, "Viewport")
+                Rotation(0.056783, 359.996582, 359.999695)
+                Scale(0.610000, 0.610000, 0.610000)
+            }
 
-                MeshInfo("hud_stealth")
-                {
-                    Position(-0.269501, 0.352591, 1.800601, "Viewport")
-                    Rotation(0.002055, 90.580322, 0.000000)
-                    Scale(0.270001, 0.270001, 0.270001)
-                }
+            MeshInfo("wok_weap_inf_thermaldetonator")
+            {
+                Position(-0.281954, 0.240963, 0.006280, "Viewport")
+                Rotation(51.626522, 352.026947, 0.000000)
+                Scale(1.653860, 1.653860, 1.653860)
+            }
 
-                MeshInfo("hud_vehicle_beam_cannon")
-                {
-                    Position(-0.217103, 0.354157, 0.006280, "Viewport")
-                    Scale(1.200000, 1.200000, 1.200000)
-                }
+            MeshInfo("gun_weap_inf_grenadethermal")
+            {
+                Position(-0.256918, 0.236531, 0.000000, "Viewport")
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("hud_vehicle_chaingun")
-                {
-                    Position(-0.201828, 0.356458, 0.006280, "Viewport")
-                }
+            MeshInfo("hud_droideka_shield")
+            {
+                Position(-0.254297, 0.247155, 0.013074, "Viewport")
+                Scale(0.640000, 0.640000, 0.640000)
+            }
 
-                MeshInfo("hud_vehicle_guided_rocket")
-                {
-                    Position(-0.228913, 0.354333, 0.006280, "Viewport")
-                    Scale(1.2500000, 1.250000, 1.250000)
-                }
+            MeshInfo("hud_detpack_plunger")
+            {
+                Position(-0.276081, 0.242515, 0.039169, "Viewport")
+                Rotation(0.056783, 359.996582, 359.999695)
+                Scale(0.440000, 0.440000, 0.440000)
+            }
 
-                MeshInfo("hud_geo_turret")
-                {
-                    Position(-0.203592, 0.354333, 0.006280, "Viewport")
-                    Scale(1.909999, 1.909999, 1.909999)
-                }
+            MeshInfo("hud_vehicle_beam_cannon")
+            {
+                Position(-0.221990, 0.250243, 0.006280, "Viewport")
+            }
 
-                MeshInfo("hud_vehicle_stingers")
-                {
-                    Position(-0.278276, 0.250243, 0.006280, "Viewport")
-                }
+            MeshInfo("hud_vehicle_chaingun")
+            {
+                Position(-0.278276, 0.250243, 0.006280, "Viewport")
+            }
 
-                MeshInfo("hud_vehicle_torpedo")
-                {
-                    Position(-0.278276, 0.250243, 0.006280, "Viewport")
-                }
+            MeshInfo("hud_vehicle_guided_rocket")
+            {
+                Position(-0.229027, 0.251896, 0.006280, "Viewport")
+            }
 
-                MeshInfo("hud_vehicle_missile")
-                {
-                    Position(-0.240880, 0.356816, 0.006280, "Viewport")
-                }
+            MeshInfo("hud_vehicle_stingers")
+            {
+                Position(-0.227707, 0.251667, 0.006280, "Viewport")
+                Scale(1.430000, 1.430000, 1.430000)
+            }
 
-                MeshInfo("hud_vehicle_mortar")
-                {
-                    Position(-0.278276, 0.250243, 0.006280, "Viewport")
-                }
+            MeshInfo("hud_vehicle_torpedo")
+            {
+                Position(-0.229027, 0.251896, 0.006280, "Viewport")
+                Scale(1.260000, 1.260000, 1.260000)
+            }
 
-                MeshInfo("hud_vehicle_recoiless")
-                {
-                    Position(-0.232116, 0.355484, 0.006280, "Viewport")
-                    Scale(1.280000, 1.280000, 1.280000)
-                }
+            MeshInfo("hud_vehicle_missile")
+            {
+                Position(-0.240880, 0.250430, 0.006280, "Viewport")
+            }
 
-                MeshInfo("hud_vehicle_flak")
-                {
-                    Position(-0.270610, 0.353623, 0.006280, "Viewport")
-                }
+            MeshInfo("hud_vehicle_mortar")
+            {
+                Position(-0.233111, 0.250243, 0.006280, "Viewport")
+                Scale(2.039999, 2.039999, 2.039999)
+            }
 
-                MeshInfo("hud_vehicle_bombs")
-                {
-                    Position(-0.278276, 0.250243, 0.006280, "Viewport")
-                }
+            MeshInfo("hud_vehicle_recoiless")
+            {
+                Position(-0.230713, 0.251495, 0.006280, "Viewport")
+                Scale(1.280000, 1.280000, 1.280000)
+            }
 
-                MeshInfo("cis_weap_inf_pistol")
-                {
-                    Position(-0.260316, 0.356366, -0.002834, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.800000, 0.800000, 0.800000)
-                }
+            MeshInfo("hud_vehicle_flak")
+            {
+                Position(-0.278276, 0.250243, 0.006280, "Viewport")
+            }
 
-                MeshInfo("cis_weap_inf_sniperrifle")
-                {
-                    Position(-0.230193, 0.361898, -0.003271, "Viewport")
-                    Rotation(359.802399, 90.747269, 359.999695)
-                }
+            MeshInfo("hud_vehicle_bombs")
+            {
+                Position(-0.265339, 0.250243, 0.006280, "Viewport")
+                Scale(0.630000, 0.630000, 0.630000)
+            }
 
-                MeshInfo("cis_weap_inf_rifle")
-                {
-                    Position(-0.236938, 0.359879, 0.001903, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
+            MeshInfo("com_weap_inf_torpedo")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("cis_weap_inf_fusioncutter")
-                {
-                    Position(-0.237654, 0.359785, -0.003261, "Viewport")
-                    Rotation(355.836060, 135.827820, 69.479843)
-                }
+            MeshInfo("com_weap_inf_grenadethermal")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("cis_weap_inf_launcher")
-                {
-                    Position(-0.206654, 0.362510, 0.003622, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.660000, 0.660000, 0.660000)
-                }
+            MeshInfo("com_weap_inf_thermaldetonator")
+            {
+                Rotation(353.358673, 99.140221, 1.132509)
+            }
 
-                MeshInfo("hud_cis_wristblaster")
-                {
-                    Position(-0.264100, 0.350311, 1.022745, "Viewport")
-                    Rotation(0.000000, 0.000000, 120.000000)
-                    Scale(0.653289, 0.653289, 0.653289)
-                }
+            MeshInfo("com_weap_inf_seismic_mine")
+            {
+                Position(-0.266703, 0.248956, 0.000000, "Viewport")
+                Rotation(0.056783, 359.996582, 359.999695)
+                Scale(0.810000, 0.810000, 0.810000)
+            }
 
-                MeshInfo("hud_cis_trishot")
-                {
-                    Position(-0.268002, 0.352302, 0.734317, "Viewport")
-                    Rotation(359.967194, 359.763428, 119.966087)
-                    Scale(0.653289, 0.653289, 0.653289)
-                }
+            MeshInfo("com_weap_inf_detpack")
+            {
+                Position(-0.265352, 0.243674, 0.000000, "Viewport")
+                Rotation(0.056783, 359.996582, 359.999695)
+                Scale(0.810000, 0.810000, 0.810000)
+            }
 
-                MeshInfo("hud_lightsaber")
-                {
-                    Position(-0.232567, 0.355873, -0.087683, "Viewport")
-                    Rotation(359.967194, 359.763428, 0.003998)
-                    Scale(1.170000, 1.170000, 1.170000)
-                }
+            MeshInfo("com_weap_inf_torpedo")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("rep_weap_inf_pistol")
-                {
-                    Position(-0.249442, 0.359076, 0.007261, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(1.140000, 1.140000, 1.140000)
-                }
+            MeshInfo("com_weap_inf_landmine")
+            {
+                Position(-0.273909, 0.229540, 0.000000, "Viewport")
+                Rotation(302.401611, 288.247955, 359.707031)
+                Scale(0.790000, 0.790000, 0.790000)
+            }
 
-                MeshInfo("rep_weap_inf_fusioncutter")
-                {
-                    Position(-0.247656, 0.353992, -0.002562, "Viewport")
-                    Rotation(355.836060, 135.827820, 69.479843)
-                }
+            MeshInfo("all_weap_inf_powerup_dispenser")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("rep_weap_inf_launcher")
-                {
-                    Position(-0.207665, 0.361767, 0.007124, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.670000, 0.670000, 0.670000)
-                }
+            MeshInfo("all_weap_inf_thermaldetonator")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("rep_weap_inf_chaingun")
-                {
-                    Position(-0.193610, 0.368393, 0.007124, "Viewport")
-                    Rotation(354.177856, 99.922020, 359.610596)
-                    Scale(0.700000, 0.700000, 0.700000)
-                }
+            MeshInfo("all_weap_inf_grenadethermal")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("com_weap_inf_torpedo")
-                {
-                    Position(-0.229334, 0.360748, 0.009504, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.810000, 0.810000, 0.810000)
-                }
+            MeshInfo("cis_weap_walk_droideka_shield")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("rep_weap_inf_sniperrifle")
-                {
-                    Position(-0.228348, 0.367230, -0.007488, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.820000, 0.820000, 0.820000)
-                }
+            MeshInfo("cis_weap_inf_mine_dispenser")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("rep_weap_inf_rifle")
-                {
-                    Position(-0.219723, 0.364485, 0.003263, "Viewport")
-                    Rotation(1.538445, 95.690582, 4.455857)
-                    Scale(0.800000, 0.800000, 0.800000)
-                }
+            MeshInfo("hud_cis_wristrocket")
+            {
+                Position(-0.258918, 0.249950, 0.000000, "Viewport")
+                Rotation(0.067146, 0.027435, 0.869930)
+            }
 
-                MeshInfo("hud_imp_flamethrower")
-                {
-                    Position(-0.173776, 0.358333, 0.205979, "Viewport")
-                    Rotation(0.013809, 0.000000, 359.991669)
-                    Scale(0.250001, 0.250001, 0.250001)
-                }
+            MeshInfo("hud_imp_wristrocket")
+            {
+                Position(-0.235938, 0.252083, 0.000000, "Viewport")
+                Rotation(0.067146, 0.027435, 0.869930)
+                Scale(1.220000, 1.220000, 1.220000)
+            }
 
-                MeshInfo("imp_weap_inf_rifle")
-                {
-                    Position(-0.242922, 0.360546, 0.003365, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
+            MeshInfo("rep_weap_inf_grenadethermal")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("imp_weap_inf_pistol")
-                {
-                    Position(-0.264184, 0.356163, -0.003873, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(1.240000, 1.240000, 1.240000)
-                }
+            MeshInfo("rep_weap_inf_landmine")
+            {
+                Rotation(106.459229, 90.747269, 359.999695)
+            }
 
-                MeshInfo("imp_weap_inf_launcher")
-                {
-                    Position(-0.206202, 0.374467, 0.011042, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.640000, 0.640000, 0.640000)
-                }
+            MeshInfo("rep_weap_inf_powerup_dispenser")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("imp_weap_inf_fusioncutter")
-                {
-                    Position(-0.239710, 0.356673, -0.000329, "Viewport")
-                    Rotation(355.836060, 135.827820, 69.479843)
-                }
+            MeshInfo("hud_rep_weap_defense_buff_icon")
+            {
+                Position(-0.235665, 0.230309, 0.013074, "Viewport")
+                Rotation(0.056783, 359.996582, 359.999695)
+                Scale(0.340001, 0.340001, 0.340001)
+            }
 
-                MeshInfo("imp_weap_inf_sniperrifle")
-                {
-                    Position(-0.211808, 0.367069, 0.001418, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.810000, 0.810000, 0.810000)
-                }
+            MeshInfo("hud_rep_defense_buff")
+            {
+                Position(-0.259348, 0.250207, 0.013074, "Viewport")
+                Scale(0.500001, 0.500001, 0.500001)
+            }
 
-                MeshInfo("all_weap_inf_pistol")
-                {
-                    Position(-0.264115, 0.358155, 0.013887, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.720000, 0.720000, 0.720000)
-                }
+            MeshInfo("hud_health_regen")
+            {
+                Position(-0.295264, 0.249070, 0.000000, "Viewport")
+                Rotation(4.668793, 7.205190, 0.869930)
+                Scale(0.530001, 0.530001, 0.530001)
+            }
 
-                MeshInfo("all_weap_inf_lightsabre")
-                {
-                    Position(-0.399193, 0.415118, -49.262363, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
+            MeshInfo("imp_weap_inf_powerup_dispenser")
+            {
+                Rotation(0.804269, 90.747269, 359.999695)
+            }
 
-                MeshInfo("all_weap_inf_rifle")
-                {
-                    Position(-0.222677, 0.361293, 0.014590, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
+            MeshInfo("com_item_powerup_dual")
+            {
+                Position(-0.281854, 0.276486, 0.000000, "Viewport")
+                Rotation(358.137604, 304.921997, 0.000000)
+                Scale(0.540000, 0.540000, 0.540000)
+            }
 
-                MeshInfo("all_weap_inf_launcher")
-                {
-                    Position(-0.213354, 0.367216, 0.000847, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.560000, 0.560000, 0.560000)
-                }
+            MeshInfo("ewk_rock")
+            {
+                Position(-0.060943, 0.076415, 276.444824, "Viewport")
+                Rotation(0.056783, 359.996582, 359.999695)
+                Scale(0.780000, 0.780000, 0.780000)
+            }
 
-                MeshInfo("all_weap_inf_fusioncutter")
-                {
-                    Position(-0.240446, 0.358461, 0.001095, "Viewport")
-                    Rotation(355.836060, 135.827820, 69.479843)
-                }
+            MeshInfo("com_weap_probedroid")
+            {
+                Position(-0.275655, 0.258602, 0.000000, "Viewport")
+                Rotation(346.000000, 202.460007, 6.200000)
+                Scale(1.180000, 1.180000, 1.180000)
+            }
 
-                MeshInfo("all_weap_inf_sniperrifle")
-                {
-                    Position(-0.231335, 0.355448, 0.003653, "Viewport")
-                    Rotation(0.804269, 90.573097, 359.999695)
-                }
+            MeshInfo("com_weap_inf_dropturret")
+            {
+                Position(-0.282107, 0.373784, 0.000000, "Viewport")
+                Rotation(10.050000, 26.660000, 7.010000)
+                Scale(0.540187, 0.540187, 0.540187)
+            }
 
-                MeshInfo("all_weap_inf_bowcaster")
-                {
-                    Position(-0.241302, 0.357451, -0.001890, "Viewport")
-                    Rotation(353.358673, 99.140221, 1.132509)
-                    Scale(0.630000, 0.630000, 0.630000)
-                }
+            MeshInfo("hud_poison")
+            {
+                Position(-0.251899, 0.248431, 0.000000, "Viewport")
+                Scale(0.330001, 0.330001, 0.330001)
+            }
 
-                MeshInfo("all_weap_inf_seeker")
-                {
-                    Position(-0.235594, 0.360432, 0.000240, "Viewport")
-                    Rotation(347.354980, 117.284363, 1.132509)
-                    Scale(0.950000, 0.950000, 0.950000)
-                }
+            MeshInfo("hud_rage")
+            {
+                Position(-0.251899, 0.248431, -0.010000, "Viewport")
+                Scale(0.330001, 0.330001, 0.330001)
+            }
 
-                MeshInfo("ewk_spear")
-                {
-                    Position(-0.086126, 0.206732, 199.969666, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                    Scale(0.590000, 0.590000, 0.590000)
-                }
+            MeshInfo("hud_invun_buff")
+            {
+                Position(-0.259348, 0.250207, 0.013074, "Viewport")
+                Scale(0.500001, 0.500001, 0.500001)
+            }
 
-                MeshInfo("des_weap_inf_fusioncutter")
-                {
-                    Position(-0.240446, 0.358461, 0.001095, "Viewport")
-                    Rotation(355.836060, 135.827820, 69.479843)
-                }
+            MeshInfo("hud_defencebuff")
+            {
+                Position(-0.259348, 0.250207, 0.013074, "Viewport")
+                Scale(0.500001, 0.500001, 0.500001)
+            }
 
-                MeshInfo("tat_weap_tuskrifle")
-                {
-                    Position(-0.214412, 0.355448, 0.003653, "Viewport")
-                    Rotation(0.804269, 90.573097, 359.999695)
-                }
+            MeshInfo("hud_force_choke")
+            {
+                Position(-0.277730, 0.250243, 0.060000, "Viewport")
+                Rotation(0.020765, 359.925140, 359.999695)
+            }
 
-                MeshInfo("wok_weap_inf_bowcaster")
-                {
-                    Position(-0.197062, 0.357451, -0.001890, "Viewport")
-                    Rotation(353.358673, 99.140221, 1.132509)
-                    Scale(0.830000, 0.830000, 0.830000)
-                }
+            MeshInfo("hud_force_saberthrow")
+            {
+                Position(-0.272903, 0.241462, 5.214769, "Viewport")
+                Rotation(0.020765, 359.925140, 359.999695)
+                Scale(0.180001, 0.180001, 0.180001)
+            }
 
-                MeshInfo("wok_weap_inf_fusioncutter")
-                {
-                    Position(-0.240446, 0.358461, 0.001095, "Viewport")
-                    Rotation(355.836060, 135.827820, 69.479843)
-                }
-               
-                MeshInfo("geo_weap_inf_blunderbuss")
-                {
-                    Position(-0.253835, 0.363164, -0.002834, "Viewport")
-                    Rotation(325.134644, 90.232857, 342.582642)
-                }
-                            
-                MeshInfo("gun_weap_inf_fusioncutter")
-                {
-                    Position(-0.254565, 0.357203, -0.002834, "Viewport")
-                    Rotation(124.471199, 68.442780, 177.787216)
-                    Scale(0.872851, 0.872851, 0.872851)
-                }                
-               
+            MeshInfo("hud_force_pull")
+            {
+                Position(-0.258612, 0.253261, 0.060000, "Viewport")
+                Rotation(0.020765, 359.925140, 359.999695)
+            }
+
+            MeshInfo("hud_force_push")
+            {
+                Position(-0.260633, 0.250827, 0.060000, "Viewport")
+                Rotation(0.020765, 359.925140, 359.999695)
+            }
+
+            MeshInfo("hud_force_lightning")
+            {
+                Position(-0.259680, 0.251856, 0.060000, "Viewport")
+                Rotation(0.020765, 359.925140, 359.999695)
+                Scale(0.490000, 0.490000, 0.490000)
             }
 
         }
 
-        Group("player1weapon2group")
-        {
-            Viewport(1)
-            Position(0.353928, -0.414382, 0.000000, "Viewport")
-            EventEnable("initialize")
-            Model3D("player1weapon2mesh")
-            {
-                EventMesh("player1.weapon2.mesh")
-                Viewport(1)
-                ZOrder(5)
-                EventEnable("player1.weapon2.mesh")
-                EventDisable("player1.weapon2.disable")
-                
-                MeshInfo("hud_thermaldetonator")
-                {
-                    Position(-0.284209, 0.250243, 0.006280, "Viewport")
-                    Rotation(0.056783, 359.996582, 359.999695)
-                    Scale(0.610000, 0.610000, 0.610000)
-                }
+    }
 
-                MeshInfo("wok_weap_inf_thermaldetonator")
-                {
-                    Position(-0.281954, 0.240963, 0.006280, "Viewport")
-                    Rotation(51.626522, 352.026947, 0.000000)
-                    Scale(1.653860, 1.653860, 1.653860)
-                }
-
-                MeshInfo("gun_weap_inf_grenadethermal")
-                {
-                    Position(-0.256918, 0.236531, 0.000000, "Viewport")
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-
-                MeshInfo("hud_droideka_shield")
-                {
-                    Position(-0.254297, 0.247155, 0.013074, "Viewport")
-                    Scale(0.640000, 0.640000, 0.640000)
-                }
-
-                MeshInfo("hud_detpack_plunger")
-                {
-                    Position(-0.276081, 0.242515, 0.039169, "Viewport")
-                    Rotation(0.056783, 359.996582, 359.999695)
-                    Scale(0.440000, 0.440000, 0.440000)
-                }
-
-                MeshInfo("hud_vehicle_beam_cannon")
-                {
-                    Position(-0.221990, 0.250243, 0.006280, "Viewport")
-                }
-
-                MeshInfo("hud_vehicle_chaingun")
-                {
-                    Position(-0.278276, 0.250243, 0.006280, "Viewport")
-                }
-
-                MeshInfo("hud_vehicle_guided_rocket")
-                {
-                    Position(-0.229027, 0.251896, 0.006280, "Viewport")
-                }
-
-                MeshInfo("hud_vehicle_stingers")
-                {
-                    Position(-0.227707, 0.251667, 0.006280, "Viewport")
-                    Scale(1.430000, 1.430000, 1.430000)
-                }
-
-                MeshInfo("hud_vehicle_torpedo")
-                {
-                    Position(-0.229027, 0.251896, 0.006280, "Viewport")
-                    Scale(1.260000, 1.260000, 1.260000)
-                }
-
-                MeshInfo("hud_vehicle_missile")
-                {
-                    Position(-0.240880, 0.250430, 0.006280, "Viewport")
-                }
-
-                MeshInfo("hud_vehicle_mortar")
-                {
-                    Position(-0.233111, 0.250243, 0.006280, "Viewport")
-                    Scale(2.039999, 2.039999, 2.039999)
-                }
-
-                MeshInfo("hud_vehicle_recoiless")
-                {
-                    Position(-0.230713, 0.251495, 0.006280, "Viewport")
-                    Scale(1.280000, 1.280000, 1.280000)
-                }
-
-                MeshInfo("hud_vehicle_flak")
-                {
-                    Position(-0.278276, 0.250243, 0.006280, "Viewport")
-                }
-
-                MeshInfo("hud_vehicle_bombs")
-                {
-                    Position(-0.265339, 0.250243, 0.006280, "Viewport")
-                    Scale(0.630000, 0.630000, 0.630000)
-                }
-
-                MeshInfo("com_weap_inf_torpedo")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("com_weap_inf_grenadethermal")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("com_weap_inf_thermaldetonator")
-                {
-                    Rotation(353.358673, 99.140221, 1.132509)
-                }
-
-                MeshInfo("com_weap_inf_seismic_mine")
-                {
-                    Position(-0.266703, 0.248956, 0.000000, "Viewport")
-                    Rotation(0.056783, 359.996582, 359.999695)
-                    Scale(0.810000, 0.810000, 0.810000)
-                }
-
-                MeshInfo("com_weap_inf_detpack")
-                {
-                    Position(-0.265352, 0.243674, 0.000000, "Viewport")
-                    Rotation(0.056783, 359.996582, 359.999695)
-                    Scale(0.810000, 0.810000, 0.810000)
-                }
-
-                MeshInfo("com_weap_inf_torpedo")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("com_weap_inf_landmine")
-                {
-                    Position(-0.273909, 0.229540, 0.000000, "Viewport")
-                    Rotation(302.401611, 288.247955, 359.707031)
-                    Scale(0.790000, 0.790000, 0.790000)
-                }
-
-                MeshInfo("all_weap_inf_powerup_dispenser")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("all_weap_inf_thermaldetonator")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("all_weap_inf_grenadethermal")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("cis_weap_walk_droideka_shield")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("cis_weap_inf_mine_dispenser")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("hud_cis_wristrocket")
-                {
-                    Position(-0.258918, 0.249950, 0.000000, "Viewport")
-                    Rotation(0.067146, 0.027435, 0.869930)
-                }
-
-                MeshInfo("hud_imp_wristrocket")
-                {
-                    Position(-0.235938, 0.252083, 0.000000, "Viewport")
-                    Rotation(0.067146, 0.027435, 0.869930)
-                    Scale(1.220000, 1.220000, 1.220000)
-                }
-
-                MeshInfo("rep_weap_inf_grenadethermal")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("rep_weap_inf_landmine")
-                {
-                    Rotation(106.459229, 90.747269, 359.999695)
-                }
-
-                MeshInfo("rep_weap_inf_powerup_dispenser")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("hud_rep_weap_defense_buff_icon")
-                {
-                    Position(-0.235665, 0.230309, 0.013074, "Viewport")
-                    Rotation(0.056783, 359.996582, 359.999695)
-                    Scale(0.340001, 0.340001, 0.340001)
-                }
-
-                MeshInfo("hud_rep_defense_buff")
-                {
-                    Position(-0.259348, 0.250207, 0.013074, "Viewport")
-                    Scale(0.500001, 0.500001, 0.500001)
-                }
-
-                MeshInfo("hud_health_regen")
-                {
-                    Position(-0.295264, 0.249070, 0.000000, "Viewport")
-                    Rotation(4.668793, 7.205190, 0.869930)
-                    Scale(0.530001, 0.530001, 0.530001)
-                }
-
-                MeshInfo("imp_weap_inf_powerup_dispenser")
-                {
-                    Rotation(0.804269, 90.747269, 359.999695)
-                }
-
-                MeshInfo("com_item_powerup_dual")
-                {
-                    Position(-0.281854, 0.276486, 0.000000, "Viewport")
-                    Rotation(358.137604, 304.921997, 0.000000)
-                    Scale(0.540000, 0.540000, 0.540000)
-                }
-
-                MeshInfo("ewk_rock")
-                {
-                    Position(-0.060943, 0.076415, 276.444824, "Viewport")
-                    Rotation(0.056783, 359.996582, 359.999695)
-                    Scale(0.780000, 0.780000, 0.780000)
-                }
-
-                MeshInfo("com_weap_probedroid")
-                {
-                    Position(-0.275655, 0.258602, 0.000000, "Viewport")
-                    Rotation(346.000000, 202.460000, 6.200000)
-                    Scale(1.180000, 1.180000, 1.180000)
-                }
-
-                MeshInfo("com_weap_inf_dropturret")
-                {
-                    Position(-0.282107, 0.373784, 0.000000, "Viewport")
-                    Rotation(10.050000, 26.660000, 7.010000)
-                    Scale(0.540187, 0.540187, 0.540187)
-                }
-
-                MeshInfo("hud_poison")
-                {
-                    Position(-0.251899, 0.248431, 0.000000, "Viewport")
-                    Scale(0.330001, 0.330001, 0.330001)
-                }
-
-                MeshInfo("hud_rage")
-                {
-                    Position(-0.251899, 0.248431, -0.010000, "Viewport")
-                    Scale(0.330001, 0.330001, 0.330001)
-                }
-
-                MeshInfo("hud_invun_buff")
-                {
-                    Position(-0.259348, 0.250207, 0.013074, "Viewport")
-                    Scale(0.500001, 0.500001, 0.500001)
-                }
-
-                MeshInfo("hud_defencebuff")
-                {
-                    Position(-0.259348, 0.250207, 0.013074, "Viewport")
-                    Scale(0.500001, 0.500001, 0.500001)
-                }
-
-                MeshInfo("hud_force_choke")
-                {
-                    Position(-0.277730, 0.250243, 0.060000, "Viewport")
-                    Rotation(0.020765, 359.925140, 359.999695)
-                }
-
-                MeshInfo("hud_force_saberthrow")
-                {
-                    Position(-0.272903, 0.241462, 5.214769, "Viewport")
-                    Rotation(0.020765, 359.925140, 359.999695)
-                    Scale(0.180001, 0.180001, 0.180001)
-                }
-
-                MeshInfo("hud_force_pull")
-                {
-                    Position(-0.258612, 0.253261, 0.060000, "Viewport")
-                    Rotation(0.020765, 359.925140, 359.999695)
-                }
-
-                MeshInfo("hud_force_push")
-                {
-                    Position(-0.260633, 0.250827, 0.060000, "Viewport")
-                    Rotation(0.020765, 359.925140, 359.999695)
-                }
-
-                MeshInfo("hud_force_lightning")
-                {
-                    Position(-0.259680, 0.251856, 0.060000, "Viewport")
-                    Rotation(0.020765, 359.925140, 359.999695)
-                    Scale(0.490000, 0.490000, 0.490000)
-                }
-
-            }
-
-        }
 }
 
 Group("player1energybar")
@@ -1111,6 +1230,7 @@ Group("objectivetimerGROUP")
         EventEnable("objectivetimer")
         EventDisable("objectivetimer.disable")
     }
+
 }
 
 Group("VictoryTimerGroup")
@@ -1145,6 +1265,7 @@ Group("VictoryTimerGroup")
         EventEnable("victorytimer")
         EventDisable("victorytimer.disable")
     }
+
 }
 
 Group("DefeatTimerGroup")
@@ -1180,6 +1301,7 @@ Group("DefeatTimerGroup")
         EventEnable("defeattimer")
         EventDisable("defeattimer.disable")
     }
+
 }
 
 Map("player1map")
@@ -1651,14 +1773,13 @@ Text("player1spawnmessage")
 Group("player1reticule")
 {
     EventPosition("player1.weapon1.reticule.position")
-    Position(0.500000, 0.5000, 0.000000, "Viewport")
-    Scale(0.8000, 0.8000, 0.8000)
+    Position(0.500000, 0.500093, 0.000000, "Viewport")
+    Scale(0.800000, 0.800000, 0.800000)
     PropagateAlpha(1)
-    Alpha(1.0000)
+	Alpha(1)
     EventEnable("player1.weapon1.reticule.position")
     EventDisable("player1.weapon1.reticule.disable")
     EventAlpha("player1.reticule.alpha")
-    
     Model3D("player1reticule_shape")
     {
         Mesh("hud_main_reticule")
@@ -1672,16 +1793,17 @@ Group("player1reticule")
     Group("player1bullseye")
     {
         EventEnable("initialize")
-        PropagateAlpha(0)
+		PropagateAlpha(0)
         Model3D("player1reticule_bullseye")
         {
             Mesh("hud_main_reticule_bullseye")
-            Scale(0.35, 0.35, 0.35)
-            Alpha(0.80000)
+            Scale(0.350000, 0.350000, 0.350000)
+            Alpha(0.800000)
             EventEnable("initialize")
             ColorChangeRate(0.001000)
             EventColor("player1.weapon1.target.teamColorBright")
         }
+
     }
 
     Model3D("player1reticule_outline")
@@ -1925,14 +2047,12 @@ BorderedBox("player1tooltipsGroup.BorderBox")
     FadeInTime(0.250000)
     FadeOutTime(0.500000)
     EventEnable("player1.tooltips")
-    EventDisable("player1.tooltips.disable")    
-
-
+    EventDisable("player1.tooltips.disable")
     Text("player1tooltipsTEXT")
     {
         Position(0.034301, 0.156000, 0.000000, "Viewport")
         ZOrder(0)
-        Alpha(1.000000)
+		Alpha(1)
         FadeInTime(0.500000)
         FadeOutTime(0.500000)
         TextBox(0.500000, 0.087500)
@@ -1944,7 +2064,7 @@ BorderedBox("player1tooltipsGroup.BorderBox")
         EventEnable("player1.tooltips")
         EventDisable("player1.tooltips.disable")
     }
-    
+
 }
 
 Text("player1spawnvehicle")
@@ -1978,13 +2098,13 @@ MultilineText("player1systemMessages")
     EventText("player1.message")
     EventColor("player1.message.color")
     NumLines(8)
-    DisplayTime(15.0)
+    DisplayTime(15.000000)
     AlwaysScroll(1)
-    ScrollSpeed(4.0)
+    ScrollSpeed(4.000000)
     AddToTop(1)
-    Rect(0.500000, 0.20000, "Left", "Top", "Viewport")
+    Rect(0.500000, 0.200000, "Left", "Top", "Viewport")
     PropagateAlpha(1)
-    Position(0.01, 0.08, 0.000000, "Viewport")
+    Position(0.010000, 0.080000, 0.000000, "Viewport")
     ZOrder(0)
     EventEnable("player1.message")
     EventDisable("player1.message.disable")
@@ -2031,6 +2151,7 @@ Group("player1teams")
                 EventEnable("player1.team1.texture")
                 EventDisable("player1.team1.textureDisable")
             }
+
         }
 
         Group("player1teams_team1pointsgroup")
@@ -2048,6 +2169,7 @@ Group("player1teams")
                 EventEnable("player1.team1.pointsText")
                 EventDisable("player1.team1.pointsDisable")
             }
+
         }
 
         Group("player1teams_team1reinforcementsgroup")
@@ -2067,6 +2189,7 @@ Group("player1teams")
                 EventDisable("player1.team1.reinforcementsDisable")
                 EventPulseRate("player1.team1.bleedRate")
             }
+
         }
 
     }
@@ -2091,6 +2214,7 @@ Group("player1teams")
                 EventEnable("player1.team2.texture")
                 EventDisable("player1.team2.textureDisable")
             }
+
         }
 
         Group("player1teams_team2pointsgroup")
@@ -2108,6 +2232,7 @@ Group("player1teams")
                 EventEnable("player1.team2.points")
                 EventDisable("player1.team2.pointsDisable")
             }
+
         }
 
         Group("player1teams_team2reinforcementsgroup")
@@ -2127,6 +2252,7 @@ Group("player1teams")
                 EventDisable("player1.team2.reinforcementsDisable")
                 EventPulseRate("player1.team2.bleedRate")
             }
+
         }
 
     }
@@ -2393,7 +2519,7 @@ Group("player1ObjectivePopupText.Group")
     {
         Bitmap("hud_white")
         BitmapRect(2.000000, 2.000000, "Center", "Center", "Viewport")
-        Position(0.000000, 0.000000, 0.000000, "Viewport")
+		Position(0.000000, 0.000000, 0.000000, "Viewport")
         Alpha(0.750000)
         Color(0, 0, 0)
         EventEnable("objectivePopup")
@@ -2714,10 +2840,11 @@ Group("player1.heroSelect")
         TextFont("gamefont_large")
         EventNumber("player1.heroSelect.timer")
         NumberToTime("%s")
-        Position(0, 0.052436, 0.000000, "Viewport")
-        Color(255, 0, 0)       
+        Position(0.000000, 0.052436, 0.000000, "Viewport")
+        Color(255, 0, 0)
         EventEnable("initialize")
     }
+
 }
 
 Group("player1SelectionPopupGroup")
@@ -2796,6 +2923,7 @@ Group("player1stats")
             EventEnable("player1.statistic.changed")
             EventDisable("player1.statistic.disable")
         }
+
     }
 
     Bitmap("player1statspoints.icon")
@@ -2827,6 +2955,7 @@ Group("player1stats")
             EventEnable("player1.statistic.changed")
             EventDisable("player1.statistic.disable")
         }
+
     }
 
     Group("player1statskillsgroup")
@@ -2846,6 +2975,7 @@ Group("player1stats")
             EventEnable("player1.statistic.changed")
             EventDisable("player1.statistic.disable")
         }
+
     }
 
     Bitmap("player1statskills.icon")
@@ -2877,6 +3007,7 @@ Group("player1stats")
             EventEnable("player1.statistic.changed")
             EventDisable("player1.statistic.disable")
         }
+
     }
 
 }
@@ -2913,7 +3044,7 @@ Group("player1lockoninfo")
         EventEnable("player1.lockOnName")
         EventDisable("player1.lockOnDisable")
     }
-    
+
     Text("player1lockon.distance")
     {
         TextBox(0.136719, 0.000000)
@@ -3012,7 +3143,7 @@ Text("player1missilelock")
     TextAlignment("Center", "Top")
     TextFont("gamefont_tiny")
     TextStyle("Shadow")
-    Position(0.500000, 0.60, 0.000000, "Viewport")
+    Position(0.500000, 0.600000, 0.000000, "Viewport")
     Color(255, 0, 0)
     ColorPulseRate(0.700000)
     FadeInTime(0.500000)
@@ -3029,7 +3160,7 @@ Text("player1missilelockdistance")
     TextFont("gamefont_large")
     TextStyle("Shadow")
     EventNumber("player1.missileLockDistance")
-    Position(0.500000, 0.55, 0.000000, "Viewport")
+    Position(0.500000, 0.550000, 0.000000, "Viewport")
     Color(255, 0, 0)
     ColorPulseRate(0.700000)
     FadeInTime(0.500000)
