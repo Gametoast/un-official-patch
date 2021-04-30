@@ -1,4 +1,4 @@
-# un-official-patch
+# unofficial-patch
 
 The Star Wars Battlefront II un-official patch was initially developed by the GameToast user Zerted.
 It provides features deemed essential to today's SWBFII modders and players. 
