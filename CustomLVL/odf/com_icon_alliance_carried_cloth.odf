@@ -1,0 +1,6 @@
+[GameObjectClass]       
+ClassLabel          = "cloth"
+
+[Properties]
+attachedmesh	= "com_icon_alliance_flag_carried"
+priority = 10.0

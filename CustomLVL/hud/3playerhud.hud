@@ -1,0 +1,15 @@
+FileInfo("3playerhud")
+{
+    Viewports(3)
+
+}
+
+Bitmap("blackmask")
+{
+    BitmapRect(0.6500000, 0.6500000, "Left", "Top", 1)
+    Bitmap("hud_white")
+    Position(0.500000, 0.500000, 0.000000, 1)
+    Scale(1.000000, 1.000000, 1.000000)
+    Color(0, 0, 0)
+    EventEnable("initialize")
+}

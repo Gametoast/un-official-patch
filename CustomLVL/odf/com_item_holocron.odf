@@ -1,0 +1,26 @@
+[GameObjectClass]
+ClassLabel			= "flag"
+GeometryName		= "cor1_prop_holocron.msh"
+
+[Properties]
+Lighting			= "Dynamic"
+
+IconTexture			= ""
+MapTexture			= ""
+MapScale			= ""
+
+GeometryName			= "cor1_prop_holocron"
+CarriedGeometryName 		= "com_prop_holocron_carried"
+SoldierAttachBone 		= "bone_pelvis"
+DroidekaAttachBone 		= "bone_spine3"
+
+PickupSound			= "health_recharge defer"
+DropSound			= ""
+AmbientSound			= ""
+
+LifeSpan			= 50.0
+
+LightODF			= "flaglight"
+
+[InstanceProperties]
+

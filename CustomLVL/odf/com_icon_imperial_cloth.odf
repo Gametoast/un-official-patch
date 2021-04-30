@@ -1,0 +1,6 @@
+[GameObjectClass]       
+ClassLabel          = "cloth"
+
+[Properties]
+attachedmesh	= "com_icon_imperial_flag"
+priority = 10.0

@@ -1,0 +1,14 @@
+[GameObjectClass]
+ClassLabel    = "SoundAmbienceStreaming"
+GeometryName  = "speaker.msh"
+GeometryScale = 1.0
+
+[Properties]
+Sound       = ""
+MinDistance = "1.0"
+MaxDistance = "10.0"
+
+[InstanceProperties]
+Sound       = ""
+MinDistance = "1.0"
+MaxDistance = "10.0"

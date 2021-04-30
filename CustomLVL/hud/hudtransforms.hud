@@ -1,0 +1,175 @@
+FileInfo("hudtransforms")
+{
+    Viewports(1, 2, 3, 4)
+
+}
+
+ViewPort("Transforms")
+{
+    EventNameFilter("player%")
+    TransformNameMesh("player1weapon1")
+    {
+        NameMesh("cis_weap_inf_wrist_trishot", "hud_cis_trishot")
+        NameMesh("ewk_weap_inf_spear", "ewk_spear")
+        NameMesh("all_weap_fly_xwing_sc_cannon", "hud_vehicle_lasers")
+        NameMesh("imp_weap_fly_tieinter_cannon", "hud_vehicle_lasers")
+        NameMesh("imp_weap_fly_tiebomber_ptorpedo", "hud_vehicle_lasers")
+        NameMesh("imp_weap_fly_tiefighter_sc_cannon", "hud_vehicle_lasers")
+        NameMesh("all_weap_inf_commando", "all_weap_inf_pistol")
+        NameMesh("cis_weap_inf_wrist_blaster", "hud_cis_wristblaster")
+        NameMesh("ewk_weap_inf_tool", "ewk_spear")
+        
+        EventInput("player1.weapon1.change")
+        EventOutput("player1.weapon1.mesh")
+    }
+
+    TransformNameMesh("player1weapon2")
+    {
+        NameMesh("rep_weap_inf_detpack_dispenser", "com_weap_inf_seismic_mine")
+        NameMesh("imp_weap_inf_detpack_dispenser", "com_weap_inf_seismic_mine")
+        NameMesh("cis_weap_inf_detpack_dispenser", "com_weap_inf_seismic_mine")
+        NameMesh("all_weap_inf_detpack_dispenser", "com_weap_inf_seismic_mine")
+        NameMesh("rep_weap_inf_detpack", "com_weap_inf_seismic_mine")
+        NameMesh("all_weap_inf_detpack", "com_weap_inf_seismic_mine")
+        NameMesh("cis_weap_inf_detpack", "com_weap_inf_seismic_mine")
+        NameMesh("imp_weap_inf_detpack", "com_weap_inf_seismic_mine")
+        NameMesh("rep_weap_inf_remotedroid", "com_weap_probedroid")
+        NameMesh("cis_weap_inf_remotedroid", "com_weap_probedroid")
+        NameMesh("imp_weap_inf_remotedroid", "com_weap_probedroid")
+        NameMesh("all_weap_inf_remotedroid", "com_weap_probedroid")
+        NameMesh("rep_weap_inf_mine_dispenser", "com_weap_inf_landmine")
+        NameMesh("imp_weap_inf_mine_dispenser", "com_weap_inf_landmine")
+        NameMesh("cis_weap_inf_mine_dispenser", "com_weap_inf_landmine")
+        NameMesh("all_weap_inf_mine_dispenser", "com_weap_inf_landmine")
+        NameMesh("imp_weap_inf_thermaldetonator", "hud_thermaldetonator")
+        NameMesh("rep_weap_inf_thermaldetonator", "hud_thermaldetonator")
+        NameMesh("all_weap_inf_thermaldetonator", "hud_thermaldetonator")
+        NameMesh("cis_weap_inf_thermaldetonator", "hud_thermaldetonator")
+        NameMesh("all_weap_inf_timebomb", "com_weap_inf_seismic_mine")
+        NameMesh("cis_weap_inf_wrist_rocket", "hud_cis_wristrocket")
+        NameMesh("cis_weap_inf_wrist_rocket_fett", "hud_cis_wristrocket")
+        NameMesh("imp_weap_inf_wrist_rocket", "hud_imp_wristrocket")
+        NameMesh("rep_weap_inf_buff_defense", "hud_rep_weap_defense_buff_icon")
+        NameMesh("imp_weap_inf_buff_health", "hud_health_regen")
+        NameMesh("com_weap_inf_powerup_dispenser", "com_item_powerup_dual")
+        NameMesh("all_weap_inf_powerup_dispenser", "com_item_powerup_dual")
+        NameMesh("rep_weap_inf_powerup_dispenser", "com_item_powerup_dual")
+        NameMesh("cis_weap_inf_powerup_dispenser", "com_item_powerup_dual")
+        NameMesh("imp_weap_inf_powerup_dispenser", "com_item_powerup_dual")
+        NameMesh("com_bldg_inf_autoturret", "com_weap_inf_dropturret")
+        NameMesh("ewk_weap_inf_rock", "ewk_rock")
+        NameMesh("imp_weap_hero_flamethrower", "hud_imp_flamethrower")
+        EventInput("player1.weapon2.change")
+        EventOutput("player1.weapon2.mesh")
+    }
+
+    TransformNumberColor("player1jetfuelcolor")
+    {
+        NumberColor(0.000000, 200, 200, 200)
+        NumberColor(1.000000, 2, 0, 0)
+        EventInput("player1.jetFuelWarning")
+        EventOutput("player1.jetFuelColor")
+    }
+
+    TransformNumberColor("player1energyfractioncolor")
+    {
+        NumberColor(0.000000, 255, 0, 0)
+        NumberColor(0.250000, 255, 0, 0)
+        NumberColor(0.260000, 209, 168, 41)
+        NumberColor(1.000000, 209, 168, 41)
+        EventInput("player1.energyFraction")
+        EventOutput("player1.energyColor")
+    }
+
+    TransformNumberColor("player1energyoverburncolor")
+    {
+        NumberColor(0.000000, 255, 0, 0)
+        NumberColor(0.990000, 128, 128, 128)
+        NumberColor(1.000000, 128, 128, 128)
+        EventInput("player1.energyOverburn")
+        EventOutput("player1.energyColor")
+    }
+
+    TransformNumberColor("player1healthcolor")
+    {
+        NumberColor(0.000000, 200, 0, 0)
+        NumberColor(0.290000, 200, 0, 0)
+        NumberColor(0.300000, 255, 200, 50)
+        NumberColor(0.590000, 255, 200, 50)
+        NumberColor(0.600000, 0, 150, 213)
+        NumberColor(1.000000, 0, 150, 213)
+        EventInput("player1.healthFraction")
+        EventOutput("player1.healthColor")
+    }
+
+    TransformNumberColor("player1vehiclehealthcolor")
+    {
+        NumberColor(0.000000, 200, 0, 0)
+        NumberColor(0.290000, 200, 0, 0)
+        NumberColor(0.300000, 0, 200, 0)
+        NumberColor(1.000000, 0, 200, 0)
+        EventInput("player1.vehicle.healthFraction")
+        EventOutput("player1.vehicle.healthColor")
+    }
+
+    TransformNumberColor("player1weapon1heatcolor")
+    {
+        NumberColor(0.000000, 239, 255, 41)
+        NumberColor(0.500000, 239, 174, 41)
+        NumberColor(1.000000, 239, 106, 41)
+        EventInput("player1.weapon1.heat")
+        EventOutput("player1.weapon1.heatcolor")
+    }
+
+    TransformNumberVector3("player1weapon1lockonscaler")
+    {
+        NumberVector3(0.000000, 1.000000, 1.000000, 1.000000)
+        NumberVector3(0.500000, 0.500000, 0.500000, 0.500000)
+        EventInput("player1.weapon1.heat")
+        EventOutput("player1.weapon1.chargeScale")
+    }
+
+    TransformNumberVector3("player1weapon1lockonrotator")
+    {
+        NumberVector3(0.500000, 0.000000, 0.000000, 0.000000)
+        NumberVector3(1.000000, 0.000000, 0.000000, 180.000000)
+        EventInput("player1.weapon1.heat")
+        EventOutput("player1.weapon1.chargeRotate")
+    }
+
+    TransformNumberColor("player1weapon1lockoncolor")
+    {
+        NumberColor(0.000000, 255, 255, 255)
+        NumberColor(0.990000, 255, 255, 255)
+        NumberColor(1.000000, 255, 0, 0)
+        EventInput("player1.weapon1.heat")
+        EventOutput("player1.weapon1.chargeColor")
+    }
+
+    TransformNumberVector3("player1weapon2lockonscaler")
+    {
+        NumberVector3(0.000000, 1.000000, 1.000000, 1.000000)
+        NumberVector3(0.500000, 0.500000, 0.500000, 0.500000)
+        EventInput("player1.weapon2.heat")
+        EventOutput("player1.weapon2.chargeScale")
+    }
+
+    TransformNumberVector3("player1weapon2lockonrotator")
+    {
+        NumberVector3(0.500000, 0.000000, 0.000000, 0.000000)
+        NumberVector3(1.000000, 0.000000, 0.000000, 180.000000)
+        EventInput("player1.weapon2.heat")
+        EventOutput("player1.weapon2.chargeRotate")
+    }
+
+    TransformNumberColor("player1weapon2lockoncolor")
+    {
+        NumberColor(0.000000, 255, 255, 255)
+        NumberColor(0.990000, 255, 255, 255)
+        NumberColor(1.000000, 255, 0, 0)
+        EventInput("player1.weapon2.heat")
+        EventOutput("player1.weapon2.chargeColor")
+    }
+
+}
+

@@ -1,0 +1,47 @@
+
+//MovieSubtitles()
+//{
+//    Segment("temp_shell")
+//    Font("gamefont_small")
+//    Color(255, 0, 0, 190)
+//    SubtitleList()
+//    {
+//        Subtitle("ifs.movies.temp_shell.1sec",  0.0,  3.0)
+//        Subtitle("ifs.movies.temp_shell.5sec",  5.0,  3.0)
+//        Subtitle("ifs.movies.temp_shell.10sec", 10.0, 3.0)
+//        Subtitle("ifs.movies.temp_shell.15sec", 15.0, 3.0)
+//        Subtitle("ifs.movies.temp_shell.20sec", 20.0, 3.0)
+//        Subtitle("ifs.movies.temp_shell.25sec", 25.0, 3.0)
+//    }
+//}
+
+MovieSubtitles()
+{
+    Segment("training1")
+    Font("gamefont_small")
+    Color(255, 255, 255, 190)
+    SubtitleList()
+    {
+        Subtitle("ifs.movies.training.line01",  2.45,  1.98)
+        Subtitle("ifs.movies.training.line02",  6.84,  3.86)
+        Subtitle("ifs.movies.training.line03",  11.63,  3.71)
+        Subtitle("ifs.movies.training.line04",  16.12,  3.98)
+        Subtitle("ifs.movies.training.line05",  20.87,  4.36)
+        Subtitle("ifs.movies.training.line06",  26.32,  3.67)
+        Subtitle("ifs.movies.training.line07",  30.56,  1.55)
+        Subtitle("ifs.movies.training.line08",  32.56,  2.85)
+        Subtitle("ifs.movies.training.line09",  35.76,  1.44)
+        Subtitle("ifs.movies.training.line10",  37.63,  1.74)
+        Subtitle("ifs.movies.training.line11",  39.88,  3.55)
+        Subtitle("ifs.movies.training.line12",  44.95,  4.20)
+        Subtitle("ifs.movies.training.line13",  50.16,  3.21)
+        Subtitle("ifs.movies.training.line14",  53.82,  3.44)
+        Subtitle("ifs.movies.training.line15",  57.63,  3.35)
+        Subtitle("ifs.movies.training.line16",  61.62,  2.81)
+        Subtitle("ifs.movies.training.line17",  65.43,  4.64)
+        Subtitle("ifs.movies.training.line18",  70.70,  1.78)
+        Subtitle("ifs.movies.training.line19",  73.27,  4.93)
+        Subtitle("ifs.movies.training.line20",  78.71,  3.83)
+        
+    }
+}

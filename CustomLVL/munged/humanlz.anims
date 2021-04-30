@@ -1,0 +1,20 @@
+ucft
+{
+	ANIM
+	{
+		"humanlz_barc_9pose"
+		"humanlz_drive"
+		"humanlz_drive_1manatst"
+		"humanlz_ride"
+		"humanlz_rifle_crouch_idle_emote"
+		"humanlz_rifle_crouch_idle_takeknee"
+		"humanlz_rifle_diveforward"
+		"humanlz_rifle_jetpack_hover"
+		"humanlz_rifle_stand_death_backward"
+		"humanlz_rifle_stand_idle_emote"
+		"humanlz_rifle_stand_runforward"
+		"humanlz_rifle_thrown_flail"
+		"humanlz_speederbike_9pose"
+		"humanlz_stap_ride"
+	}
+}

@@ -1,0 +1,12 @@
+[GameObjectClass]		
+
+ClassLabel		=	"prop"
+GeometryName	=	"com_inv_col_8ed.msh"
+
+
+[Properties]		
+
+GeometryName	=	"com_inv_col_8"
+OrdnanceCollision =	"none"
+
+

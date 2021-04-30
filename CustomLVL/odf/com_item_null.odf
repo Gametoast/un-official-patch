@@ -1,0 +1,10 @@
+[GameObjectClass]		
+
+ClassLabel		=	"prop"
+GeometryName	=	"com_bldg_ctfbase.msh"
+
+
+[Properties]		
+
+GeometryName	=	"com_bldg_ctfbase"
+
