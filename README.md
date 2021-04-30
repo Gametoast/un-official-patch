@@ -34,8 +34,11 @@ v1.3patch_strings   |  \*    |  \*
 pre-movie.mvs       |  \-    |  \-
 
 \+ \: done and verified
-\# \: Done, to be verified
+
+\# \: done, to be verified
+
 \* \: WIP
+
 \- \: TBD
 
 
