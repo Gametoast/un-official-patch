@@ -1,0 +1,12 @@
+ucft
+{
+    REQN
+    {
+		"script"
+		"uop_controller_ingame"
+		"uop_ifs_sideselect"
+		"utility_functions2"
+		"fakeconsole_functions"
+		"uop_ifs_fakeconsole"
+    }
+}

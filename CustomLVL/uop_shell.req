@@ -1,0 +1,24 @@
+ucft
+{
+	REQN
+	{
+		"script"
+		"uop_controller_interface"
+
+		"uop_ifs_login"
+		"uop_ifs_missionselect"
+		"uop_missionlist"
+		"uop_ifs_sp"
+		"uop_ifs_sp_campaign"
+		"uop_ifs_instant_options_tags"
+
+		"uop_ifs_freeform_init_common"
+		"uop_ifs_freeform_main"
+		"uop_ifs_freeform_battle_mode"
+		"uop_ifs_freeform_battle_card"
+
+		"uop_ifs_mp_leaderboard"
+		"uop_ifs_missionselect_pcMulti"
+		"ifs_era_handler"
+	}
+}

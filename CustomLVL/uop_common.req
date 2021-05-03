@@ -1,0 +1,17 @@
+ucft
+{
+    REQN
+    {
+        "script"
+		"uop_error_popup"
+		"uop_ifs_awardstats"
+		"uop_ifs_careerstats"
+		"uop_ifs_mp_lobby"
+		"uop_ifs_opt_general"
+		"uop_ifs_opt_mp"
+		"uop_ifs_pausemenu"
+		"uop_ifs_personalstats"
+		"uop_ifs_teamstats"
+		"popup_prompt"
+    }
+}
