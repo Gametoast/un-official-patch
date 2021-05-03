@@ -1,6 +1,47 @@
 --------------------------------------------
 -- Overview
 
+**Modified by Spiret/Steam**
+ifs_instant_options.lua
+ifs_mpgs_friends.lua
+ifs_mpgs_pclogin.lua
+
+**Modified by Zerted**
+ifs_instant_options_tags.lua
+ifs_mp_leaderboard.lua
+ifs_mp_lobby.lua
+ifs_mp_sessionlist.lua
+ifs_opt_mp.lua
+ifs_pausemenu.lua
+error_popup.lua
+ifs_awardstats.lua
+ifs_careerstats.lua
+ifs_opt_general.lua
+ifs_personalstats.lua
+ifs_teamstats.lua
+game_interface.lua
+ifs_fakeconsole.lua
+ifs_sideselect.lua
+ifs_freeform_battle_card.lua
+ifs_freeform_battle_mode.lua
+ifs_freeform_init_common.lua
+ifs_freeform_main.lua
+ifs_login.lua
+ifs_missionselect.lua
+ifs_missionselect_pcmulti.lua
+ifs_sp.lua
+ifs_sp_campaign.lua
+missionlist.lua
+shell_interface.lua
+
+**New by Zerted**
+addme.lua
+popup_prompt.lua
+fakeconsole_functions.lua
+utility_functions2.lua
+ifs_era_handler.lua
+
+
 File                |  r129 | r130
 --------------------+-------+------
 addme.script        |  +    |  +
