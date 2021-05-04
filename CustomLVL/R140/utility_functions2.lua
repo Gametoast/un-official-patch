@@ -31,7 +31,7 @@ if AddUnitClass then
 		end
 		
 		--foward the call to the original function
-		RetailAddUnitClass( unpack(arg) )
+		return RetailAddUnitClass( unpack(arg) )
 	end
 else
 	print("utility_functions2: WARNING: Cannot listen on AddUnitClass()")
