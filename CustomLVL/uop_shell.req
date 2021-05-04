@@ -21,4 +21,15 @@ ucft
 		"uop_ifs_missionselect_pcMulti"
 		"ifs_era_handler"
 	}
+	
+	REQN
+	{
+		"texture"
+	}
+	
+	REQN
+	{
+		"config"
+		"shell_movies"
+	}
 }

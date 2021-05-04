@@ -1,7 +1,8 @@
--- addme.lua un-official patch 1.3 
--- decompile by BAD_AL (verified)
--- Original By Zerted
-
+------------------------------------------------------------------
+-- SWBF2 unofficial patch 1.4 
+-- by BAD_AL & GT-Anakin
+-- based on unofficial patch 1.3 by Zerted
+------------------------------------------------------------------
 
 print("Unofficial Patch: Entered addme")
 

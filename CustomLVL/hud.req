@@ -1,0 +1,12 @@
+ucft
+{
+    REQN
+    {
+        "config"
+        "hudtransforms"
+        "1playerhud"
+        "2playerhud"
+        "3playerhud"
+        "4playerhud"
+    }
+}

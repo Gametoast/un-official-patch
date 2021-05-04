@@ -28,6 +28,8 @@ ScriptCB_DoFile("utility_functions2")
 print("Unofficial Patch: Reading in custom strings")
 ReadUnofficialFile("v1.3patch_strings.lvl")
 
+ReadUnofficialFile("hud\\hud.lvl")
+
 local maxScripts = 10
 local i = nil
 

@@ -14,4 +14,33 @@ ucft
 		"uop_ifs_teamstats"
 		"popup_prompt"
     }
+	
+	REQN
+	{
+		"texture"
+		"bfx_cw_icon"
+		"bfx_gcw_icon"
+		"earth_icon"
+		"exgcw_icon"
+		"front_icon"
+		"gray_rect"
+		"halo_icon"
+		"i_icon"
+		"imp_icon"
+		"j_icon"
+		"kotor_icon"
+		"lego_icon"
+		"newrep_icon"
+		"newsithwars_icon"
+		"oldsith_icon"
+		"rebirth_icon"
+		"rep_icon"
+		"rvb_icon"
+		"toys_icon"
+		"u_icon"
+		"v_icon"
+		"wacky_icon"
+		"yuz_icon"
+		"z_icon"
+	}
 }
