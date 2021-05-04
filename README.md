@@ -12,8 +12,9 @@
 
 - [x] debug integration
 - [x] uop_controller_ingame
-- [ ] uop_controller_shell
+- [x] uop_controller_shell
 - [ ] Does the texture overwrite work? calling order: what common/ingame/shell is called first? 
+- [ ] Does effect overwrite works? com_sfx_landmine from ingame
 - [ ] Do we need the modifications from steam? r130 changes by spiret or steam?
 - [ ] Does the modified movie work? Do movie mcfg files overwrite existing once?
 - [ ] Is the msh.option differences important?
@@ -58,17 +59,17 @@
 - [x] missionlist.lua
 - [x] shell_interface.lua
 
-- [ ] com_sfx_landmine.fx
+- [x] com_sfx_landmine.fx
 
 - [x] 1playerhud.hud
 - [x] hudtransforms.hud
 
 - [x] shell_movies.mcfg
 
-- [ ] iface_bgmeta_space.tga
+- [x] iface_bgmeta_space.tga
 - [ ] com_sfx_laser_orange.tga
-- [ ] mode_icon_XL.tga
-- [ ] mode_icon_eli.tga
+- [x] mode_icon_XL.tga
+- [x] mode_icon_eli.tga
 
 ### New by Zerted
 - [x] addme.lua
@@ -81,8 +82,8 @@
 
 - [ ] com_item_weaponrecharge.msh.option
 
-- [ ] custom_gc_10.lvl
-- [ ] user_script_10.lvl
+- [x] custom_gc_10.lvl
+- [x] user_script_10.lvl
 - [ ] v1.3patch_strings.lvl
 
 - [ ] com_sfx_scorchmark.tga
@@ -110,33 +111,33 @@
 - [x] wacky_icon.tga
 - [x] yuz_icon.tga
 - [x] z_icon.tga
-- [ ] mode_icon_avh.tga
-- [ ] mode_icon_bf1.tga
-- [ ] mode_icon_c.tga
-- [ ] mode_icon_c1.tga
-- [ ] mode_icon_c2.tga
-- [ ] mode_icon_c3.tga
-- [ ] mode_icon_c4.tga
-- [ ] mode_icon_control.tga
-- [ ] mode_icon_dm.tga
-- [ ] mode_icon_hctf.tga
-- [ ] mode_icon_holo.tga
-- [ ] mode_icon_ins.tga
-- [ ] mode_icon_jhu.tga
-- [ ] mode_icon_koh.tga
-- [ ] mode_icon_lms.tga
-- [ ] mode_icon_obj.tga
-- [ ] mode_icon_ord66.tga
-- [ ] mode_icon_race.tga
-- [ ] mode_icon_rpg.tga
-- [ ] mode_icon_siege.tga
-- [ ] mode_icon_space.tga
-- [ ] mode_icon_survival.tga
-- [ ] mode_icon_tdf.tga
-- [ ] mode_icon_tdm.tga
-- [ ] mode_icon_uber.tga
-- [ ] mode_icon_vehicle.tga
-- [ ] mode_icon_vh.tga
-- [ ] mode_icon_wav.tga
-- [ ] mode_icon_wea.tga
-- [ ] mode_icon_xtra.tga
+- [x] mode_icon_avh.tga
+- [x] mode_icon_bf1.tga
+- [x] mode_icon_c.tga
+- [x] mode_icon_c1.tga
+- [x] mode_icon_c2.tga
+- [x] mode_icon_c3.tga
+- [x] mode_icon_c4.tga
+- [x] mode_icon_control.tga
+- [x] mode_icon_dm.tga
+- [x] mode_icon_hctf.tga
+- [x] mode_icon_holo.tga
+- [x] mode_icon_ins.tga
+- [x] mode_icon_jhu.tga
+- [x] mode_icon_koh.tga
+- [x] mode_icon_lms.tga
+- [x] mode_icon_obj.tga
+- [x] mode_icon_ord66.tga
+- [x] mode_icon_race.tga
+- [x] mode_icon_rpg.tga
+- [x] mode_icon_siege.tga
+- [x] mode_icon_space.tga
+- [x] mode_icon_survival.tga
+- [x] mode_icon_tdf.tga
+- [x] mode_icon_tdm.tga
+- [x] mode_icon_uber.tga
+- [x] mode_icon_vehicle.tga
+- [x] mode_icon_vh.tga
+- [x] mode_icon_wav.tga
+- [x] mode_icon_wea.tga
+- [x] mode_icon_xtra.tga

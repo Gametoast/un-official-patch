@@ -4,7 +4,7 @@
 -- based on unofficial patch 1.3 by Zerted
 ------------------------------------------------------------------
 
-print("game_interface: Entered")
+print("shell_interface: Entered")
 
 function ReadUnofficialFile(file)
 	ReadDataFile("..\\..\\addon\\unofficial_patch\\" .. file)
@@ -12,7 +12,7 @@ end
 
 -- is this the right place?
 ReadUnofficialFile("uop_common.lvl")
-ReadUnofficialFile("uop_ingame.lvl")
+ReadUnofficialFile("uop_shell.lvl")
 
 __gPcPlatform__ = nil
 
@@ -22,8 +22,8 @@ else
 	__gPcPlatform__ = "STEAM_GOG"
 end
 
-print("game_interface: apply unofficial patch")
-ScriptCB_DoFile("uop_controller_ingame")
-ScriptCB_DoFile("stock_game_interface")
+print("shell_interface: apply unofficial patch")
+ScriptCB_DoFile("uop_controller_shell")
+ScriptCB_DoFile("stock_shell_interface")
 
-print("game_interface: Exited")
+print("shell_interface: Exited")
