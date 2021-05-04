@@ -5,6 +5,33 @@
 ------------------------------------------------------------------
 
 __v13patchSettings_noColors__ = "..\\..\\addon\\AAA-v1.3patch\\settings\\noColors.txt"
+local overwrite = {
+	error_popup = "uop_error_popup",
+	ifs_awardstats = "uop_ifs_awardstats",
+	ifs_careerstats = "uop_ifs_careerstats",
+	ifs_mp_lobby = "uop_ifs_mp_lobby",
+	ifs_opt_general = "uop_ifs_opt_general",
+	ifs_opt_mp = "uop_ifs_opt_mp",
+	ifs_pausemenu = "uop_ifs_pausemenu",
+	ifs_personalstats = "uop_ifs_personalstats",
+	ifs_teamstats = "uop_ifs_teamstats",
+--	popup_prompt = true,	-- << special, won't be overwritten, call in correct order
+	ifs_login = "uop_ifs_login",
+	ifs_missionselect = "uop_ifs_missionselect",
+	missionlist = "uop_missionlist",
+	ifs_sp = "uop_ifs_sp",
+	ifs_sp_campaign = "uop_ifs_sp_campaign",
+	ifs_instant_options_tags = "uop_ifs_instant_options_tags",
+	ifs_freeform_init_common = "uop_ifs_freeform_init_common",
+	ifs_freeform_main = "uop_ifs_freeform_main",
+	ifs_freeform_battle_mode = "uop_ifs_freeform_battle_mode",
+	ifs_freeform_battle_card = "uop_ifs_freeform_battle_card",
+	ifs_mp_leaderboard = "uop_ifs_mp_leaderboard",
+	ifs_missionselect_pcMulti = "uop_ifs_missionselect_pcMulti",
+--	ifs_era_handler = true,	-- << special, won't be overwritten, call in correct order
+}
+
+
 ReadDataFile("v1.3patch_strings.lvl")
 
 
