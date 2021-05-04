@@ -5,6 +5,9 @@
 ! Do not use it unless you are part of the developer team
 ```
 
+
+*********************************************************************
+
 ## ToDo list
 
 - [x] debug integration
@@ -18,6 +21,8 @@
 - [ ] Installer that modifies exisiting lvl files while install process
 
 
+*********************************************************************
+
 ## Files to take care of
 
 ### Modified by Spiret/Steam
@@ -25,8 +30,6 @@
 - [ ] ifs_mpgs_friends.lua
 - [ ] ifs_mpgs_pclogin.lua
 
-
-*********************************************************************
 ### Modified by Zerted
 - [x] ifs_instant_options_tags.lua
 - [x] ifs_mp_leaderboard.lua
@@ -67,8 +70,6 @@
 - [ ] mode_icon_XL.tga
 - [ ] mode_icon_eli.tga
 
-
-*********************************************************************
 ### New by Zerted
 - [x] addme.lua
 - [x] popup_prompt.lua
