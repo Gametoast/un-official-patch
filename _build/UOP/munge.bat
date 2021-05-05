@@ -115,6 +115,7 @@ move /y levelpack.log UOP\levelpack_sublvl.log
 	levelpack -inputfile uop_common.req %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
 	levelpack -inputfile uop_ingame.req %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
 	levelpack -inputfile uop_shell.req %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	levelpack -inputfile hud.req %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
 	@REM levelpack -inputfile v1.3patch_strings.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
 ) ELSE (
 	levelpack -inputfile common.req -writefiles %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
