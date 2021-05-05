@@ -67,7 +67,7 @@
 - [x] shell_movies.mcfg
 
 - [x] iface_bgmeta_space.tga
-- [ ] com_sfx_laser_orange.tga
+- [x] com_sfx_laser_orange.tga
 - [x] mode_icon_XL.tga
 - [x] mode_icon_eli.tga
 
@@ -86,7 +86,7 @@
 - [x] user_script_10.lvl
 - [ ] v1.3patch_strings.lvl
 
-- [ ] com_sfx_scorchmark.tga
+- [x] com_sfx_scorchmark.tga
 - [x] bfx_cw_icon.tga
 - [x] bfx_gcw_icon.tga
 - [x] earth_icon.tga

@@ -17,6 +17,7 @@
 @set MUNGE_DIR=UOP\MUNGED\%MUNGE_PLATFORM%
 @set MUNGE_DIR_R129=UOP\MUNGED\R129
 @set MUNGE_DIR_R130=UOP\MUNGED\R130
+@set MUNGE_DIR_R140=UOP\MUNGED\R140
 @set OUTPUT_DIR=%MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM%\%BUILD_NUMBER%
 
 @set LOCAL_MUNGE_LOG="%CD%\%MUNGE_PLATFORM%_MungeLog.txt"
@@ -31,6 +32,7 @@
 @if not exist %MUNGE_DIR% mkdir %MUNGE_DIR%
 @if not exist %MUNGE_DIR_R129% mkdir %MUNGE_DIR_R129%
 @if not exist %MUNGE_DIR_R130% mkdir %MUNGE_DIR_R130%
+@if not exist %MUNGE_DIR_R140% mkdir %MUNGE_DIR_R140%
 @if not exist %MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM% mkdir %MUNGE_ROOT_DIR%\_LVL_%MUNGE_PLATFORM%
 @if not exist %OUTPUT_DIR% mkdir %OUTPUT_DIR%
 
@@ -109,13 +111,19 @@ move /y levelpack.log UOP\levelpack_sublvl.log
 @set SOURCE_DIR=
 @set SOURCE_DIR=%SOURCE_DIR% %MUNGE_ROOT_DIR%\%SOURCE_SUBDIR%
 
-
-levelpack -inputfile common.req -writefiles %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
-levelpack -inputfile ingame.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
-levelpack -inputfile shell.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
-levelpack -inputfile user_script_10.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
-levelpack -inputfile custom_gc_10.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
-levelpack -inputfile v1.3patch_strings.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+@if "%BUILD_NUMBER%"=="R140" (
+	levelpack -inputfile uop_common.req %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	levelpack -inputfile uop_ingame.req %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	levelpack -inputfile uop_shell.req %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	@REM levelpack -inputfile v1.3patch_strings.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+) ELSE (
+	levelpack -inputfile common.req -writefiles %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	levelpack -inputfile ingame.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	levelpack -inputfile shell.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	levelpack -inputfile user_script_10.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	levelpack -inputfile custom_gc_10.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+	@REM levelpack -inputfile v1.3patch_strings.req -common %MUNGE_DIR%\common.files %MUNGE_ARGS% -sourcedir %SOURCE_DIR% -inputdir %MUNGE_DIR% UOP\MUNGED\%BUILD_NUMBER% -outputdir %OUTPUT_DIR% 2>>%MUNGE_LOG%
+)
 @move /y levelpack.log UOP\levelpack.log
 
 
