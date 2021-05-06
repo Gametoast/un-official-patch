@@ -13,10 +13,10 @@
 - [x] debug integration
 - [x] uop_controller_ingame
 - [x] uop_controller_shell
-- [ ] Does the texture overwrite work? calling order: what common/ingame/shell is called first? 
+- [x] Does the texture overwrite work? calling order: what common/ingame/shell is called first? 
 - [ ] Does effect overwrite works? com_sfx_landmine from ingame
 - [ ] Do we need the modifications from steam? r130 changes by spiret or steam?
-- [ ] Does the modified movie work? Do movie mcfg files overwrite existing once?
+- [x] Does the modified movie work? Do movie mcfg files overwrite existing once?
 - [ ] Is the msh.option differences important?
 - [ ] Remaster integration
 - [ ] Installer that modifies exisiting lvl files while install process
