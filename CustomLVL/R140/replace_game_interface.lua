@@ -7,7 +7,7 @@
 print("game_interface: Entered")
 
 function ReadUnofficialFile(file)
-	ReadDataFile("..\\..\\addon\\unofficial_patch\\" .. file)
+	ReadDataFile("..\\..\\addon\\unofficial_patch\\data\\_LVL_PC\\" .. file)
 end
 
 -- is this the right place?

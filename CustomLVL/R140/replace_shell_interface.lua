@@ -7,7 +7,7 @@
 print("shell_interface: Entered")
 
 function ReadUnofficialFile(file)
-	ReadDataFile("..\\..\\addon\\unofficial_patch\\" .. file)
+	ReadDataFile("..\\..\\addon\\unofficial_patch\\data\\_LVL_PC\\" .. file)
 end
 
 -- is this the right place?
@@ -23,7 +23,7 @@ else
 end
 
 print("shell_interface: apply unofficial patch")
-ScriptCB_DoFile("uop_controller_shell")
+ScriptCB_DoFile("uop_controller_interface")
 ScriptCB_DoFile("stock_shell_interface")
 
 print("shell_interface: Exited")

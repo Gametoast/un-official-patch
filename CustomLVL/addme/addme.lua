@@ -74,7 +74,7 @@ function uopDebugStartMission()
 end
 
 if(gPlatformStr == "PC") then
-	if ScriptCB_IsFileExist("..\\..\\addon\\unofficial_patch\\debug.lua") then
+	if ScriptCB_IsFileExist("..\\..\\addon\\unofficial_patch\\debug.lua") == 1 then
 		require("addon\\unofficial_patch\\debug")
 	end
 end

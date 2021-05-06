@@ -22,6 +22,7 @@ ucft
 		"ifs_era_handler"
 		
 		"stock_shell_interface"
+		"replace_shell_interface"
 	}
 	
 	REQN

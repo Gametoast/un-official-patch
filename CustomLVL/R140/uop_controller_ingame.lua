@@ -4,7 +4,7 @@
 -- based on unofficial patch 1.3 by Zerted
 ------------------------------------------------------------------
 
-__v13patchSettings_noAwards__ = "..\\..\\addon\\AAA-v1.3patch\\settings\\noAwards.txt"
+__v13patchSettings_noAwards__ = "..\\..\\addon\\unofficial_patch\\settings\\noAwards.txt"
 local overwrite = {
 	error_popup = "uop_error_popup",
 	ifs_awardstats = "uop_ifs_awardstats",
@@ -26,21 +26,21 @@ local overwrite = {
 ScriptCB_DoFile("utility_functions2")
 
 print("Unofficial Patch: Reading in custom strings")
-ReadUnofficialFile("v1.3patch_strings.lvl")
+ReadUnofficialFile("unofficial_patch_strings.lvl")
 
-ReadUnofficialFile("hud\\hud.lvl")
+ReadUnofficialFile("hud.lvl")
 
 local maxScripts = 10
 local i = nil
 
 for i = 0, maxScripts, 1 do
 	
-	if ScriptCB_IsFileExist("..\\..\\addon\\unofficial_patch\\user_scripts\\user_script_" .. i .. ".lvl") == 0 then
+	if ScriptCB_IsFileExist("..\\..\\addon\\unofficial_patch\\uop_scripts\\user_script_" .. i .. ".lvl") == 0 then
 		print("Unofficial Patch: No user_script_" .. i .. ".lvl")
 	else
 		print("Unofficial Patch: Found user_script_" .. i .. ".lvl")
 		
-		ReadUnofficialFile("user_scripts\\user_script_" .. i .. ".lvl")
+		ReadUnofficialFile("uop_scripts\\user_script_" .. i .. ".lvl")
 		ScriptCB_DoFile("user_script_" .. i)
 	end
 	
@@ -54,12 +54,12 @@ repeat
 	j = j + 1;
 	scriptName = "user_script_" .. j
 	
-	if ScriptCB_IsFileExist(scriptName .. ".lvl") == 0 then
+	if ScriptCB_IsFileExist("..\\..\\addon\\unofficial_patch\\uop_scripts\\" .. scriptName .. ".lvl") == 0 then
 		stop = true
 		print("Unofficial Patch: No " .. scriptName .. ".lvl.  Will stop searching for any more user scripts.")
 	else
 		print("Unofficial Patch: Found " .. scriptName .. ".lvl")
-		ReadDataFile(scriptName .. ".lvl")
+		ReadUnofficialFile("uop_scripts\\" .. scriptName .. ".lvl")
 		ScriptCB_DoFile(scriptName)
 	end
 

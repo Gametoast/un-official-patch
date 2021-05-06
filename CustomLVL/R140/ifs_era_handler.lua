@@ -28,7 +28,7 @@ print("ifs_era_handler - Entered")
 -- Edit these tables to add custom game modes
 --------------------------------------------------------------------------------
 	local movieNameVar = "preview-loop"
-	local movieFileVar = "MOVIES\\pre-movie"
+	local movieFileVar = "..\\..\\addon\\unofficial_patch\\data\\_LVL_PC\\MOVIES\\pre-movie"
 
 	custom_sp_missionselect_listbox_contents = {
 		-- In the below list, the first '%s' will be replaced by the era,

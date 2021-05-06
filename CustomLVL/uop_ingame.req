@@ -9,6 +9,7 @@ ucft
 		"fakeconsole_functions"
 		"uop_ifs_fakeconsole"
 		"stock_game_interface"
+		"replace_game_interface"
     }
 	
 	REQN
