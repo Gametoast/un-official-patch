@@ -20,6 +20,8 @@
 - [ ] Is the msh.option differences important?
 - [ ] Remaster integration
 - [ ] Installer that modifies exisiting lvl files while install process
+- [ ] increase/remove Mission limit
+- [ ] support more era ids
 
 
 *********************************************************************
