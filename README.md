@@ -18,7 +18,7 @@
 - [ ] Do we need the modifications from steam? r130 changes by spiret or steam?
 - [x] Does the modified movie work? Do movie mcfg files overwrite existing once?
 - [ ] Is the msh.option differences important?
-- [ ] Remaster integration
+- [x] Remaster integration
 - [ ] Installer that modifies exisiting lvl files while install process
 - [ ] increase/remove Mission limit
 - [ ] support more era ids
