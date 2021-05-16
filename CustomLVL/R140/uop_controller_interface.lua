@@ -4,49 +4,6 @@
 -- based on unofficial patch 1.3 by Zerted
 ------------------------------------------------------------------
 
-
-function getn(v)
-    local v_type = type(v);
-    if v_type == "table" then
-        return table.getn(v);
-    elseif v_type == "string" then
-        return string.len(v);
-    else
-        return;
-    end
-end
-
-function string.starts(str, Start)
-    return string.sub(str, 1, getn(Start)) == Start;
-end
-
-function tprint(t, indent)
-    if not indent then indent = 1, print(tostring(t) .. " {") end
-    if t then
-        for key,value in pairs(t) do
-            if not string.starts(tostring(key), "__") then
-                local formatting = string.rep("    ", indent) .. tostring(key) .. ": ";
-                if value and type(value) == "table" then
-					print(formatting .. tostring(value) .. " {")
-                    tprint(value, indent+1);
-				else
-					print(formatting .. tostring(value))
-                end
-            end
-        end
-		print(string.rep("    ", indent - 1) .. "}")
-    end
-end
-
-
---CONMult
---CTFScore
---HUNScore
---ASSScore
---ifs_io_changeFunc
---ifs_io_GetElementLayoutFor
-
-
 __v13patchSettings_noColors__ = "..\\..\\addon\\unofficial_patch\\settings\\noColors.txt"
 local overwrite = {
 	error_popup = "uop_error_popup",
@@ -178,16 +135,16 @@ ScriptCB_DoFile = function(name, ...)
 							element.selValue = ifs_instant_options.GamePrefs.iCONMult
 						elseif element.tag == "hun_score" then
 							element.selValue = RoundTo(oldValue, HUNScore.increment)
-							this.GamePrefs.iHUNTScoreLimit = Clamp(math.floor(element.selValue), HUNScore.low, HUNScore.high)
-							element.selValue = this.GamePrefs.iHUNTScoreLimit
+							ifs_instant_options.GamePrefs.iHUNTScoreLimit = Clamp(math.floor(element.selValue), HUNScore.low, HUNScore.high)
+							element.selValue = ifs_instant_options.GamePrefs.iHUNTScoreLimit
 						elseif element.tag == "ctf_score" then
 							element.selValue = RoundTo(oldValue, CTFScore.increment)
-							this.GamePrefs.iCTFScore = Clamp(math.floor(element.selValue), CTFScore.low, CTFScore.high)
-							element.selValue = this.GamePrefs.iCTFScore
+							ifs_instant_options.GamePrefs.iCTFScore = Clamp(math.floor(element.selValue), CTFScore.low, CTFScore.high)
+							element.selValue = ifs_instant_options.GamePrefs.iCTFScore
 						elseif element.tag == "ass_score" then
 							element.selValue = RoundTo(oldValue, ASSScore.increment)
-							this.GamePrefs.iASSScoreLimit = Clamp(math.floor(element.selValue), ASSScore.low, ASSScore.high)
-							element.selValue = this.GamePrefs.iASSScoreLimit
+							ifs_instant_options.GamePrefs.iASSScoreLimit = Clamp(math.floor(element.selValue), ASSScore.low, ASSScore.high)
+							element.selValue = ifs_instant_options.GamePrefs.iASSScoreLimit
 						end
 						
 						return unpack(ret)
@@ -199,10 +156,6 @@ ScriptCB_DoFile = function(name, ...)
 						Form_CreateVertical(ifs_instant_options.screens[key], ifs_io_GetLayoutFor(ifs_io_listtags[key], ifs_instant_options))
 						IFObj_fnSetVis(ifs_instant_options.screens[key], nil)
 					end
-					
-					print("ifs_instant_options")
-					tprint(ifs_instant_options)
-					
 				end
 
 				-- let the original function happen
@@ -217,6 +170,3 @@ ScriptCB_DoFile = function(name, ...)
 	
 	return uop_ScriptCB_DoFile(overwrite[name] or name, unpack(arg))
 end
-
-
-

@@ -15,7 +15,7 @@
 - [x] uop_controller_shell
 - [x] Does the texture overwrite work? calling order: what common/ingame/shell is called first? 
 - [ ] Does effect overwrite works? com_sfx_landmine from ingame
-- [ ] Do we need the modifications from steam? r130 changes by spiret or steam?
+- [x] Do we need the modifications from steam? r130 changes by spiret or steam?
 - [x] Does the modified movie work? Do movie mcfg files overwrite existing once?
 - [ ] Is the msh.option differences important?
 - [x] Remaster integration
@@ -29,9 +29,9 @@
 ## Files to take care of
 
 ### Modified by Spiret/Steam
-- [ ] ifs_instant_options.lua
-- [ ] ifs_mpgs_friends.lua
-- [ ] ifs_mpgs_pclogin.lua
+- [x] ifs_instant_options.lua
+- [x] ifs_mpgs_friends.lua
+- [x] ifs_mpgs_pclogin.lua
 
 ### Modified by Zerted
 - [x] ifs_instant_options_tags.lua
