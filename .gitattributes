@@ -1,4 +1,5 @@
 *.lua linguist-language=Lua
+*.req linguist-language=Lua
 *.odf linguist-language=C#
 *.sfx linguist-language=C#
 *.combo linguist-language=C#
